@@ -20,25 +20,36 @@ public class Player_Controller : MonoBehaviour {
 		vertical = Input.GetAxis("Vertical");
 		horizontal = Input.GetAxis("Horizontal");
 
-		//Moves the player using velocities
-		Move(horizontal, vertical);
-		//Turns the player to face direction of movement
-		Look(horizontal, vertical);
+		//is input greater than 0
+		if(Vector2.SqrMagnitude(new Vector2(vertical, horizontal))>0f){
+		
+			//Moves the player using velocities
+			Move(horizontal, vertical);
+			//Turns the player to face direction of movement
+			Look(horizontal, vertical);
+		}
 
 	}
 	void Move(float _h, float _v){
+		
+		//get previous upward velocity
+		float _yVelocity = rb.velocity.y;
 		//Move Player
-		rb.velocity = new Vector3(_h,0f, _v)*forceFactor;
+		if(Mathf.Abs(_h)>Mathf.Abs(_v)){
+			rb.velocity = new Vector3(_h,0f, 0f)*forceFactor;
+		}
+		else{
+			rb.velocity = new Vector3(0f,0f, _v)*forceFactor;
+		
+		}
+		//Reset upwards velocity
+		rb.velocity += new Vector3(0f,_yVelocity,0f);
 	}
 	void Look(float _h, float _v){
 		//Point player in proper direction
 		
-		//No movement - Keep Rotation
-		if(Vector2.SqrMagnitude(new Vector2(_h, _v))==0f){
-			//do nothing
-		}
 		//Is the vertical movement greater than horizontal
-		else if(Mathf.Abs(_v)>Mathf.Abs(_h)){
+		if(Mathf.Abs(_v)>Mathf.Abs(_h)){
 			//align to angle 0 or 180 based on sign of vertical
 			transform.rotation = Quaternion.Euler(0f,Mathf.Sign(_v)*90f-90f,0f);
 
