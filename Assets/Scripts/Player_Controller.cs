@@ -5,13 +5,19 @@ using UnityEngine;
 public class Player_Controller : MonoBehaviour {
 	float vertical;
 	float horizontal;
+	[Tooltip("Assigned automatrically if left empty")]
+	public Camera mainCamera;
+	public Vector3 cameraOffset;
 	//Amou nt of force applied to player
 	public float forceFactor = 5f;
 	Rigidbody rb;
+	Quaternion originalCameraRotation;
 	// Use this for initialization
 	void Start () {
 		//Find the rigidbody
 		rb = GetComponent<Rigidbody>();
+		mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+		originalCameraRotation = mainCamera.transform.rotation;
 	}
 	
 	// Update is called once per frame
@@ -27,7 +33,9 @@ public class Player_Controller : MonoBehaviour {
 			Move(horizontal, vertical);
 			//Turns the player to face direction of movement
 			Look(horizontal, vertical);
+			
 		}
+		CameraFollow();
 
 	}
 	void Move(float _h, float _v){
@@ -44,6 +52,11 @@ public class Player_Controller : MonoBehaviour {
 		}
 		//Reset upwards velocity
 		rb.velocity += new Vector3(0f,_yVelocity,0f);
+		
+	}
+	void CameraFollow(){
+		mainCamera.transform.position = this.transform.position + cameraOffset;
+		mainCamera.transform.rotation = originalCameraRotation;
 	}
 	void Look(float _h, float _v){
 		//Point player in proper direction
