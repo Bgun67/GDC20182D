@@ -10,16 +10,31 @@ public class Door : MonoBehaviour {
 	public bool locked;
 	// Use this for initialization
 	void Start () {
+		//destroy extra players when any scene loads
+			foreach(GameObject go in GameObject.FindGameObjectsWithTag("Player")){
+				if(go.scene != SceneManager.GetActiveScene()){
+					print("Destroying Extra player");
+					Destroy(go);
+				}
+			}
 	}
 	
 	public void OpenDoor () {
 		if(locked){
 			return;
 		}
+		//Find player
 		player = GameObject.FindGameObjectWithTag("Player");
-		Scene _currentScene = SceneManager.GetActiveScene();
+		
+		//Find new scenes
 		Scene _newScene = SceneManager.GetSceneByName(sceneName);
+		//Check to make sure scene is loaded
+		if(_newScene.isDirty){
+			return;
+		}
+		//find all doors
 		Door[] doors = FindObjectsOfType<Door>();
+		//find door with corresponding number move player to that door and forward a bit
 		foreach(Door door in doors){
 			if(door.doorNumber == this.doorNumber){
 				if(door != this){
@@ -29,6 +44,7 @@ public class Door : MonoBehaviour {
 				}
 			}
 		}
+		//move the player to the next scene and set that scene as the current one
 		SceneManager.MoveGameObjectToScene(player, _newScene);
 		SceneManager.SetActiveScene(_newScene);
 	}
@@ -37,6 +53,7 @@ public class Door : MonoBehaviour {
 		if(!SceneManager.GetSceneByName(sceneName).IsValid()){
 			if(sceneName.Length>0){
 				SceneManager.LoadSceneAsync(sceneName,LoadSceneMode.Additive);
+			
 			}
 		}
 		else{
