@@ -1,34 +1,70 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Player_Controller : MonoBehaviour {
+	#region Movement
+	[Header("Movement")]
 	float vertical;
 	float horizontal;
+	//Amount of force applied to player
+	public float forceFactor = 5f;
+	//Determines which colliders the rays should hit
+	public LayerMask jumpMask;
+	Rigidbody rb;
+	#endregion
+	#region Camera
+	[Header("Camera")]
 	[Tooltip("Assigned automatrically if left empty")]
 	public Camera mainCamera;
 	//Placement of camera with respect to player
 	public Vector3 cameraOffset;
-	//Amount of force applied to player
-	public float forceFactor = 5f;
-	Rigidbody rb;
+	//originalCam rotation as a rotation type
 	Quaternion originalCameraRotation;
-	// Use this for initialization
-	void Start () {
-		//Find the rigidbody
-		rb = GetComponent<Rigidbody>();
-		mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-		originalCameraRotation = mainCamera.transform.rotation;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+	#endregion
+	#region Weapon
+	[Header("Weapon")]
+	public float weaponDamageFactor = 5f;
+	public float weaponRange = 2f;
+    #endregion
+   #region "UI"
+   public Text infoText;
+    public Text healthText;
+    public Health healthScript;
+    #endregion
+    public Scene lastScene;
+    public int lastDoorNumber;
+    bool isDead;
+
+
+    // Use this for initialization
+    void Start()
+    {
+        //Find the rigidbody
+        rb = GetComponent<Rigidbody>();
+        mainCamera = transform.GetComponentInChildren<Camera>();
+        originalCameraRotation = mainCamera.transform.rotation;
+        healthScript = this.GetComponent<Health>();
+        //Check to make sure there is a scene to return to
+        if (lastScene.name == null)
+        {
+            lastScene = SceneManager.GetActiveScene();
+        }
+        //check if the player has fallen every 1 second
+        InvokeRepeating("CheckFall", 1f, 1f);
+
+    }
+
+    // Update is called once per frame
+    void Update () {
 		//Get Input
 		vertical = Input.GetAxis("Vertical");
 		horizontal = Input.GetAxis("Horizontal");
 
 		//is input greater than 0
-		if(Vector2.SqrMagnitude(new Vector2(vertical, horizontal))>0f){
+		if(Vector2.SqrMagnitude(new Vector2(vertical, horizontal))>0f/* &&CheckGrounded()*/){
 		
 			//Moves the player using velocities
 			Move(horizontal, vertical);
@@ -36,9 +72,16 @@ public class Player_Controller : MonoBehaviour {
 			Look(horizontal, vertical);
 			
 		}
+		if(Input.GetKeyDown("space")&&CheckGrounded()){
+			Jump();
+		}
+		if(Input.GetKeyDown("f")){
+			Attack();
+		}
 		CameraFollow();
 
 	}
+	#region Movement
 	void Move(float _h, float _v){
 		
 		//get previous upward velocity
@@ -51,11 +94,6 @@ public class Player_Controller : MonoBehaviour {
 		rb.velocity += new Vector3(0f,_yVelocity,0f);
 		
 	}
-	void CameraFollow(){
-		//Track players position but reset the rotation
-		mainCamera.transform.position = this.transform.position + cameraOffset;
-		mainCamera.transform.rotation = originalCameraRotation;
-	}
 	void Look(float _h, float _v){
 		//Point player in proper direction
 		
@@ -64,6 +102,88 @@ public class Player_Controller : MonoBehaviour {
 		
 		
 	}
+	void Jump(){
+		//add upwards velocity to current velocity
+		Vector3 _oldVelocity = rb.velocity;
+		rb.velocity = Vector3.up*5f+_oldVelocity;
+	}
+	bool CheckGrounded(){
+		bool _grounded = false;
+		//draw a laser downwards and see if it hits anything
+		RaycastHit _hit;
+		if(Physics.Raycast(this.transform.position,Vector3.down,out _hit,0.55f,jumpMask,QueryTriggerInteraction.Ignore)){
+			//we've hit something, there is something below the player
+			_grounded = true;
+		}
+		
+		return _grounded;
+
+	}
+
+	#endregion
+	void CameraFollow(){
+		//Track players position but reset the rotation
+		mainCamera.transform.position = this.transform.position + cameraOffset;
+		mainCamera.transform.rotation = originalCameraRotation;
+	}
+
 	
-	
+	void Attack(){
+		//draw a laser forward and see if it hits anything
+		RaycastHit _hit;
+		if(Physics.Raycast(this.transform.position,transform.forward,out _hit,2f,jumpMask,QueryTriggerInteraction.Ignore)){
+			Health healthScript = _hit.transform.root.GetComponent<Health>();
+			if(healthScript!=null){
+				healthScript.TakeDamage(weaponDamageFactor);
+			}
+		}
+	}
+    void CheckFall()
+    {
+		
+        if (transform.position.y<-10f)
+        {
+
+            Die();
+        }
+    }
+    public void Die()
+    {
+        if (!isDead)
+        {
+            healthScript.Reset();
+            infoText.text = "You Died";
+            print(lastScene.name);
+            isDead = true;
+            //StartCoroutine(TransitionScene(lastScene.name));
+            foreach (Door _door in FindObjectsOfType<Door>())
+            {
+                if (_door.doorNumber == lastDoorNumber)
+                {
+                    _door.OpenDoor();
+                    break;
+                }
+            }
+            this.isDead = false;
+
+        }
+
+    }
+
+    public void UpdateHealth()
+    {
+        if (healthScript == null)
+        {
+            healthScript = this.GetComponent<Health>();
+        }
+
+        int _shieldNumber = (int)healthScript.currentHealth/10;
+        healthText.text = "";
+        for (int i = 0; i < _shieldNumber; i++)
+        {
+            healthText.text += " 0";
+        }
+    }
+
+
 }
