@@ -56,7 +56,6 @@ public class Player_Controller : MonoBehaviour {
         InvokeRepeating("CheckFall", 1f, 1f);
 
     }
-
     // Update is called once per frame
     void Update () {
 		//Get Input
@@ -149,13 +148,14 @@ public class Player_Controller : MonoBehaviour {
     }
     public void Die()
     {
+		//check if player has already died
         if (!isDead)
         {
+			//reset health to full
             healthScript.Reset();
             infoText.text = "You Died";
-            print(lastScene.name);
             isDead = true;
-            //StartCoroutine(TransitionScene(lastScene.name));
+			//go through last door
             foreach (Door _door in FindObjectsOfType<Door>())
             {
                 if (_door.doorNumber == lastDoorNumber)
@@ -164,7 +164,7 @@ public class Player_Controller : MonoBehaviour {
                     break;
                 }
             }
-            this.isDead = false;
+            isDead = false;
 
         }
 
@@ -172,13 +172,15 @@ public class Player_Controller : MonoBehaviour {
 
     public void UpdateHealth()
     {
+		//check to make sure health is assigned
         if (healthScript == null)
         {
             healthScript = this.GetComponent<Health>();
         }
-
+		//Clear shields and get number of shields needed
         int _shieldNumber = (int)healthScript.currentHealth/10;
         healthText.text = "";
+		//type shields
         for (int i = 0; i < _shieldNumber; i++)
         {
             healthText.text += " 0";
