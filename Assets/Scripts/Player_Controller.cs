@@ -38,6 +38,7 @@ public class Player_Controller : MonoBehaviour {
     public int lastDoorNumber;
     bool isDead;
 
+	public GameObject hitIndicator;//Hit indicator prefab
 
     // Use this for initialization
     void Start()
@@ -185,6 +186,9 @@ public class Player_Controller : MonoBehaviour {
         {
             healthText.text += " 0";
         }
+		Debug.Log("Spawn hit ind");
+		GameObject newHit = Instantiate(hitIndicator, transform.position + Vector3.up, Quaternion.identity);
+		newHit.GetComponent<HitIndicator>().SetHealth(healthScript.lastUpdate);
     }
 
 

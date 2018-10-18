@@ -12,6 +12,7 @@ public class Health : MonoBehaviour
 	public UnityEvent dieFunction;
 	public bool showHealth;
 	public UnityEvent healthUpdateFunction;
+	public float lastUpdate;
 
 	#region regen
 	[Tooltip("Does the object regenerate health")]
@@ -33,12 +34,21 @@ public class Health : MonoBehaviour
 		//Send message for script to update UI
 		if (healthUpdateFunction.GetPersistentEventCount() > 0 && showHealth)
 		{
+			lastUpdate = 0;
 			healthUpdateFunction.Invoke();
 		}
 	}
 	public void Reset()
 	{
 		Start();
+	}
+
+	public void Update()//All debug stuff
+	{
+		if (Input.GetKeyDown("i"))//i for sm(i)te everything
+		{
+			TakeDamage(1);
+		}
 	}
 
 	// Update is called once per frame
@@ -63,6 +73,7 @@ public class Health : MonoBehaviour
 		//Send message for script to update UI
 		if (healthUpdateFunction.GetPersistentEventCount() > 0 && showHealth)
 		{
+			lastUpdate = -_amount;
 			healthUpdateFunction.Invoke();
 		}
 	}
@@ -84,6 +95,7 @@ public class Health : MonoBehaviour
 	}
 	void Regen()
 	{
+		float remainingHealth = originalHealth - currentHealth;
 		//adds health
 		currentHealth += regenAmount;
 		//if health is maxxed out set to max and cancel regeneration
@@ -95,6 +107,7 @@ public class Health : MonoBehaviour
 		//Send message for script to update UI
 		if (healthUpdateFunction.GetPersistentEventCount() > 0 && showHealth)
 		{
+			if (remainingHealth < regenAmount) lastUpdate = remainingHealth; else lastUpdate = regenAmount;
 			healthUpdateFunction.Invoke();
 		}
 	}
