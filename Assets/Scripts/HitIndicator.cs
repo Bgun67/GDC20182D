@@ -7,7 +7,6 @@ using UnityEngine;
 [RequireComponent(typeof(TextMeshPro))]
 public class HitIndicator : MonoBehaviour
 {
-
 	TextMeshPro tmpro;
 	Rigidbody rb;
 	float timeAlive;
@@ -21,7 +20,7 @@ public class HitIndicator : MonoBehaviour
 		rb = GetComponent<Rigidbody>();
 		rb.velocity = new Vector3(Random.Range(-1, 1), 5, Random.Range(-1, 1));
 		rb.angularVelocity = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1));
-		timeAlive = 0;
+		Destroy(gameObject, timeToLive);
 	}
 
 	public void SetHealth(float amount)
@@ -35,15 +34,5 @@ public class HitIndicator : MonoBehaviour
 			tmpro.faceColor = new Color32(255, 0, 0, 255);//Green
 		}
 		tmpro.text = amount.ToString();
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
-		timeAlive += Time.deltaTime;
-		if(timeAlive > timeToLive)
-		{
-			Destroy(gameObject);
-		}
 	}
 }
