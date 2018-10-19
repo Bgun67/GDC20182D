@@ -27,27 +27,37 @@ public class Doormat_Activater : MonoBehaviour {
 	void Start () {
 		
 	}
-	void OnTriggerEnter(Collider other){
-		//if player has entered set _entered flag
+    void OnTriggerEnter(Collider other)
+    {
+        //if player has entered set _entered flag
+        if (other.tag == "Player")
+        {
+            Player_Controller _player = other.GetComponent<Player_Controller>();
+
+            _entered = true;
+            //if there is text display it
+            if (_player.infoText != null)
+            {
+                if (displayText.Length > 0)
+                {
+
+                    _player.infoText.text = displayText;
+                    _player.infoText.gameObject.SetActive(true);
+                }
+            }
+
+
+        }
+    }
+    void OnTriggerExit(Collider other){
+		//if player has left, set entered flag to false
 		if(other.tag == "Player"){
-			_entered = true;
-			//if there is text display it
-			if(UI_Manager.instance.infoText!=null){
-				if(displayText.Length>0){
-					UI_Manager.instance.infoText.text = displayText;
-					UI_Manager.instance.infoText.gameObject.SetActive(true);
-				}
-			}
-		}
-	}
-	void OnTriggerExit(Collider other){
-		//if play has left set entered flag to false
-		if(other.tag == "Player"){
-			_entered = false;
+            Player_Controller _player = other.GetComponent<Player_Controller>();
+            _entered = false;
 			//hide text
-			if(UI_Manager.instance.infoText!=null){
-				UI_Manager.instance.infoText.text = "";
-				UI_Manager.instance.infoText.gameObject.SetActive(false);
+			if(_player.infoText!=null){
+				_player.infoText.text = "";
+				_player.infoText.gameObject.SetActive(false);
 			}
 
 			//run function if execute on exit

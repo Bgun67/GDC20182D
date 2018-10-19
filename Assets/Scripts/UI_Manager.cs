@@ -5,9 +5,10 @@ using UnityEngine.UI;
 
 public class UI_Manager : MonoBehaviour {
 	public Text infoText;
-	public static UI_Manager instance;
+    public Text healthText;
+    public static UI_Manager instance;
 	// Use this for initialization
 	void Start () {
-		UI_Manager.instance = this;
+		//UI_Manager.instance = this;
 	}
 }

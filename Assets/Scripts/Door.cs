@@ -4,34 +4,50 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Door : MonoBehaviour {
-	public float doorNumber;
+	public int doorNumber;
 	public string sceneName;
 	public GameObject player;
 	public bool locked;
-	// Use this for initialization
-	void Start () {
-		//destroy extra players when any scene loads
-			foreach(GameObject go in GameObject.FindGameObjectsWithTag("Player")){
-				if(go.scene != SceneManager.GetActiveScene()){
-					print("Destroying Extra player");
-					Destroy(go);
-				}
-			}
-	}
-	
-	public void OpenDoor () {
+    // Use this for initialization
+    void Start()
+    {
+        //destroy extra players when any scene loads
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (go.scene != SceneManager.GetActiveScene())
+            {
+                print("Destroying Extra player");
+                Destroy(go);
+            }
+        }
+    }
+
+    public void OpenDoor () {
 		if(locked){
 			return;
 		}
-		//Find player
-		player = GameObject.FindGameObjectWithTag("Player");
-		
+        StartCoroutine(TransitionScene());
+    }
+
+	
+    IEnumerator TransitionScene()
+    {
+		//Find the player
+        player = GameObject.FindGameObjectWithTag("Player");
+		//get the scene that the player is transitioning from
+        Scene _currentScene = SceneManager.GetActiveScene();
+		//make sure the scene has not been already loaded
+        if(!SceneManager.GetSceneByName(sceneName).isLoaded){
+			if(sceneName.Length>0){
+				SceneManager.LoadSceneAsync(sceneName,LoadSceneMode.Additive);
+			
+			}
+		}
+		//wait until scene has been loaded THIS CODE WORKS GREAT-- () => bool means until bool is true
+        yield return new WaitUntil(() => SceneManager.GetSceneByName(sceneName).isLoaded);
 		//Find new scenes
 		Scene _newScene = SceneManager.GetSceneByName(sceneName);
-		//Check to make sure scene is loaded
-		if(_newScene.isDirty){
-			return;
-		}
+		
 		//find all doors
 		Door[] doors = FindObjectsOfType<Door>();
 		//find door with corresponding number move player to that door and forward a bit
@@ -44,29 +60,20 @@ public class Door : MonoBehaviour {
 				}
 			}
 		}
-		//move the player to the next scene and set that scene as the current one
-		SceneManager.MoveGameObjectToScene(player, _newScene);
-		SceneManager.SetActiveScene(_newScene);
-	}
+		//set the last active scene of the player
+       // player.GetComponent<Player_Controller>().lastScene = SceneManager.GetActiveScene();
+        player.GetComponent<Player_Controller>().lastDoorNumber = doorNumber;
+        if (_newScene != _currentScene)
+        {
+            DontDestroyOnLoad(this);
+            //move the player to the next scene and set that scene as the current one
+            SceneManager.MoveGameObjectToScene(player, _newScene);
+            //change scenes and unload old
+            SceneManager.SetActiveScene(_newScene);
+            SceneManager.UnloadSceneAsync(_currentScene);
+            Destroy(this.gameObject);
+        }
 
-	public void LoadNextScene(){
-		if(!SceneManager.GetSceneByName(sceneName).IsValid()){
-			if(sceneName.Length>0){
-				SceneManager.LoadSceneAsync(sceneName,LoadSceneMode.Additive);
-			
-			}
-		}
-		else{
-			
-		}
-	}
-	public void UnloadInactiveScenes(){
-		foreach(Scene _scene in SceneManager.GetAllScenes()){
-			if(_scene != SceneManager.GetActiveScene()){
-				SceneManager.UnloadSceneAsync(_scene);
-			}
+    }
 
-		}
-	}
-	
 }
