@@ -92,7 +92,7 @@ public class Player_Controller : MonoBehaviour
         //get previous upward velocity
         float _yVelocity = rb.velocity.y;
         //Move Player
-        rb.velocity = new Vector3(_h, 0f, _v) * forceFactor;
+        rb.velocity = new Vector3(_h, 0f, _v).normalized * forceFactor;
 
 
         //Reset upwards velocity
