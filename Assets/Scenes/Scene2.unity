@@ -316,10 +316,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 726036786}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4da207439cd9a9f4e88579477bb2decb, type: 3}
+  m_Script: {fileID: 11500000, guid: e863810f76661b945af215a139d4493a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalHealth: 10
+  originalHealth: 100
   currentHealth: 0
   dieFunction:
     m_PersistentCalls:
@@ -515,10 +515,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1070678040}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4da207439cd9a9f4e88579477bb2decb, type: 3}
+  m_Script: {fileID: 11500000, guid: e863810f76661b945af215a139d4493a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalHealth: 10
+  originalHealth: 100
   currentHealth: 0
   dieFunction:
     m_PersistentCalls:
@@ -629,10 +629,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1133910902}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4da207439cd9a9f4e88579477bb2decb, type: 3}
+  m_Script: {fileID: 11500000, guid: e863810f76661b945af215a139d4493a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalHealth: 10
+  originalHealth: 100
   currentHealth: 0
   dieFunction:
     m_PersistentCalls:
@@ -1095,10 +1095,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2060783446}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4da207439cd9a9f4e88579477bb2decb, type: 3}
+  m_Script: {fileID: 11500000, guid: e863810f76661b945af215a139d4493a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalHealth: 10
+  originalHealth: 100
   currentHealth: 0
   dieFunction:
     m_PersistentCalls:
