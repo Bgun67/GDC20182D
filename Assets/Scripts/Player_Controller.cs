@@ -294,7 +294,7 @@ public class Player_Controller : MonoBehaviour
 		//add force forwards
 		rb.velocity = transform.forward*3f;
 		//check for object
-		if (!Physics.Raycast(transform.position, Vector3.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (!Physics.Raycast(transform.position, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			return;
 		}
