@@ -15,9 +15,11 @@ public class Player_Controller : MonoBehaviour
     //Determines which colliders the rays should hit
     public LayerMask jumpMask;
     Rigidbody rb;
-    #endregion
-    #region Camera
-    [Header("Camera")]
+	public Animator anim;
+	bool rolling;
+	#endregion
+	#region Camera
+	[Header("Camera")]
     [Tooltip("Assigned automatrically if left empty")]
     public Camera mainCamera;
     //Placement of camera with respect to player
@@ -29,9 +31,13 @@ public class Player_Controller : MonoBehaviour
     [Header("Weapon")]
     public float weaponDamageFactor = 5f;
     public float weaponRange = 2f;
-    #endregion
-    #region "UI"
-    public Text infoText;
+	public Weapon primaryWeapon;
+	public Weapon secondaryWeapon;
+	public Weapon currentWeapon;
+	public Transform finger;
+	#endregion
+	#region "UI"
+	public Text infoText;
     public Text healthText;
     public Health healthScript;
     #endregion
@@ -46,7 +52,8 @@ public class Player_Controller : MonoBehaviour
     {
         //Find the rigidbody
         rb = GetComponent<Rigidbody>();
-        mainCamera = transform.GetComponentInChildren<Camera>();
+		anim = GetComponent<Animator>();
+		mainCamera = transform.GetComponentInChildren<Camera>();
         originalCameraRotation = mainCamera.transform.rotation;
         healthScript = this.GetComponent<Health>();
         //Check to make sure there is a scene to return to
