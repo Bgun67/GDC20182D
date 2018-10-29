@@ -4,38 +4,34 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class Player_Controller : MonoBehaviour {
-	#region Movement
-	[Header("Movement")]
-	float vertical;
-	float horizontal;
-	//Amount of force applied to player
-	public float forceFactor = 5f;
-	//Determines which colliders the rays should hit
-	public LayerMask jumpMask;
-	Rigidbody rb;
-	public Animator anim;
-	bool rolling;
-	#endregion
-	#region Camera
-	[Header("Camera")]
-	[Tooltip("Assigned automatrically if left empty")]
-	public Camera mainCamera;
-	//Placement of camera with respect to player
-	public Vector3 cameraOffset;
-	//originalCam rotation as a rotation type
-	Quaternion originalCameraRotation;
-	#endregion
-	#region Weapon
-	[Header("Weapon")]
-	public Weapon primaryWeapon;
-	public Weapon secondaryWeapon;
-	public Weapon currentWeapon;
-	public Transform finger;
-	#endregion
-	[Header("UI")]
-	#region "UI"
-	public Text infoText;
+public class Player_Controller : MonoBehaviour
+{
+    #region Movement
+    [Header("Movement")]
+    float vertical;
+    float horizontal;
+    //Amount of force applied to player
+    public float forceFactor = 5f;
+    //Determines which colliders the rays should hit
+    public LayerMask jumpMask;
+    Rigidbody rb;
+    #endregion
+    #region Camera
+    [Header("Camera")]
+    [Tooltip("Assigned automatrically if left empty")]
+    public Camera mainCamera;
+    //Placement of camera with respect to player
+    public Vector3 cameraOffset;
+    //originalCam rotation as a rotation type
+    Quaternion originalCameraRotation;
+    #endregion
+    #region Weapon
+    [Header("Weapon")]
+    public float weaponDamageFactor = 5f;
+    public float weaponRange = 2f;
+    #endregion
+    #region "UI"
+    public Text infoText;
     public Text healthText;
     public Health healthScript;
     #endregion
@@ -104,8 +100,10 @@ public class Player_Controller : MonoBehaviour {
 	void Look(float _h, float _v){
 		//Point player in proper direction
 		
-		//Calculate atan to find angle convert from rads
-		transform.rotation = Quaternion.Euler(0f,Mathf.Rad2Deg*Mathf.Atan(_h/_v)+Mathf.Sign(_v)*90f-90f,0f);
+	  //Calculate atan to find angle convert from rads Lerps the angle, result is not exactly the angle
+    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, Mathf.Rad2Deg * Mathf.Atan(_h / _v) + Mathf.Sign(_v) * 90f - 90f, 0f), 0.2f);
+
+
 		
 		
 	}
@@ -160,8 +158,8 @@ public class Player_Controller : MonoBehaviour {
 	}
     void CheckFall()
     {
-		
-        if (transform.position.y<-10f)
+
+        if (transform.position.y < -10f)
         {
 
             Die();
@@ -169,14 +167,14 @@ public class Player_Controller : MonoBehaviour {
     }
     public void Die()
     {
-		//check if player has already died
+        //check if player has already died
         if (!isDead)
         {
-			//reset health to full
+            //reset health to full
             healthScript.Reset();
             infoText.text = "You Died";
             isDead = true;
-			//go through last door
+            //go through last door
             foreach (Door _door in FindObjectsOfType<Door>())
             {
                 if (_door.doorNumber == lastDoorNumber)
@@ -193,15 +191,15 @@ public class Player_Controller : MonoBehaviour {
 
     public void UpdateHealth()
     {
-		//check to make sure health is assigned
+        //check to make sure health is assigned
         if (healthScript == null)
         {
             healthScript = this.GetComponent<Health>();
         }
-		//Clear shields and get number of shields needed
-        int _shieldNumber = (int)healthScript.currentHealth/10;
+        //Clear shields and get number of shields needed
+        int _shieldNumber = (int)healthScript.currentHealth / 10;
         healthText.text = "";
-		//type shields
+        //type shields
         for (int i = 0; i < _shieldNumber; i++)
         {
             healthText.text += " 0";
@@ -300,6 +298,5 @@ public class Player_Controller : MonoBehaviour {
 		}
 	
 	}
-
 
 }
