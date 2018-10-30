@@ -1369,15 +1369,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   anim: {fileID: 95646334076895574}
-  mainCamera: {fileID: 0}
+  mainCamera: {fileID: 20242895853476098}
   cameraOffset: {x: 0, y: 4, z: -1}
+  weaponDamageFactor: 5
+  weaponRange: 2
   primaryWeapon: {fileID: 0}
   secondaryWeapon: {fileID: 0}
+  currentWeapon: {fileID: 0}
   finger: {fileID: 4333758971914010}
   infoText: {fileID: 114093513819222378}
   healthText: {fileID: 114717356380306886}
   healthScript: {fileID: 0}
   lastDoorNumber: 0
+  playerNum: 0
 --- !u!114 &114632748048300056
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1386,23 +1390,45 @@ MonoBehaviour:
   m_GameObject: {fileID: 1257546995151422}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e863810f76661b945af215a139d4493a, type: 3}
+  m_Script: {fileID: 11500000, guid: 4da207439cd9a9f4e88579477bb2decb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalHealth: 0
+  originalHealth: 100
   currentHealth: 0
   dieFunction:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114522857728829982}
+        m_MethodName: Die
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  showHealth: 0
+  showHealth: 1
   healthUpdateFunction:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114522857728829982}
+        m_MethodName: UpdateHealth
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  regen: 0
+  regen: 1
   regenDelay: 5
   regenTime: 1
   regenAmount: 5

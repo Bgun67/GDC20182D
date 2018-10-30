@@ -41,9 +41,14 @@ public class Player_Controller : MonoBehaviour
     public Text healthText;
     public Health healthScript;
     #endregion
-    public Scene lastScene;
-    public int lastDoorNumber;
-    bool isDead;
+    public Scene currentScene;
+	public Scene lastScene;
+	public int lastDoorNumber;
+    public bool isDead;
+	Game_Controller gameController;
+	#region Player Data
+	public int playerNum;
+	#endregion
 	
 
 
@@ -53,7 +58,7 @@ public class Player_Controller : MonoBehaviour
         //Find the rigidbody
         rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
-		mainCamera = transform.GetComponentInChildren<Camera>();
+		//mainCamera = this.GetComponentInChildren<Camera>();
         originalCameraRotation = mainCamera.transform.rotation;
         healthScript = this.GetComponent<Health>();
         //Check to make sure there is a scene to return to
@@ -61,19 +66,25 @@ public class Player_Controller : MonoBehaviour
         {
             lastScene = SceneManager.GetActiveScene();
         }
+		if (currentScene.name == null)
+        {
+            currentScene = SceneManager.GetActiveScene();
+        }
         //check if the player has fallen every 1 second
         InvokeRepeating("CheckFall", 1f, 1f);
 
-		primaryWeapon = WeaponLoader.LoadWeapon(finger, 1);
-		secondaryWeapon = WeaponLoader.LoadWeapon(finger, 2);
+		primaryWeapon = WeaponLoader.LoadWeapon(finger, 1, playerNum);
+		secondaryWeapon = WeaponLoader.LoadWeapon(finger, 2, playerNum);
 		secondaryWeapon.gameObject.SetActive(false);
 		currentWeapon = primaryWeapon;
+
 	}
-    // Update is called once per frame
-    void Update () {
+	
+	// Update is called once per frame
+	void Update () {
 		//Get Input
-		vertical = Input.GetAxis("Vertical");
-		horizontal = Input.GetAxis("Horizontal");
+		vertical = Input.GetAxis("Vertical "+(playerNum+1));
+		horizontal = Input.GetAxis("Horizontal "+(playerNum+1));
 
 		//is input greater than 0
 		if(Vector2.SqrMagnitude(new Vector2(vertical, horizontal))>0f&&!rolling){
@@ -84,11 +95,27 @@ public class Player_Controller : MonoBehaviour
 			Look(horizontal, vertical);
 			
 		}
-		if(Input.GetKeyDown("space")&&CheckGrounded()){
+		if(Input.GetButtonDown("Jump "+(playerNum+1))&&CheckGrounded()){
 			Jump();
 		}
 		Attack();
 		CameraFollow();
+
+	}
+	public void SetupPlayer()
+	{
+		gameController = FindObjectOfType<Game_Controller>();
+		//Adjust Camera to fit players on screen
+		float _x = Mathf.Clamp01(playerNum - 1) * 0.5f;
+		float _y = (playerNum) % 2 * 0.5f;
+		float _width = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 2) * 0.5f;
+		//multiplication added at end to fit player 3 to full screen
+		float _height = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 1) * 0.5f; //* Mathf.Clamp01(Mathf.Abs(gameController.numberOfPlayers - (playerNum + 1)));
+		mainCamera.rect = new Rect(_x,_y,_width ,_height);
+		ColorPlayer();
+	}
+	 void ColorPlayer()
+	{
 
 	}
 	#region Movement
@@ -140,16 +167,16 @@ public class Player_Controller : MonoBehaviour
 		mainCamera.transform.position = this.transform.position + cameraOffset;
 		mainCamera.transform.rotation = originalCameraRotation;
 	}
-
+	
 	
 	void Attack(){
 		if (!rolling)
 		{
-			if (Input.GetKeyDown("w"))
+			if (Input.GetButtonDown("Primary Attack "+(playerNum+1)))
 			{
 				currentWeapon.Attack(0);
 			}
-			if (Input.GetKeyDown("s"))
+			if (Input.GetButtonDown("Secondary Attack "+(playerNum+1)))
 			{
 				currentWeapon.Attack(1);
 			}
@@ -181,18 +208,11 @@ public class Player_Controller : MonoBehaviour
             healthScript.Reset();
             infoText.text = "You Died";
             isDead = true;
-            //go through last door
-            foreach (Door _door in FindObjectsOfType<Door>())
-            {
-                if (_door.doorNumber == lastDoorNumber)
-                {
-                    _door.OpenDoor();
-                    break;
-                }
-            }
-            isDead = false;
+			//Go to level spawn
+			gameController.GetLevelController(currentScene.name).SpawnPlayer(this.gameObject);
 
-        }
+
+		}
 
     }
 

@@ -6,24 +6,24 @@ using System.IO;
 public static class WeaponLoader{
 	public static string[] loadoutData;
 	// Use this for initialization
-	public static void LoadWeaponData()
+	public static void LoadWeaponData(int _playerNum)
 	{
 		try
 		{
-			loadoutData = File.ReadAllLines(@"Loadout Data.txt");
+			loadoutData = File.ReadAllLines(@"Loadout Data P"+_playerNum+".txt");
 		}
 		catch
 		{
 			loadoutData = new string[] { "Sword","Sword" };
-			File.WriteAllLines(@"Loadout Data.txt", loadoutData);
+			File.WriteAllLines(@"Loadout Data P"+_playerNum+".txt", loadoutData);
 
 		}
 
 	}
-	public static Weapon LoadWeapon(Transform _finger, int weaponNumber)
+	public static Weapon LoadWeapon(Transform _finger, int weaponNumber, int _playerNum)
 	{
 		
-		LoadWeaponData();
+		LoadWeaponData(_playerNum);
 		try
 		{
 			string data = loadoutData[weaponNumber - 1];
@@ -31,7 +31,7 @@ public static class WeaponLoader{
 		catch
 		{
 			loadoutData = new string[] { "Sword","Sword" };
-			File.WriteAllLines(@"Loadout Data.txt", loadoutData);
+			File.WriteAllLines(@"Loadout Data P"+_playerNum+".txt", loadoutData);
 		}
 
 

@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Doormat_Activater : MonoBehaviour {
-	public enum InputType{
+public class Doormat_Activater : MonoBehaviour
+{
+	[System.Serializable]
+	public class MyGameObjectEvent : UnityEvent<GameObject>{
+
+	}
+public enum InputType
+	{
 		None,
 		Key,
 		Button
 	}
-	public UnityEvent functionToRun;
+	public MyGameObjectEvent functionToRun;
 	[Tooltip("Does the function execute when the player exits the trigger")]
 	public bool executeOnExit;
 	public string displayText;
@@ -23,6 +29,7 @@ public class Doormat_Activater : MonoBehaviour {
 	[Tooltip("Only use if input required is 'Button'")]
 
 	public string buttonName = "";
+	public GameObject obj;
 	// Use this for initialization
 	void Start () {
 		
@@ -30,11 +37,11 @@ public class Doormat_Activater : MonoBehaviour {
     void OnTriggerEnter(Collider other)
     {
         //if player has entered set _entered flag
-        if (other.tag == "Player")
+        if (other.transform.root.tag == "Player")
         {
-            Player_Controller _player = other.GetComponent<Player_Controller>();
-
-            _entered = true;
+            Player_Controller _player = other.transform.root.GetComponent<Player_Controller>();
+			obj = other.transform.root.gameObject;
+			_entered = true;
             //if there is text display it
             if (_player.infoText != null)
             {
@@ -62,8 +69,14 @@ public class Doormat_Activater : MonoBehaviour {
 
 			//run function if execute on exit
 			if(executeOnExit){
-				functionToRun.Invoke();
+				obj = other.gameObject;
 
+				functionToRun.Invoke(other.gameObject);
+
+			}
+			else
+			{
+				obj = null;
 			}
 		}
 	}
@@ -76,13 +89,13 @@ public class Doormat_Activater : MonoBehaviour {
 		}
 		//check for input run function if fullfilled
 		if(inputRequired == InputType.None){
-			functionToRun.Invoke();
+			functionToRun.Invoke(obj);
 		}
 		else if(inputRequired == InputType.Key && Input.GetKeyDown(keyCode)){
-			functionToRun.Invoke();
+			functionToRun.Invoke(obj);
 		}
 		else if(inputRequired == InputType.Button && Input.GetButtonDown(buttonName)){
-			functionToRun.Invoke();
+			functionToRun.Invoke(obj);
 		}
 		else{
 			return;
