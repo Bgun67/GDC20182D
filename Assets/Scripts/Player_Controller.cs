@@ -187,7 +187,6 @@ public class Player_Controller : MonoBehaviour {
         {
             healthText.text += " 0";
         }
-		Debug.Log("Spawn hit ind");
 		GameObject newHit = Instantiate(hitIndicator, transform.position + Vector3.up, Quaternion.identity);
 		newHit.GetComponent<HitIndicator>().SetHealth(amount);
     }

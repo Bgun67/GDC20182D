@@ -15,7 +15,6 @@ public class HitIndicator : MonoBehaviour
 	// Use this for initialization
 	void Awake()
 	{
-		Debug.Log("Start on hit");
 		tmpro = GetComponent<TextMeshPro>();
 		rb = GetComponent<Rigidbody>();
 		rb.velocity = new Vector3(Random.Range(-1, 1), 5, Random.Range(-1, 1));
@@ -31,7 +30,7 @@ public class HitIndicator : MonoBehaviour
 		}
 		else//Hurt
 		{
-			tmpro.faceColor = new Color32(255, 0, 0, 255);//Green
+			tmpro.faceColor = new Color32(255, 0, 0, 255);//Red
 		}
 		tmpro.text = amount.ToString();
 	}
