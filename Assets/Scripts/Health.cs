@@ -11,8 +11,7 @@ public class Health : MonoBehaviour
 	[Tooltip("If left empty, object is destroyed")]
 	public UnityEvent dieFunction;
 	public bool showHealth;
-	public UnityEvent healthUpdateFunction;
-	public float lastUpdate;
+	//public float lastUpdate;
 
 	#region regen
 	[Tooltip("Does the object regenerate health")]
@@ -25,6 +24,9 @@ public class Health : MonoBehaviour
 	public float regenAmount = 5f;
 	#endregion
 
+	public delegate void HealthChangeHandler(float amount);
+	public event HealthChangeHandler HealthChanged;
+
 	//Ensures dieFunction only executes once
 	bool isDead;
 	// Use this for initialization
@@ -32,11 +34,7 @@ public class Health : MonoBehaviour
 	{
 		currentHealth = originalHealth;
 		//Send message for script to update UI
-		if (healthUpdateFunction.GetPersistentEventCount() > 0 && showHealth)
-		{
-			lastUpdate = 0;
-			healthUpdateFunction.Invoke();
-		}
+		if(HealthChanged != null && showHealth) HealthChanged.Invoke(0);
 	}
 	public void Reset()
 	{
@@ -71,11 +69,7 @@ public class Health : MonoBehaviour
 			InvokeRepeating("Regen", regenDelay, regenTime);
 		}
 		//Send message for script to update UI
-		if (healthUpdateFunction.GetPersistentEventCount() > 0 && showHealth)
-		{
-			lastUpdate = -_amount;
-			healthUpdateFunction.Invoke();
-		}
+		if (HealthChanged != null && showHealth) HealthChanged.Invoke(-_amount);
 	}
 	void Die()
 	{
@@ -105,10 +99,11 @@ public class Health : MonoBehaviour
 			CancelInvoke("Regen");
 		}
 		//Send message for script to update UI
-		if (healthUpdateFunction.GetPersistentEventCount() > 0 && showHealth)
+		if (HealthChanged != null && showHealth)
 		{
-			if (remainingHealth < regenAmount) lastUpdate = remainingHealth; else lastUpdate = regenAmount;
-			healthUpdateFunction.Invoke();
+			float amount;
+			if (remainingHealth < regenAmount) amount = remainingHealth; else amount = regenAmount;
+			if (HealthChanged != null) HealthChanged.Invoke(amount);
 		}
 	}
 }

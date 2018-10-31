@@ -48,6 +48,7 @@ public class Player_Controller : MonoBehaviour {
         mainCamera = transform.GetComponentInChildren<Camera>();
         originalCameraRotation = mainCamera.transform.rotation;
         healthScript = this.GetComponent<Health>();
+		healthScript.HealthChanged += UpdateHealth;
         //Check to make sure there is a scene to return to
         if (lastScene.name == null)
         {
@@ -171,7 +172,7 @@ public class Player_Controller : MonoBehaviour {
 
     }
 
-    public void UpdateHealth()
+    public void UpdateHealth(float amount)
     {
 		//check to make sure health is assigned
         if (healthScript == null)
@@ -188,7 +189,7 @@ public class Player_Controller : MonoBehaviour {
         }
 		Debug.Log("Spawn hit ind");
 		GameObject newHit = Instantiate(hitIndicator, transform.position + Vector3.up, Quaternion.identity);
-		newHit.GetComponent<HitIndicator>().SetHealth(healthScript.lastUpdate);
+		newHit.GetComponent<HitIndicator>().SetHealth(amount);
     }
 
 
