@@ -29,6 +29,8 @@ public enum InputType
 	[Tooltip("Only use if input required is 'Button'")]
 
 	public string buttonName = "";
+	//check if you want only the player within the trigger to be able to access
+	public bool usePlayerNum;
 	public GameObject obj;
 	// Use this for initialization
 	void Start () {
@@ -94,13 +96,36 @@ public enum InputType
 		else if(inputRequired == InputType.Key && Input.GetKeyDown(keyCode)){
 			functionToRun.Invoke(obj);
 		}
-		else if(inputRequired == InputType.Button && Input.GetButtonDown(buttonName)){
-			functionToRun.Invoke(obj);
+		else if (inputRequired == InputType.Button)
+		{
+			if (usePlayerNum)
+			{
+				if (Input.GetButtonDown(AddPlayerNum(obj)))
+				{
+					functionToRun.Invoke(obj);
+				}
+			}
+			else
+			{
+				if (Input.GetButtonDown(buttonName))
+				{
+					functionToRun.Invoke(obj);
+				}
+			}
 		}
-		else{
+
+		else
+		{
 			return;
 		}
-		
-		
+
+
 	}
+	string AddPlayerNum(GameObject _player)
+	{
+		string _tmpString  = buttonName + " " + (obj.GetComponent<Player_Controller>().playerNum + 1);
+		
+		return _tmpString;
+	}
+
 }

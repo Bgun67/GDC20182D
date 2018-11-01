@@ -24,19 +24,24 @@ public class Health : MonoBehaviour {
 	#endregion
 
     //Ensures dieFunction only executes once
-    bool isDead;
+    public bool isDead;
 	// Use this for initialization
 	void Start () {
 		currentHealth = originalHealth;
+
 		//Send message for script to update UI
         if (healthUpdateFunction.GetPersistentEventCount() > 0&&showHealth)
         {
             healthUpdateFunction.Invoke();
         }
+		isDead = false;
+		print(isDead+this.gameObject.name);
+
 	}
     public void Reset()
     {
-        Start();
+		print("Reset Health"+this.gameObject.name);
+		Start();
     }
 
     // Update is called once per frame
@@ -44,7 +49,11 @@ public class Health : MonoBehaviour {
        
         currentHealth -= _amount;
 		//Checks if the object is alive and health below 0
-		if(!isDead&&currentHealth<=0){
+		if (isDead)
+		{
+			return;
+		}
+		if(currentHealth<=0){
 			Die();
 			return;
 		}
@@ -63,6 +72,13 @@ public class Health : MonoBehaviour {
         }
     }
 	void Die(){
+		if (isDead)
+		{
+			return;
+		}
+		isDead = true;
+
+		print("Health Dying"+this.gameObject.name);
 		//check if there is a diefunction
 		if(dieFunction.GetPersistentEventCount()>0){
 			//runs diefunction
@@ -73,7 +89,6 @@ public class Health : MonoBehaviour {
 			Destroy(this.gameObject);
 		}
 		//Sets object to dead
-		isDead = true;
 	}
     void Regen()
     {

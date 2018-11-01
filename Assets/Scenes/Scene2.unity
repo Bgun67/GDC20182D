@@ -235,10 +235,11 @@ MonoBehaviour:
     m_TypeName: Doormat_Activater+MyGameObjectEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   executeOnExit: 0
-  displayText: Press G to use
-  inputRequired: 1
+  displayText: Press jump to use
+  inputRequired: 2
   keyCode: 103
-  buttonName: 
+  buttonName: Jump
+  usePlayerNum: 1
   obj: {fileID: 0}
 --- !u!65 &425681498
 BoxCollider:
@@ -1009,10 +1010,11 @@ MonoBehaviour:
     m_TypeName: Doormat_Activater+MyGameObjectEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   executeOnExit: 0
-  displayText: Press G to use
-  inputRequired: 1
+  displayText: Press jump to use
+  inputRequired: 2
   keyCode: 103
-  buttonName: 
+  buttonName: Jump
+  usePlayerNum: 1
   obj: {fileID: 0}
 --- !u!65 &1333569285
 BoxCollider:
@@ -1084,10 +1086,11 @@ MonoBehaviour:
     m_TypeName: Doormat_Activater+MyGameObjectEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   executeOnExit: 0
-  displayText: Press G to use
-  inputRequired: 1
+  displayText: Press jump to use
+  inputRequired: 2
   keyCode: 103
-  buttonName: 
+  buttonName: Jump
+  usePlayerNum: 1
   obj: {fileID: 0}
 --- !u!65 &1376611952
 BoxCollider:

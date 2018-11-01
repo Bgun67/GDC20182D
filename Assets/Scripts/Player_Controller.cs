@@ -26,9 +26,10 @@ public class Player_Controller : MonoBehaviour
     public Vector3 cameraOffset;
     //originalCam rotation as a rotation type
     Quaternion originalCameraRotation;
-    #endregion
-    #region Weapon
-    [Header("Weapon")]
+	public float cameraSafeBoundary = 0.05f;
+	#endregion
+	#region Weapon
+	[Header("Weapon")]
     public float weaponDamageFactor = 5f;
     public float weaponRange = 2f;
 	public Weapon primaryWeapon;
@@ -44,7 +45,7 @@ public class Player_Controller : MonoBehaviour
     public Scene currentScene;
 	public Scene lastScene;
 	public int lastDoorNumber;
-    public bool isDead;
+    public bool isPlayerDead;
 	Game_Controller gameController;
 	#region Player Data
 	public int playerNum;
@@ -109,8 +110,7 @@ public class Player_Controller : MonoBehaviour
 		float _x = Mathf.Clamp01(playerNum - 1) * 0.5f;
 		float _y = (playerNum) % 2 * 0.5f;
 		float _width = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 2) * 0.5f;
-		//multiplication added at end to fit player 3 to full screen
-		float _height = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 1) * 0.5f; //* Mathf.Clamp01(Mathf.Abs(gameController.numberOfPlayers - (playerNum + 1)));
+		float _height = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 1) * 0.5f; 
 		mainCamera.rect = new Rect(_x,_y,_width ,_height);
 		ColorPlayer();
 	}
@@ -163,12 +163,58 @@ public class Player_Controller : MonoBehaviour
 
 	#endregion
 	void CameraFollow(){
-		//Track players position but reset the rotation
-		mainCamera.transform.position = this.transform.position + cameraOffset;
-		mainCamera.transform.rotation = originalCameraRotation;
+		Vector3 _position = Vector3.zero;
+		int _connectedPlayers = 0;
+
+		this.mainCamera.transform.rotation = originalCameraRotation;
+		
+		//Add all players within range
+		foreach (GameObject _player in gameController.players)
+		{
+
+			//find if other player is merge zone
+			float _distance = Vector3.Distance(_player.transform.position, this.transform.position);
+			if (_distance < 15f)
+			{
+
+				//add position 
+				_position += _player.transform.position;
+				_connectedPlayers++;
+			}
+
+		}
+		//average positions
+		Vector3 camPosition = (_position / _connectedPlayers) + cameraOffset;
+		
+		//Move camera forward or backward to create a mixed view
+		if (_connectedPlayers > 1)
+		{
+			 float _height = mainCamera.orthographicSize * 2;
+        	 float _width = _height * Screen.width/ Screen.height;
+			if (_connectedPlayers > 2)
+			{
+				camPosition += Mathf.Sign(1.1f-(playerNum)) *  0.5f*_width* Vector3.left;
+			}
+			
+				camPosition += Mathf.Pow(-1f, (playerNum + 1)) * 0.8f *_height* Vector3.forward;
+			
+		}
+		//Move the camera slow if entering or exiting merge zone
+		float _moveRate = 0f;
+		if (Vector3.Distance(camPosition, mainCamera.transform.position) < 8f)
+		{
+			_moveRate = 10f;
+		}
+		else
+		{
+
+			_moveRate = 0.1f;
+		}
+		//move camera to positon
+		mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, camPosition,_moveRate);
 	}
-	
-	
+
+
 	void Attack(){
 		if (!rolling)
 		{
@@ -180,11 +226,11 @@ public class Player_Controller : MonoBehaviour
 			{
 				currentWeapon.Attack(1);
 			}
-			if (Input.GetKeyDown("d"))
+			if (Input.GetButtonDown("Roll Right "+(playerNum+1)))
 			{
 				RollRight();
 			}
-			if (Input.GetKeyDown("a"))
+			if (Input.GetButtonDown("Roll Left "+(playerNum+1)))
 			{
 				RollLeft();
 			}
@@ -196,27 +242,33 @@ public class Player_Controller : MonoBehaviour
         if (transform.position.y < -10f)
         {
 
-            Die();
+            healthScript.TakeDamage(1000f);
         }
     }
-    public void Die()
-    {
-        //check if player has already died
-        if (!isDead)
-        {
-            //reset health to full
-            healthScript.Reset();
-            infoText.text = "You Died";
-            isDead = true;
-			//Go to level spawn
-			gameController.GetLevelController(currentScene.name).SpawnPlayer(this.gameObject);
+	public void Die()
+	{
+		//check if player has already died
 
-
+		infoText.text = "You Died";
+		//Go to level spawn
+		Level_Controller _levelController = gameController.GetLevelController(currentScene.name);
+		if (_levelController != null)
+		{
+			_levelController.SpawnPlayer(this.gameObject);
 		}
+		else
+		{
+			print("No Level Controller in this scene please add one");
+		}
+		//reset health to full
+		healthScript.Reset();
 
-    }
 
-    public void UpdateHealth()
+
+
+	}
+
+	public void UpdateHealth()
     {
         //check to make sure health is assigned
         if (healthScript == null)
@@ -282,7 +334,7 @@ public class Player_Controller : MonoBehaviour
 		anim.SetInteger("Attack Number", 0);
 		//check for object below
 		RaycastHit _hit;
-		if (!Physics.Raycast(transform.position, Vector3.down, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (!Physics.SphereCast(transform.position,0.01f, -transform.up, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			yield break;
 		}
@@ -314,7 +366,7 @@ public class Player_Controller : MonoBehaviour
 		//add force forwards
 		rb.velocity = transform.forward*3f;
 		//check for object
-		if (!Physics.Raycast(transform.position, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (!Physics.SphereCast(transform.position,0.3f, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			return;
 		}
