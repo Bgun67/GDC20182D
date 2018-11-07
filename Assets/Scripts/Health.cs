@@ -34,19 +34,13 @@ public class Health : MonoBehaviour
 	{
 		currentHealth = originalHealth;
 		//Send message for script to update UI
-		if(HealthChanged != null && showHealth) HealthChanged.Invoke(0);
+		if(HealthChanged != null && showHealth){
+      HealthChanged.Invoke(0);
+    }
 	}
 	public void Reset()
 	{
 		Start();
-	}
-
-	public void Update()//All debug stuff
-	{
-		if (Input.GetKeyDown("i"))//i for sm(i)te everything
-		{
-			TakeDamage(1);
-		}
 	}
 
 	// Update is called once per frame
@@ -102,8 +96,15 @@ public class Health : MonoBehaviour
 		if (HealthChanged != null && showHealth)
 		{
 			float amount;
-			if (remainingHealth < regenAmount) amount = remainingHealth; else amount = regenAmount;
-			if (HealthChanged != null) HealthChanged.Invoke(amount);
+			if (remainingHealth < regenAmount){
+        amount = remainingHealth;
+      }
+      else{
+        amount = regenAmount;
+      }
+			if (HealthChanged != null){
+        HealthChanged.Invoke(amount);
+      }
 		}
 	}
 }
