@@ -47,6 +47,7 @@ public class Player_Controller : MonoBehaviour
 	public int lastDoorNumber;
     public bool isPlayerDead;
 	Game_Controller gameController;
+	public Color[] playerColors;
 	#region Player Data
 	public int playerNum;
 	#endregion
@@ -116,7 +117,7 @@ public class Player_Controller : MonoBehaviour
 	}
 	 void ColorPlayer()
 	{
-
+		this.transform.GetComponentInChildren<Renderer>().material.color = playerColors[playerNum];
 	}
 	#region Movement
 	void Move(float _h, float _v){
@@ -162,56 +163,149 @@ public class Player_Controller : MonoBehaviour
 	}
 
 	#endregion
-	void CameraFollow(){
+	void CameraFollow()
+	{
 		Vector3 _position = Vector3.zero;
 		int _connectedPlayers = 0;
 
 		this.mainCamera.transform.rotation = originalCameraRotation;
-		
+
+		GameObject[,] _playerGrid = new GameObject[2, 2];
+
 		//Add all players within range
 		foreach (GameObject _player in gameController.players)
 		{
 
 			//find if other player is merge zone
 			float _distance = Vector3.Distance(_player.transform.position, this.transform.position);
-			if (_distance < 15f)
+			if (_distance < 12f)
 			{
 
 				//add position 
 				_position += _player.transform.position;
+				Rect _camRect = _player.GetComponent<Player_Controller>().mainCamera.rect;
+				_playerGrid[(int)(_camRect.x * 2f), (int)(_camRect.y * 2f)] = _player;
 				_connectedPlayers++;
 			}
 
 		}
-		//average positions
-		Vector3 camPosition = (_position / _connectedPlayers) + cameraOffset;
-		
+		if (_connectedPlayers > 1)
+		{
+			//be careful these change
+			GameObject _player00 = _playerGrid[0, 0];
+			GameObject _player10 = _playerGrid[1, 0];
+
+			if (_player00 != null && _player10 != null)
+			{
+				//swap player cam at bottom left with bottom right if positioned incorrectly
+				Camera _cam00 = _player00.GetComponent<Player_Controller>().mainCamera;
+				Camera _cam10 = _player10.GetComponent<Player_Controller>().mainCamera;
+
+				if (_player00.transform.position.x > _player10.transform.position.x)
+				{
+					_playerGrid[0, 0].GetComponent<Player_Controller>().mainCamera = _cam10;
+					_playerGrid[1, 0].GetComponent<Player_Controller>().mainCamera = _cam00;
+
+					_playerGrid[0, 0] = _player10;
+					_playerGrid[1, 0] = _player00;
+				}
+			}
+			//be careful these change
+			_player00 = _playerGrid[0, 0];
+			GameObject _player01 = _playerGrid[0, 1];
+
+			if (_player00 != null && _player01 != null)
+			{
+				//swap player cam at bottom left with top left if positioned incorrectly
+
+
+				if (_player00.transform.position.z > _player01.transform.position.z)
+				{
+					Camera _cam00 = _player00.GetComponent<Player_Controller>().mainCamera;
+					Camera _cam01 = _player01.GetComponent<Player_Controller>().mainCamera;
+
+
+					_playerGrid[0, 0].GetComponent<Player_Controller>().mainCamera = _cam01;
+					_playerGrid[0, 1].GetComponent<Player_Controller>().mainCamera = _cam00;
+
+					_playerGrid[0, 0] = _player01;
+					_playerGrid[0, 1] = _player00;
+				}
+			}
+			//be careful these change
+			_player01 = _playerGrid[0, 1];
+			GameObject _player11 = _playerGrid[1, 1];
+
+			if (_player01 != null && _player11 != null)
+			{
+				//swap player cam at top left with top right if positioned incorrectly
+
+				Camera _cam01 = _player01.GetComponent<Player_Controller>().mainCamera;
+				Camera _cam11 = _player11.GetComponent<Player_Controller>().mainCamera;
+				if (_player01.transform.position.x > _player11.transform.position.x)
+				{
+					_playerGrid[0, 1].GetComponent<Player_Controller>().mainCamera = _cam11;
+					_playerGrid[1, 1].GetComponent<Player_Controller>().mainCamera = _cam01;
+
+					_playerGrid[0, 1] = _player11;
+					_playerGrid[1, 1] = _player01;
+				}
+			}
+			//be careful these change
+			_player11 = _playerGrid[1, 1];
+			_player10 = _playerGrid[1, 0];
+
+			if (_player11 != null && _player10 != null)
+			{
+				//swap player cam at top right with bottom right if positioned incorrectly
+				Camera _cam11 = _player11.GetComponent<Player_Controller>().mainCamera;
+				Camera _cam10 = _player10.GetComponent<Player_Controller>().mainCamera;
+				if (_player10.transform.position.z > _player11.transform.position.z)
+				{
+					_playerGrid[1, 0].GetComponent<Player_Controller>().mainCamera = _cam11;
+					_playerGrid[1, 1].GetComponent<Player_Controller>().mainCamera = _cam10;
+
+					_playerGrid[1, 0] = _player11;
+					_playerGrid[1, 1] = _player10;
+				}
+			}
+		}
+
+
+		//average positions only if there are 2 or 4 players connected together
+		Vector3 camPosition;
+
+		camPosition = (_position / _connectedPlayers) + cameraOffset;
+
+
 		//Move camera forward or backward to create a mixed view
 		if (_connectedPlayers > 1)
 		{
-			 float _height = mainCamera.orthographicSize * 2;
-        	 float _width = _height * Screen.width/ Screen.height;
+			float _height = mainCamera.orthographicSize * 2;
+			float _width = _height * Screen.width / Screen.height;
 			if (_connectedPlayers > 2)
 			{
-				camPosition += Mathf.Sign(1.1f-(playerNum)) *  0.5f*_width* Vector3.left;
+				camPosition += (1 - mainCamera.rect.x * 4f) * 0.5f * _width * Vector3.left;
 			}
-			
-				camPosition += Mathf.Pow(-1f, (playerNum + 1)) * 0.8f *_height* Vector3.forward;
-			
+
+			camPosition += (mainCamera.rect.y * 4f - 1) * 0.8f * _height * Vector3.forward;
+
 		}
 		//Move the camera slow if entering or exiting merge zone
-		float _moveRate = 0f;
-		if (Vector3.Distance(camPosition, mainCamera.transform.position) < 8f)
+		
+		if (Vector3.Distance(camPosition, mainCamera.transform.position) < 11f)
 		{
-			_moveRate = 10f;
+			mainCamera.transform.position = camPosition;
 		}
 		else
 		{
+						mainCamera.transform.position = camPosition;
 
-			_moveRate = 0.1f;
+			//move camera to positon
+			//mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, camPosition, 0.1f);
 		}
-		//move camera to positon
-		mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, camPosition,_moveRate);
+
+
 	}
 
 
