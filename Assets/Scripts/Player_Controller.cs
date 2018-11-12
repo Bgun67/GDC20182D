@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 [System.Serializable]
 public enum AttackType
@@ -28,10 +29,12 @@ public class AttackClass
 	public AttackType type = AttackType.Default;
 	public bool available = true;
 }
+
 public class Player_Controller : MonoBehaviour
 {
-    #region Movement
-    [Header("Movement")]
+	
+	#region Movement
+	[Header("Movement")]
     float vertical;
     float horizontal;
     //Amount of force applied to player
@@ -44,17 +47,16 @@ public class Player_Controller : MonoBehaviour
 	#endregion
 	#region Camera
 	[Header("Camera")]
-    [Tooltip("Assigned automatrically if left empty")]
+    [Tooltip("Assigned automatically if left empty")]
     public Camera mainCamera;
     //Placement of camera with respect to player
     public Vector3 cameraOffset;
     //originalCam rotation as a rotation type
     Quaternion originalCameraRotation;
-	public float cameraSafeBoundary = 0.05f;
-	#endregion
-	#region Weapon
-	[Header("Weapon")]
-    public AttackClass[] attacks;
+    #endregion
+    #region Weapon
+    [Header("Weapon")]
+	public AttackClass[] attacks;
 	public AttackClass currentAttack;
 	public GameObject icePrefab;
 	#endregion
@@ -63,16 +65,15 @@ public class Player_Controller : MonoBehaviour
     public Text healthText;
     public Health healthScript;
     #endregion
-    public Scene currentScene;
-	public Scene lastScene;
-	public int lastDoorNumber;
-    public bool isPlayerDead;
+    public Scene lastScene;
+    public int lastDoorNumber;
+    bool isDead;
 	Game_Controller gameController;
 	public Color[] playerColors;
 	#region Player Data
 	public int playerNum;
 	#endregion
-	
+
 
 	public GameObject hitIndicator;//Hit indicator prefab
 
@@ -82,31 +83,25 @@ public class Player_Controller : MonoBehaviour
         //Find the rigidbody
         rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
-		//mainCamera = this.GetComponentInChildren<Camera>();
+		mainCamera = transform.GetComponentInChildren<Camera>();
         originalCameraRotation = mainCamera.transform.rotation;
         healthScript = this.GetComponent<Health>();
 		healthScript.HealthChanged += UpdateHealth;
 
 		SwitchAttacks(0);
 
-        //Check to make sure there is a scene to return to
-        if (lastScene.name == null)
+		//Check to make sure there is a scene to return to
+		if (lastScene.name == null)
         {
             lastScene = SceneManager.GetActiveScene();
-        }
-		if (currentScene.name == null)
-        {
-            currentScene = SceneManager.GetActiveScene();
         }
         //check if the player has fallen every 1 second
         InvokeRepeating("CheckFall", 1f, 1f);
 
 	
-
 	}
-	
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
 		//Get Input
 		vertical = Input.GetAxis("Vertical "+(playerNum+1));
 		horizontal = Input.GetAxis("Horizontal "+(playerNum+1));
@@ -128,6 +123,7 @@ public class Player_Controller : MonoBehaviour
 		}
 		Attack();
 		CameraFollow();
+		
 
 	}
 	public void SetupPlayer()
@@ -145,6 +141,112 @@ public class Player_Controller : MonoBehaviour
 	{
 		this.transform.GetComponentInChildren<Renderer>().material.color = playerColors[playerNum];
 	}
+	#region Attacks
+	void ChooseAttack(float _h, float _v)
+	{
+		//     1
+		//  8     2
+		// 7   0   3
+		//  6     4
+		//     5
+		//on the right side of the clock
+		if (_h > 0.5f)
+		{
+			//upper right
+			if (_v > 0.5f)
+			{
+				// attempt to switch to attack 2 if available
+				SwitchAttacks(2);
+			}
+			//bottom right
+			else if (_v < -0.5f)
+			{
+				// attempt to switch to attack 2 if available
+				SwitchAttacks(4);
+			}
+			//middle right
+			else
+			{
+				SwitchAttacks(3);
+			}
+		}
+		else 	//on the left side of the clock
+		if (_h < -0.5f)
+		{
+			//upper left
+			if (_v > 0.5f)
+			{
+				// attempt to switch if available
+				SwitchAttacks(8);
+			}
+			//bottom right
+			else if (_v < -0.5f)
+			{
+				// attempt to switch to attack 2 if available
+				SwitchAttacks(6);
+			}
+			//middle right
+			else
+			{
+				SwitchAttacks(7);
+			}
+		}
+		//center
+		else
+		{
+			//upper center
+			if (_v > 0.5f)
+			{
+				SwitchAttacks(1);
+			}
+			//bottom 
+			else if (_v < -0.5f)
+			{
+				SwitchAttacks(5);
+			}
+			//middle center
+			else
+			{
+				SwitchAttacks(0);
+			}
+		}
+	}
+	void SwitchAttacks(int _attackNum)
+	{
+		if (_attackNum >= 0 && _attackNum < attacks.Length)
+		{
+			AttackClass _attack = attacks[_attackNum];
+			if (_attack.available)
+			{
+				currentAttack = _attack;
+			}
+		}
+
+	}
+	void Attack()
+	{
+		if (!rolling)
+		{
+			if (Input.GetButtonDown("Primary Attack "+(playerNum+1)))
+			{
+				currentAttack.function.Invoke();
+			}
+			if (Input.GetButtonDown("Secondary Attack "+(playerNum+1)))
+			{
+				FlipSmash();
+			}
+
+		}
+		if (Input.GetButtonDown("Roll Right "+(playerNum+1)))
+		{
+			RollRight();
+		}
+		if (Input.GetButtonDown("Roll Left "+(playerNum+1)))
+		{
+			RollLeft();
+		}
+	}
+	#endregion
 	#region Movement
 	void Move(float _h, float _v){
 		
@@ -334,38 +436,18 @@ public class Player_Controller : MonoBehaviour
 
 	}
 
-
-	void Attack(){
-		if (!rolling)
-		{
-			if (Input.GetButtonDown("Primary Attack "+(playerNum+1)))
-			{
-				currentWeapon.Attack(0);
-			}
-			if (Input.GetButtonDown("Secondary Attack "+(playerNum+1)))
-			{
-				currentWeapon.Attack(1);
-			}
-			if (Input.GetButtonDown("Roll Right "+(playerNum+1)))
-			{
-				RollRight();
-			}
-			if (Input.GetButtonDown("Roll Left "+(playerNum+1)))
-			{
-				RollLeft();
-			}
-		}
-	}
+	
+	
     void CheckFall()
     {
 
         if (transform.position.y < -10f)
         {
 
-            healthScript.TakeDamage(1000f);
+            Die();
         }
     }
-	public void Die()
+   public void Die()
 	{
 		//check if player has already died
 
@@ -382,7 +464,7 @@ public class Player_Controller : MonoBehaviour
 		}
 		//reset health to full
 		healthScript.Reset();
-
+	}
 
     public void UpdateHealth(float amount)
     {
@@ -399,9 +481,12 @@ public class Player_Controller : MonoBehaviour
         {
             healthText.text += " 0";
         }
-		GameObject newHit = Instantiate(hitIndicator, transform.position + Vector3.up, Quaternion.identity);
-		newHit.GetComponent<HitIndicator>().SetHealth(amount);
-    }
+		if (hitIndicator != null)
+		{
+			GameObject newHit = Instantiate(hitIndicator, transform.position + Vector3.up, Quaternion.identity);
+			newHit.GetComponent<HitIndicator>().SetHealth(amount);
+		}
+	}
 	public void RollRight()
 	{
 		if (CheckGrounded()&&anim.GetInteger("Attack Number")==0)
@@ -428,6 +513,7 @@ public class Player_Controller : MonoBehaviour
 	{
 		rolling = false;
 	}
+	#region Attacks
 	public void FlipSmash()
 	{
 		StartCoroutine(RunFlipSmash());
@@ -452,14 +538,14 @@ public class Player_Controller : MonoBehaviour
 		anim.SetInteger("Attack Number", 0);
 		//check for object below
 		RaycastHit _hit;
-		if (!Physics.SphereCast(transform.position,0.01f, -transform.up, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (!Physics.Raycast(transform.position, Vector3.down, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			yield break;
 		}
 		//if object below has a health component, give damage
 		if (_hit.transform.GetComponent<Health>() != null)
 		{
-			_hit.transform.GetComponent<Health>().TakeDamage(100f);
+			_hit.transform.GetComponent<Health>().TakeDamage(currentAttack.damage, currentAttack.type);
 		}
 		
 
@@ -473,7 +559,6 @@ public class Player_Controller : MonoBehaviour
 		}
 		//Ram
 		anim.SetInteger("Attack Number", 2);
-		
 		//Damage is called by animation event
 	}
 	public void ForwardStrike()
@@ -484,16 +569,32 @@ public class Player_Controller : MonoBehaviour
 		//add force forwards
 		rb.velocity = transform.forward*3f;
 		//check for object
-		if (!Physics.SphereCast(transform.position,0.3f, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (!Physics.Raycast(transform.position, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			return;
 		}
 		//if object below has a health component, give damage
 		if (_hit.transform.GetComponent<Health>() != null)
 		{
-			_hit.transform.GetComponent<Health>().TakeDamage(currentWeapon.GetStrikeDamage());
+			_hit.transform.GetComponent<Health>().TakeDamage(currentAttack.damage, currentAttack.type);
 		}
 	
 	}
+	public void Ice()
+	{
+		RaycastHit _hit;
+		if (!Physics.SphereCast(transform.position+rb.centerOfMass,0.3f, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
+		{
+			return;
+		}
+		Health _hitHealth = _hit.transform.GetComponent<Health>();
+		if (_hitHealth != null)
+		{
+			Destroy(Instantiate(icePrefab, _hitHealth.transform.position, Quaternion.identity, _hitHealth.transform),5f);
+			
+		}
+	}
+	
+	#endregion
 
 }
