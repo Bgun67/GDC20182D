@@ -109,7 +109,7 @@ public class Player_Controller : MonoBehaviour
 		vertical = Input.GetAxis("Vertical " + (playerNum + 1));
 		horizontal = Input.GetAxis("Horizontal " + (playerNum + 1));
 
-		if (Input.GetButton("Change Weapon" + (playerNum + 1)))
+		if (Input.GetButton("Change Weapon " + (playerNum + 1)))
 		{
 			ChooseAttack(horizontal, vertical);
 		}

@@ -10,18 +10,10 @@ public class Door : MonoBehaviour
 	public List<GameObject> players;
 	public Queue<GameObject> usingPlayers = new Queue<GameObject>();
 	public bool locked;
-<<<<<<< HEAD
-    // Use this for initialization
-    void Start()
-    {
-       
-    }
-=======
 	public bool inUse;
 	// Use this for initialization
 	void Start()
 	{
->>>>>>> 0ce790695e8c3d376003009e010bc575fc609e3b
 
 	}
 
