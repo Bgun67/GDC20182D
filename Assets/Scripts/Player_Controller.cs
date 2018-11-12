@@ -26,9 +26,10 @@ public class Player_Controller : MonoBehaviour
     public Vector3 cameraOffset;
     //originalCam rotation as a rotation type
     Quaternion originalCameraRotation;
-    #endregion
-    #region Weapon
-    [Header("Weapon")]
+	public float cameraSafeBoundary = 0.05f;
+	#endregion
+	#region Weapon
+	[Header("Weapon")]
     public float weaponDamageFactor = 5f;
     public float weaponRange = 2f;
 	public Weapon primaryWeapon;
@@ -41,9 +42,15 @@ public class Player_Controller : MonoBehaviour
     public Text healthText;
     public Health healthScript;
     #endregion
-    public Scene lastScene;
-    public int lastDoorNumber;
-    bool isDead;
+    public Scene currentScene;
+	public Scene lastScene;
+	public int lastDoorNumber;
+    public bool isPlayerDead;
+	Game_Controller gameController;
+	public Color[] playerColors;
+	#region Player Data
+	public int playerNum;
+	#endregion
 	
 
 	public GameObject hitIndicator;//Hit indicator prefab
@@ -54,7 +61,7 @@ public class Player_Controller : MonoBehaviour
         //Find the rigidbody
         rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
-		mainCamera = transform.GetComponentInChildren<Camera>();
+		//mainCamera = this.GetComponentInChildren<Camera>();
         originalCameraRotation = mainCamera.transform.rotation;
         healthScript = this.GetComponent<Health>();
 		healthScript.HealthChanged += UpdateHealth;
@@ -63,19 +70,25 @@ public class Player_Controller : MonoBehaviour
         {
             lastScene = SceneManager.GetActiveScene();
         }
+		if (currentScene.name == null)
+        {
+            currentScene = SceneManager.GetActiveScene();
+        }
         //check if the player has fallen every 1 second
         InvokeRepeating("CheckFall", 1f, 1f);
 
-		primaryWeapon = WeaponLoader.LoadWeapon(finger, 1);
-		secondaryWeapon = WeaponLoader.LoadWeapon(finger, 2);
+		primaryWeapon = WeaponLoader.LoadWeapon(finger, 1, playerNum);
+		secondaryWeapon = WeaponLoader.LoadWeapon(finger, 2, playerNum);
 		secondaryWeapon.gameObject.SetActive(false);
 		currentWeapon = primaryWeapon;
+
 	}
-    // Update is called once per frame
-    void Update () {
+	
+	// Update is called once per frame
+	void Update () {
 		//Get Input
-		vertical = Input.GetAxis("Vertical");
-		horizontal = Input.GetAxis("Horizontal");
+		vertical = Input.GetAxis("Vertical "+(playerNum+1));
+		horizontal = Input.GetAxis("Horizontal "+(playerNum+1));
 
 		//is input greater than 0
 		if(Vector2.SqrMagnitude(new Vector2(vertical, horizontal))>0f&&!rolling){
@@ -86,12 +99,27 @@ public class Player_Controller : MonoBehaviour
 			Look(horizontal, vertical);
 			
 		}
-		if(Input.GetKeyDown("space")&&CheckGrounded()){
+		if(Input.GetButtonDown("Jump "+(playerNum+1))&&CheckGrounded()){
 			Jump();
 		}
 		Attack();
 		CameraFollow();
 
+	}
+	public void SetupPlayer()
+	{
+		gameController = FindObjectOfType<Game_Controller>();
+		//Adjust Camera to fit players on screen
+		float _x = Mathf.Clamp01(playerNum - 1) * 0.5f;
+		float _y = (playerNum) % 2 * 0.5f;
+		float _width = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 2) * 0.5f;
+		float _height = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 1) * 0.5f; 
+		mainCamera.rect = new Rect(_x,_y,_width ,_height);
+		ColorPlayer();
+	}
+	 void ColorPlayer()
+	{
+		this.transform.GetComponentInChildren<Renderer>().material.color = playerColors[playerNum];
 	}
 	#region Movement
 	void Move(float _h, float _v){
@@ -137,29 +165,168 @@ public class Player_Controller : MonoBehaviour
 	}
 
 	#endregion
-	void CameraFollow(){
-		//Track players position but reset the rotation
-		mainCamera.transform.position = this.transform.position + cameraOffset;
-		mainCamera.transform.rotation = originalCameraRotation;
+	void CameraFollow()
+	{
+		Vector3 _position = Vector3.zero;
+		int _connectedPlayers = 0;
+
+		this.mainCamera.transform.rotation = originalCameraRotation;
+
+		GameObject[,] _playerGrid = new GameObject[2, 2];
+
+		//Add all players within range
+		foreach (GameObject _player in gameController.players)
+		{
+
+			//find if other player is merge zone
+			float _distance = Vector3.Distance(_player.transform.position, this.transform.position);
+			if (_distance < 12f)
+			{
+
+				//add position 
+				_position += _player.transform.position;
+				Rect _camRect = _player.GetComponent<Player_Controller>().mainCamera.rect;
+				_playerGrid[(int)(_camRect.x * 2f), (int)(_camRect.y * 2f)] = _player;
+				_connectedPlayers++;
+			}
+
+		}
+		if (_connectedPlayers > 1)
+		{
+			//be careful these change
+			GameObject _player00 = _playerGrid[0, 0];
+			GameObject _player10 = _playerGrid[1, 0];
+
+			if (_player00 != null && _player10 != null)
+			{
+				//swap player cam at bottom left with bottom right if positioned incorrectly
+				Camera _cam00 = _player00.GetComponent<Player_Controller>().mainCamera;
+				Camera _cam10 = _player10.GetComponent<Player_Controller>().mainCamera;
+
+				if (_player00.transform.position.x > _player10.transform.position.x)
+				{
+					_playerGrid[0, 0].GetComponent<Player_Controller>().mainCamera = _cam10;
+					_playerGrid[1, 0].GetComponent<Player_Controller>().mainCamera = _cam00;
+
+					_playerGrid[0, 0] = _player10;
+					_playerGrid[1, 0] = _player00;
+				}
+			}
+			//be careful these change
+			_player00 = _playerGrid[0, 0];
+			GameObject _player01 = _playerGrid[0, 1];
+
+			if (_player00 != null && _player01 != null)
+			{
+				//swap player cam at bottom left with top left if positioned incorrectly
+
+
+				if (_player00.transform.position.z > _player01.transform.position.z)
+				{
+					Camera _cam00 = _player00.GetComponent<Player_Controller>().mainCamera;
+					Camera _cam01 = _player01.GetComponent<Player_Controller>().mainCamera;
+
+
+					_playerGrid[0, 0].GetComponent<Player_Controller>().mainCamera = _cam01;
+					_playerGrid[0, 1].GetComponent<Player_Controller>().mainCamera = _cam00;
+
+					_playerGrid[0, 0] = _player01;
+					_playerGrid[0, 1] = _player00;
+				}
+			}
+			//be careful these change
+			_player01 = _playerGrid[0, 1];
+			GameObject _player11 = _playerGrid[1, 1];
+
+			if (_player01 != null && _player11 != null)
+			{
+				//swap player cam at top left with top right if positioned incorrectly
+
+				Camera _cam01 = _player01.GetComponent<Player_Controller>().mainCamera;
+				Camera _cam11 = _player11.GetComponent<Player_Controller>().mainCamera;
+				if (_player01.transform.position.x > _player11.transform.position.x)
+				{
+					_playerGrid[0, 1].GetComponent<Player_Controller>().mainCamera = _cam11;
+					_playerGrid[1, 1].GetComponent<Player_Controller>().mainCamera = _cam01;
+
+					_playerGrid[0, 1] = _player11;
+					_playerGrid[1, 1] = _player01;
+				}
+			}
+			//be careful these change
+			_player11 = _playerGrid[1, 1];
+			_player10 = _playerGrid[1, 0];
+
+			if (_player11 != null && _player10 != null)
+			{
+				//swap player cam at top right with bottom right if positioned incorrectly
+				Camera _cam11 = _player11.GetComponent<Player_Controller>().mainCamera;
+				Camera _cam10 = _player10.GetComponent<Player_Controller>().mainCamera;
+				if (_player10.transform.position.z > _player11.transform.position.z)
+				{
+					_playerGrid[1, 0].GetComponent<Player_Controller>().mainCamera = _cam11;
+					_playerGrid[1, 1].GetComponent<Player_Controller>().mainCamera = _cam10;
+
+					_playerGrid[1, 0] = _player11;
+					_playerGrid[1, 1] = _player10;
+				}
+			}
+		}
+
+
+		//average positions only if there are 2 or 4 players connected together
+		Vector3 camPosition;
+
+		camPosition = (_position / _connectedPlayers) + cameraOffset;
+
+
+		//Move camera forward or backward to create a mixed view
+		if (_connectedPlayers > 1)
+		{
+			float _height = mainCamera.orthographicSize * 2;
+			float _width = _height * Screen.width / Screen.height;
+			if (_connectedPlayers > 2)
+			{
+				camPosition += (1 - mainCamera.rect.x * 4f) * 0.5f * _width * Vector3.left;
+			}
+
+			camPosition += (mainCamera.rect.y * 4f - 1) * 0.8f * _height * Vector3.forward;
+
+		}
+		//Move the camera slow if entering or exiting merge zone
+		
+		if (Vector3.Distance(camPosition, mainCamera.transform.position) < 11f)
+		{
+			mainCamera.transform.position = camPosition;
+		}
+		else
+		{
+						mainCamera.transform.position = camPosition;
+
+			//move camera to positon
+			//mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, camPosition, 0.1f);
+		}
+
+
 	}
 
-	
+
 	void Attack(){
 		if (!rolling)
 		{
-			if (Input.GetKeyDown("w"))
+			if (Input.GetButtonDown("Primary Attack "+(playerNum+1)))
 			{
 				currentWeapon.Attack(0);
 			}
-			if (Input.GetKeyDown("s"))
+			if (Input.GetButtonDown("Secondary Attack "+(playerNum+1)))
 			{
 				currentWeapon.Attack(1);
 			}
-			if (Input.GetKeyDown("d"))
+			if (Input.GetButtonDown("Roll Right "+(playerNum+1)))
 			{
 				RollRight();
 			}
-			if (Input.GetKeyDown("a"))
+			if (Input.GetButtonDown("Roll Left "+(playerNum+1)))
 			{
 				RollLeft();
 			}
@@ -171,32 +338,27 @@ public class Player_Controller : MonoBehaviour
         if (transform.position.y < -10f)
         {
 
-            Die();
+            healthScript.TakeDamage(1000f);
         }
     }
-    public void Die()
-    {
-        //check if player has already died
-        if (!isDead)
-        {
-            //reset health to full
-            healthScript.Reset();
-            infoText.text = "You Died";
-            isDead = true;
-            //go through last door
-            foreach (Door _door in FindObjectsOfType<Door>())
-            {
-                if (_door.doorNumber == lastDoorNumber)
-                {
-                    _door.OpenDoor();
-                    break;
-                }
-            }
-            isDead = false;
+	public void Die()
+	{
+		//check if player has already died
 
-        }
+		infoText.text = "You Died";
+		//Go to level spawn
+		Level_Controller _levelController = gameController.GetLevelController(currentScene.name);
+		if (_levelController != null)
+		{
+			_levelController.SpawnPlayer(this.gameObject);
+		}
+		else
+		{
+			print("No Level Controller in this scene please add one");
+		}
+		//reset health to full
+		healthScript.Reset();
 
-    }
 
     public void UpdateHealth(float amount)
     {
@@ -266,7 +428,7 @@ public class Player_Controller : MonoBehaviour
 		anim.SetInteger("Attack Number", 0);
 		//check for object below
 		RaycastHit _hit;
-		if (!Physics.Raycast(transform.position, Vector3.down, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (!Physics.SphereCast(transform.position,0.01f, -transform.up, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			yield break;
 		}
@@ -298,7 +460,7 @@ public class Player_Controller : MonoBehaviour
 		//add force forwards
 		rb.velocity = transform.forward*3f;
 		//check for object
-		if (!Physics.Raycast(transform.position, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (!Physics.SphereCast(transform.position,0.3f, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			return;
 		}
