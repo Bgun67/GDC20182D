@@ -35,6 +35,7 @@ ModelImporter:
     100058: Upper_Arm_R
     100060: Upper_Leg_L
     100062: Upper_Leg_R
+    100064: Cube
     400000: Armature
     400002: Character
     400004: Chest
@@ -67,8 +68,14 @@ ModelImporter:
     400058: Upper_Arm_R
     400060: Upper_Leg_L
     400062: Upper_Leg_R
+    400064: Cube
     2100000: Character__Character_Texture_png
+    2100002: unnamed
+    2100004: Character__Kliff_Reference_Cropped__jpg
+    2300000: Cube
+    3300000: Cube
     4300000: Character
+    4300002: Cube
     7400000: Default Take
     7400002: Flip_Smash
     7400004: Walk
