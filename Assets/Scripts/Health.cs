@@ -27,23 +27,20 @@ public class Health : MonoBehaviour
 	public float regenAmount = 5f;
 	#endregion
 
-
 	public delegate void HealthChangeHandler(float amount);
 	public event HealthChangeHandler HealthChanged;
 
 	//Ensures dieFunction only executes once
 	bool isDead;
-
 	// Use this for initialization
 	void Start()
 	{
 		currentHealth = originalHealth;
-
 		//Send message for script to update UI
-		if(HealthChanged != null && showHealth){
-      HealthChanged.Invoke(0);
-
-    }
+		if (HealthChanged != null && showHealth)
+		{
+			HealthChanged.Invoke(0);
+		}
 	}
 	public void Reset()
 	{
@@ -89,6 +86,7 @@ public class Health : MonoBehaviour
 			Destroy(this.gameObject);
 		}
 		//Sets object to dead
+		isDead = true;
 	}
 	void Regen()
 	{
