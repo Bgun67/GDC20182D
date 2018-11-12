@@ -32,42 +32,43 @@ public class AttackClass
 
 public class Player_Controller : MonoBehaviour
 {
-	
+
 	#region Movement
 	[Header("Movement")]
-    float vertical;
-    float horizontal;
-    //Amount of force applied to player
-    public float forceFactor = 5f;
-    //Determines which colliders the rays should hit
-    public LayerMask jumpMask;
-    Rigidbody rb;
+	float vertical;
+	float horizontal;
+	//Amount of force applied to player
+	public float forceFactor = 5f;
+	//Determines which colliders the rays should hit
+	public LayerMask jumpMask;
+	Rigidbody rb;
 	public Animator anim;
 	bool rolling;
 	#endregion
 	#region Camera
 	[Header("Camera")]
-    [Tooltip("Assigned automatically if left empty")]
-    public Camera mainCamera;
-    //Placement of camera with respect to player
-    public Vector3 cameraOffset;
-    //originalCam rotation as a rotation type
-    Quaternion originalCameraRotation;
-    #endregion
-    #region Weapon
-    [Header("Weapon")]
+	[Tooltip("Assigned automatically if left empty")]
+	public Camera mainCamera;
+	//Placement of camera with respect to player
+	public Vector3 cameraOffset;
+	//originalCam rotation as a rotation type
+	Quaternion originalCameraRotation;
+	#endregion
+	#region Weapon
+	[Header("Weapon")]
 	public AttackClass[] attacks;
 	public AttackClass currentAttack;
 	public GameObject icePrefab;
 	#endregion
 	#region "UI"
 	public Text infoText;
-    public Text healthText;
-    public Health healthScript;
-    #endregion
-    public Scene lastScene;
-    public int lastDoorNumber;
-    bool isDead;
+	public Text healthText;
+	public Health healthScript;
+	#endregion
+	public Scene currentScene;
+	public Scene lastScene;
+	public int lastDoorNumber;
+	bool isDead;
 	Game_Controller gameController;
 	public Color[] playerColors;
 	#region Player Data
@@ -77,53 +78,58 @@ public class Player_Controller : MonoBehaviour
 
 	public GameObject hitIndicator;//Hit indicator prefab
 
-    // Use this for initialization
-    void Start()
-    {
-        //Find the rigidbody
-        rb = GetComponent<Rigidbody>();
+	// Use this for initialization
+	void Start()
+	{
+		//Find the rigidbody
+		rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
 		mainCamera = transform.GetComponentInChildren<Camera>();
-        originalCameraRotation = mainCamera.transform.rotation;
-        healthScript = this.GetComponent<Health>();
+		originalCameraRotation = mainCamera.transform.rotation;
+		healthScript = this.GetComponent<Health>();
 		healthScript.HealthChanged += UpdateHealth;
 
 		SwitchAttacks(0);
 
 		//Check to make sure there is a scene to return to
 		if (lastScene.name == null)
-        {
-            lastScene = SceneManager.GetActiveScene();
-        }
-        //check if the player has fallen every 1 second
-        InvokeRepeating("CheckFall", 1f, 1f);
+		{
+			lastScene = SceneManager.GetActiveScene();
+			currentScene = SceneManager.GetActiveScene();
+		}
+		//check if the player has fallen every 1 second
+		InvokeRepeating("CheckFall", 1f, 1f);
 
-	
+
 	}
-    // Update is called once per frame
-    void Update () {
+	// Update is called once per frame
+	void Update()
+	{
 		//Get Input
-		vertical = Input.GetAxis("Vertical "+(playerNum+1));
-		horizontal = Input.GetAxis("Horizontal "+(playerNum+1));
+		vertical = Input.GetAxis("Vertical " + (playerNum + 1));
+		horizontal = Input.GetAxis("Horizontal " + (playerNum + 1));
 
-		if (Input.GetKey("e")){
+		if (Input.GetButton("Change Weapon" + (playerNum + 1)))
+		{
 			ChooseAttack(horizontal, vertical);
 		}
 		//is input greater than 0
-		else if(Vector2.SqrMagnitude(new Vector2(vertical, horizontal))>0f&&!rolling){
-		
+		else if (Vector2.SqrMagnitude(new Vector2(vertical, horizontal)) > 0f && !rolling)
+		{
+
 			//Moves the player using velocities
 			Move(horizontal, vertical);
 			//Turns the player to face direction of movement
 			Look(horizontal, vertical);
-			
+
 		}
-		if(Input.GetButtonDown("Jump "+(playerNum+1))&&CheckGrounded()){
+		if (Input.GetButtonDown("Jump " + (playerNum + 1)) && CheckGrounded())
+		{
 			Jump();
 		}
 		Attack();
 		CameraFollow();
-		
+
 
 	}
 	public void SetupPlayer()
@@ -133,11 +139,11 @@ public class Player_Controller : MonoBehaviour
 		float _x = Mathf.Clamp01(playerNum - 1) * 0.5f;
 		float _y = (playerNum) % 2 * 0.5f;
 		float _width = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 2) * 0.5f;
-		float _height = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 1) * 0.5f; 
-		mainCamera.rect = new Rect(_x,_y,_width ,_height);
+		float _height = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 1) * 0.5f;
+		mainCamera.rect = new Rect(_x, _y, _width, _height);
 		ColorPlayer();
 	}
-	 void ColorPlayer()
+	void ColorPlayer()
 	{
 		this.transform.GetComponentInChildren<Renderer>().material.color = playerColors[playerNum];
 	}
@@ -170,7 +176,7 @@ public class Player_Controller : MonoBehaviour
 				SwitchAttacks(3);
 			}
 		}
-		else 	//on the left side of the clock
+		else    //on the left side of the clock
 		if (_h < -0.5f)
 		{
 			//upper left
@@ -227,65 +233,70 @@ public class Player_Controller : MonoBehaviour
 	{
 		if (!rolling)
 		{
-			if (Input.GetButtonDown("Primary Attack "+(playerNum+1)))
+			if (Input.GetButtonDown("Primary Attack " + (playerNum + 1)))
 			{
 				currentAttack.function.Invoke();
 			}
-			if (Input.GetButtonDown("Secondary Attack "+(playerNum+1)))
+			if (Input.GetButtonDown("Secondary Attack " + (playerNum + 1)))
 			{
 				FlipSmash();
 			}
 
 		}
-		if (Input.GetButtonDown("Roll Right "+(playerNum+1)))
+		if (Input.GetButtonDown("Roll Right " + (playerNum + 1)))
 		{
 			RollRight();
 		}
-		if (Input.GetButtonDown("Roll Left "+(playerNum+1)))
+		if (Input.GetButtonDown("Roll Left " + (playerNum + 1)))
 		{
 			RollLeft();
 		}
 	}
 	#endregion
 	#region Movement
-	void Move(float _h, float _v){
-		
+	void Move(float _h, float _v)
+	{
+
 		//get previous upward velocity
 		float _yVelocity = rb.velocity.y;
 		//Move Player
-		rb.velocity = new Vector3(_h,0f, _v)*forceFactor;
-		
-		
+		rb.velocity = new Vector3(_h, 0f, _v) * forceFactor;
+
+
 		//Reset upwards velocity
-		rb.velocity += new Vector3(0f,_yVelocity,0f);
-		
+		rb.velocity += new Vector3(0f, _yVelocity, 0f);
+
 	}
-	void Look(float _h, float _v){
+	void Look(float _h, float _v)
+	{
 		//Point player in proper direction
-		
-	  //Calculate atan to find angle convert from rads Lerps the angle, result is not exactly the angle
-    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, Mathf.Rad2Deg * Mathf.Atan(_h / _v) + Mathf.Sign(_v) * 90f - 90f, 0f), 0.2f);
+
+		//Calculate atan to find angle convert from rads Lerps the angle, result is not exactly the angle
+		transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, Mathf.Rad2Deg * Mathf.Atan(_h / _v) + Mathf.Sign(_v) * 90f - 90f, 0f), 0.2f);
 
 
-		
-		
+
+
 	}
-	void Jump(){
+	void Jump()
+	{
 		//add upwards velocity to current velocity
 		Vector3 _oldVelocity = rb.velocity;
-		rb.velocity = Vector3.up*5f+_oldVelocity;
+		rb.velocity = Vector3.up * 5f + _oldVelocity;
 		//FindObjectOfType<Physics_Helper>().MoveTo(this.gameObject,new Vector3(0f,0f,0f),10f);
 
 	}
-	bool CheckGrounded(){
+	bool CheckGrounded()
+	{
 		bool _grounded = false;
 		//draw a laser downwards and see if it hits anything
 		RaycastHit _hit;
-		if(Physics.Raycast(this.transform.position,Vector3.down,out _hit,0.1f,jumpMask,QueryTriggerInteraction.Ignore)){
+		if (Physics.Raycast(this.transform.position, Vector3.down, out _hit, 0.1f, jumpMask, QueryTriggerInteraction.Ignore))
+		{
 			//we've hit something, there is something below the player
 			_grounded = true;
 		}
-		
+
 		return _grounded;
 
 	}
@@ -420,14 +431,14 @@ public class Player_Controller : MonoBehaviour
 
 		}
 		//Move the camera slow if entering or exiting merge zone
-		
+
 		if (Vector3.Distance(camPosition, mainCamera.transform.position) < 11f)
 		{
 			mainCamera.transform.position = camPosition;
 		}
 		else
 		{
-						mainCamera.transform.position = camPosition;
+			mainCamera.transform.position = camPosition;
 
 			//move camera to positon
 			//mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, camPosition, 0.1f);
@@ -436,18 +447,18 @@ public class Player_Controller : MonoBehaviour
 
 	}
 
-	
-	
-    void CheckFall()
-    {
 
-        if (transform.position.y < -10f)
-        {
 
-            Die();
-        }
-    }
-   public void Die()
+	void CheckFall()
+	{
+
+		if (transform.position.y < -10f)
+		{
+
+			Die();
+		}
+	}
+	public void Die()
 	{
 		//check if player has already died
 
@@ -466,21 +477,21 @@ public class Player_Controller : MonoBehaviour
 		healthScript.Reset();
 	}
 
-    public void UpdateHealth(float amount)
-    {
-        //check to make sure health is assigned
-        if (healthScript == null)
-        {
-            healthScript = this.GetComponent<Health>();
-        }
-        //Clear shields and get number of shields needed
-        int _shieldNumber = (int)healthScript.currentHealth / 10;
-        healthText.text = "";
-        //type shields
-        for (int i = 0; i < _shieldNumber; i++)
-        {
-            healthText.text += " 0";
-        }
+	public void UpdateHealth(float amount)
+	{
+		//check to make sure health is assigned
+		if (healthScript == null)
+		{
+			healthScript = this.GetComponent<Health>();
+		}
+		//Clear shields and get number of shields needed
+		int _shieldNumber = (int)healthScript.currentHealth / 10;
+		healthText.text = "";
+		//type shields
+		for (int i = 0; i < _shieldNumber; i++)
+		{
+			healthText.text += " 0";
+		}
 		if (hitIndicator != null)
 		{
 			GameObject newHit = Instantiate(hitIndicator, transform.position + Vector3.up, Quaternion.identity);
@@ -489,7 +500,7 @@ public class Player_Controller : MonoBehaviour
 	}
 	public void RollRight()
 	{
-		if (CheckGrounded()&&anim.GetInteger("Attack Number")==0)
+		if (CheckGrounded() && anim.GetInteger("Attack Number") == 0)
 		{
 			anim.SetTrigger("Roll Right");
 
@@ -501,7 +512,8 @@ public class Player_Controller : MonoBehaviour
 	}
 	public void RollLeft()
 	{
-		if (CheckGrounded()&&anim.GetInteger("Attack Number")==0){
+		if (CheckGrounded() && anim.GetInteger("Attack Number") == 0)
+		{
 			anim.SetTrigger("Roll Left");
 
 			rb.velocity = transform.right * -10f;
@@ -521,18 +533,18 @@ public class Player_Controller : MonoBehaviour
 	public IEnumerator RunFlipSmash()
 	{
 		//Make sure player is in the air and not attacking
-		if (CheckGrounded()||anim.GetInteger("Attack Number")!=0)
+		if (CheckGrounded() || anim.GetInteger("Attack Number") != 0)
 		{
 			yield break;
 		}
 		//do a flip
 		anim.SetInteger("Attack Number", 1);
 		//add a force upwards to keep player in air longer
-		rb.velocity = Vector3.up*7f;
+		rb.velocity = Vector3.up * 7f;
 		//Wait a second
 		yield return new WaitForSeconds(1f);
 		//send the player crashing down
-		rb.velocity = Vector3.down*10f;
+		rb.velocity = Vector3.down * 10f;
 		yield return new WaitUntil(() => CheckGrounded());
 		//reset player's animation
 		anim.SetInteger("Attack Number", 0);
@@ -547,13 +559,13 @@ public class Player_Controller : MonoBehaviour
 		{
 			_hit.transform.GetComponent<Health>().TakeDamage(currentAttack.damage, currentAttack.type);
 		}
-		
+
 
 	}
 	public void ShoulderRam()
 	{
 		//Make sure player is grounded and not attacking
-		if (!CheckGrounded()||anim.GetInteger("Attack Number")!=0)
+		if (!CheckGrounded() || anim.GetInteger("Attack Number") != 0)
 		{
 			return;
 		}
@@ -567,7 +579,7 @@ public class Player_Controller : MonoBehaviour
 		//reset player's animation
 		anim.SetInteger("Attack Number", 0);
 		//add force forwards
-		rb.velocity = transform.forward*3f;
+		rb.velocity = transform.forward * 3f;
 		//check for object
 		if (!Physics.Raycast(transform.position, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
@@ -578,23 +590,23 @@ public class Player_Controller : MonoBehaviour
 		{
 			_hit.transform.GetComponent<Health>().TakeDamage(currentAttack.damage, currentAttack.type);
 		}
-	
+
 	}
 	public void Ice()
 	{
 		RaycastHit _hit;
-		if (!Physics.SphereCast(transform.position+rb.centerOfMass,0.3f, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (!Physics.SphereCast(transform.position + rb.centerOfMass, 0.3f, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			return;
 		}
 		Health _hitHealth = _hit.transform.GetComponent<Health>();
 		if (_hitHealth != null)
 		{
-			Destroy(Instantiate(icePrefab, _hitHealth.transform.position, Quaternion.identity, _hitHealth.transform),5f);
-			
+			Destroy(Instantiate(icePrefab, _hitHealth.transform.position, Quaternion.identity, _hitHealth.transform), 5f);
+
 		}
 	}
-	
+
 	#endregion
 
 }

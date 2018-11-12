@@ -11,15 +11,7 @@ public class Door : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        //destroy extra players when any scene loads
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
-        {
-            if (go.scene != SceneManager.GetActiveScene())
-            {
-                print("Destroying Extra player");
-                Destroy(go);
-            }
-        }
+       
     }
 
     public void OpenDoor () {

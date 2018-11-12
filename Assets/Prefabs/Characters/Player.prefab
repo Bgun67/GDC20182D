@@ -201,7 +201,6 @@ GameObject:
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-
   - component: {fileID: 4734265849952168}
   - component: {fileID: 95646334076895574}
   - component: {fileID: 114522857728829982}
@@ -209,7 +208,6 @@ GameObject:
   - component: {fileID: 114358469244767514}
   - component: {fileID: 54907021444842276}
   - component: {fileID: 136695011228527632}
-
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1373,13 +1371,81 @@ MonoBehaviour:
   anim: {fileID: 95646334076895574}
   mainCamera: {fileID: 0}
   cameraOffset: {x: 0, y: 4, z: -1}
-  primaryWeapon: {fileID: 0}
-  secondaryWeapon: {fileID: 0}
-  finger: {fileID: 4333758971914010}
+  attacks:
+  - function:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 114522857728829982}
+          m_MethodName: ShoulderRam
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    damage: 100
+    type: 1
+    available: 1
+  - function:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 114522857728829982}
+          m_MethodName: FlipSmash
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    damage: 100
+    type: 3
+    available: 1
+  - function:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 114522857728829982}
+          m_MethodName: Ice
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    damage: 0
+    type: 5
+    available: 1
+  currentAttack:
+    function:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    damage: 0
+    type: 0
+    available: 1
+  icePrefab: {fileID: 1267227237326776, guid: 3d9ac89db4df9464b981e7e366109b1b, type: 2}
   infoText: {fileID: 114093513819222378}
   healthText: {fileID: 114717356380306886}
   healthScript: {fileID: 0}
   lastDoorNumber: 0
+  playerColors: []
+  playerNum: 0
+  hitIndicator: {fileID: 0}
 --- !u!114 &114632748048300056
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1388,23 +1454,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 1257546995151422}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e863810f76661b945af215a139d4493a, type: 3}
+  m_Script: {fileID: 11500000, guid: 4da207439cd9a9f4e88579477bb2decb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalHealth: 0
+  originalHealth: 100
   currentHealth: 0
   dieFunction:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114522857728829982}
+        m_MethodName: Die
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  showHealth: 0
-  healthUpdateFunction:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  regen: 0
+  showHealth: 1
+  criticalAttackType: 0
+  criticalMultiplier: 0
+  regen: 1
   regenDelay: 5
   regenTime: 1
   regenAmount: 5

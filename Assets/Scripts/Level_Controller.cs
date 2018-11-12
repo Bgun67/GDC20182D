@@ -19,7 +19,6 @@ public class Level_Controller : MonoBehaviour {
 	public void SpawnPlayer(GameObject _player)
 	{
 		_player.transform.position = playerSpawnPosition.position;
-		_player.GetComponent<Player_Controller>().isPlayerDead = false;
 
 	}
 	
