@@ -4,6 +4,30 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+[System.Serializable]
+public enum AttackType
+{
+	//use this for critical Attack in health
+	None,
+	//use this for a basic attack
+	Default,
+	Slime,
+	Fire,
+	Water,
+	Ice,
+	Grass,
+	Earth
+	//etc
+
+}
+[System.Serializable]
+public class AttackClass
+{
+	public UnityEvent function;
+	public float damage;
+	public AttackType type = AttackType.Default;
+	public bool available = true;
+}
 public class Player_Controller : MonoBehaviour
 {
     #region Movement
@@ -30,12 +54,9 @@ public class Player_Controller : MonoBehaviour
 	#endregion
 	#region Weapon
 	[Header("Weapon")]
-    public float weaponDamageFactor = 5f;
-    public float weaponRange = 2f;
-	public Weapon primaryWeapon;
-	public Weapon secondaryWeapon;
-	public Weapon currentWeapon;
-	public Transform finger;
+    public AttackClass[] attacks;
+	public AttackClass currentAttack;
+	public GameObject icePrefab;
 	#endregion
 	#region "UI"
 	public Text infoText;
