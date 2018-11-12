@@ -201,6 +201,7 @@ GameObject:
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
+
   - component: {fileID: 4734265849952168}
   - component: {fileID: 95646334076895574}
   - component: {fileID: 114522857728829982}
@@ -208,6 +209,7 @@ GameObject:
   - component: {fileID: 114358469244767514}
   - component: {fileID: 54907021444842276}
   - component: {fileID: 136695011228527632}
+
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
