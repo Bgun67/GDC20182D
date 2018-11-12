@@ -11,6 +11,9 @@ public class Health : MonoBehaviour
 	[Tooltip("If left empty, object is destroyed")]
 	public UnityEvent dieFunction;
 	public bool showHealth;
+	[Tooltip("Do not use default as a critical attack type")]
+	public AttackType criticalAttackType = AttackType.None;
+	public float criticalMultiplier;
 	//public float lastUpdate;
 
 	#region regen
@@ -34,9 +37,10 @@ public class Health : MonoBehaviour
 	{
 		currentHealth = originalHealth;
 		//Send message for script to update UI
-		if(HealthChanged != null && showHealth){
-      HealthChanged.Invoke(0);
-    }
+		if (HealthChanged != null && showHealth)
+		{
+			HealthChanged.Invoke(0);
+		}
 	}
 	public void Reset()
 	{
@@ -44,9 +48,12 @@ public class Health : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	public void TakeDamage(float _amount)
+	public void TakeDamage(float _amount, AttackType _damageType)
 	{
-
+		if (_damageType == criticalAttackType)
+		{
+			_amount *= criticalMultiplier;
+		}
 		currentHealth -= _amount;
 		//Checks if the object is alive and health below 0
 		if (!isDead && currentHealth <= 0)
