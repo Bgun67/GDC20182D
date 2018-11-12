@@ -68,6 +68,11 @@ public class Player_Controller : MonoBehaviour
     public Scene lastScene;
     public int lastDoorNumber;
     bool isDead;
+	Game_Controller gameController;
+	public Color[] playerColors;
+	#region Player Data
+	public int playerNum;
+	#endregion
 
 
 	public GameObject hitIndicator;//Hit indicator prefab
