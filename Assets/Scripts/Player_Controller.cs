@@ -86,6 +86,9 @@ public class Player_Controller : MonoBehaviour
         originalCameraRotation = mainCamera.transform.rotation;
         healthScript = this.GetComponent<Health>();
 		healthScript.HealthChanged += UpdateHealth;
+
+		SwitchAttacks(0);
+
         //Check to make sure there is a scene to return to
         if (lastScene.name == null)
         {
@@ -98,10 +101,7 @@ public class Player_Controller : MonoBehaviour
         //check if the player has fallen every 1 second
         InvokeRepeating("CheckFall", 1f, 1f);
 
-		primaryWeapon = WeaponLoader.LoadWeapon(finger, 1, playerNum);
-		secondaryWeapon = WeaponLoader.LoadWeapon(finger, 2, playerNum);
-		secondaryWeapon.gameObject.SetActive(false);
-		currentWeapon = primaryWeapon;
+	
 
 	}
 	
@@ -111,8 +111,11 @@ public class Player_Controller : MonoBehaviour
 		vertical = Input.GetAxis("Vertical "+(playerNum+1));
 		horizontal = Input.GetAxis("Horizontal "+(playerNum+1));
 
+		if (Input.GetKey("e")){
+			ChooseAttack(horizontal, vertical);
+		}
 		//is input greater than 0
-		if(Vector2.SqrMagnitude(new Vector2(vertical, horizontal))>0f&&!rolling){
+		else if(Vector2.SqrMagnitude(new Vector2(vertical, horizontal))>0f&&!rolling){
 		
 			//Moves the player using velocities
 			Move(horizontal, vertical);
