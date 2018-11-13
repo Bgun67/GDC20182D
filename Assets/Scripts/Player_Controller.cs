@@ -28,6 +28,7 @@ public class AttackClass
 	public float damage;
 	public AttackType type = AttackType.Default;
 	public bool available = true;
+	public GameObject effect;
 }
 
 public class Player_Controller : MonoBehaviour
@@ -590,10 +591,15 @@ public class Player_Controller : MonoBehaviour
 		{
 			_hit.transform.GetComponent<Health>().TakeDamage(currentAttack.damage, currentAttack.type);
 		}
+		if (_hit.transform.GetComponent<Rigidbody>() != null)
+		{
+			_hit.transform.GetComponent<Rigidbody>().velocity = transform.forward * 5f;
+		}
 
 	}
 	public void Ice()
 	{
+		currentAttack.effect.GetComponent<ParticleSystem>().Play();
 		RaycastHit _hit;
 		if (!Physics.SphereCast(transform.position + rb.centerOfMass, 0.3f, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
