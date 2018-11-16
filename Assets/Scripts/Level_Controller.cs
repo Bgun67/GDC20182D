@@ -7,9 +7,11 @@ public class Level_Controller : MonoBehaviour {
 	[System.Serializable]
 	public class SpawnedEnemy
 	{
-		public float spawnTime;
 		public GameObject enemyPrefab;
 		public Transform position;
+		public int amount = 1;
+		public float initialDelay;
+		public float subsequentDelay;
 	}
 	public SpawnedEnemy[] enemiesToSpawn;
 	public Transform playerSpawnPosition;
@@ -33,13 +35,20 @@ public class Level_Controller : MonoBehaviour {
 	{
 		foreach (SpawnedEnemy _enemy in enemiesToSpawn)
 		{
-			StartCoroutine(Spawn(_enemy.enemyPrefab, _enemy.position, _enemy.spawnTime));
+			
+			StartCoroutine(Spawn(_enemy));
 		}
 	}
-	IEnumerator Spawn(GameObject _enemy, Transform _position, float _time)
+	IEnumerator Spawn(SpawnedEnemy _enemy)
 	{
-		yield return new WaitForSeconds(_time);
-		Instantiate(_enemy, _position.position, _position.rotation);
+		//wait initial time
+		yield return new WaitForSeconds(_enemy.initialDelay);
+		//continue spawning enemies at delayed times until reaches amount
+		for (int i = 0; i < _enemy.amount; i++)
+		{
+			Instantiate(_enemy.enemyPrefab, _enemy.position.position, _enemy.position.rotation);
+			yield return new WaitForSeconds(_enemy.subsequentDelay);
+		}
 	}
 
 }

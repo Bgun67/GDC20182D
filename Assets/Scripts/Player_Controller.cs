@@ -28,6 +28,12 @@ public class AttackClass
 	public float damage;
 	public AttackType type = AttackType.Default;
 	public bool available = true;
+	public int maxUses = 1;
+	[HideInInspector]
+	public int currentUses;
+	public float rechargeTime = 0;
+	[HideInInspector]
+	public float rechargeWait = 0;
 	public GameObject effect;
 }
 
@@ -611,6 +617,23 @@ public class Player_Controller : MonoBehaviour
 			Destroy(Instantiate(icePrefab, _hitHealth.transform.position, Quaternion.identity, _hitHealth.transform), 5f);
 
 		}
+	}
+	public void EarthQuake()
+	{
+		if (currentAttack.currentUses > currentAttack.maxUses)
+		{
+			if (Time.time > currentAttack.rechargeWait)
+			{
+				currentAttack.currentUses = 0;
+			}
+			else
+			{
+				return;
+			}
+		}
+		
+
+		currentAttack.currentUses++;
 	}
 
 	#endregion
