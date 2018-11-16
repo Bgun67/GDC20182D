@@ -28,6 +28,13 @@ public class AttackClass
 	public float damage;
 	public AttackType type = AttackType.Default;
 	public bool available = true;
+	public int maxUses = 1;
+	[HideInInspector]
+	public int currentUses;
+	public float rechargeTime = 0;
+	[HideInInspector]
+	public float rechargeWait = 0;
+	public GameObject effect;
 }
 
 public class Player_Controller : MonoBehaviour
@@ -590,10 +597,15 @@ public class Player_Controller : MonoBehaviour
 		{
 			_hit.transform.GetComponent<Health>().TakeDamage(currentAttack.damage, currentAttack.type);
 		}
+		if (_hit.transform.GetComponent<Rigidbody>() != null)
+		{
+			_hit.transform.GetComponent<Rigidbody>().velocity = transform.forward * 5f;
+		}
 
 	}
 	public void Ice()
 	{
+		currentAttack.effect.GetComponent<ParticleSystem>().Play();
 		RaycastHit _hit;
 		if (!Physics.SphereCast(transform.position + rb.centerOfMass, 0.3f, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
@@ -605,6 +617,23 @@ public class Player_Controller : MonoBehaviour
 			Destroy(Instantiate(icePrefab, _hitHealth.transform.position, Quaternion.identity, _hitHealth.transform), 5f);
 
 		}
+	}
+	public void EarthQuake()
+	{
+		if (currentAttack.currentUses > currentAttack.maxUses)
+		{
+			if (Time.time > currentAttack.rechargeWait)
+			{
+				currentAttack.currentUses = 0;
+			}
+			else
+			{
+				return;
+			}
+		}
+		
+
+		currentAttack.currentUses++;
 	}
 
 	#endregion
