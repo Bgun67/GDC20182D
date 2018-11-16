@@ -34,7 +34,6 @@ public class Enemy : MonoBehaviour {
 		//follow the player
 		print("Trying to Following");
  		target = GameObject.FindGameObjectWithTag("Player");
- 		print(navAgent.remainingDistance);
 		if (!navAgent.isOnNavMesh)
 		{
 			NavMeshHit _hit;

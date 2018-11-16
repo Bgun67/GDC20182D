@@ -44,10 +44,12 @@ public class Player_Controller : MonoBehaviour
 	[Header("Movement")]
 	float vertical;
 	float horizontal;
+	Vector3 lastVelocity;
 	//Amount of force applied to player
 	public float forceFactor = 5f;
 	//Determines which colliders the rays should hit
 	public LayerMask jumpMask;
+	public ParticleSystem dust;
 	Rigidbody rb;
 	public Animator anim;
 	bool rolling;
@@ -136,6 +138,7 @@ public class Player_Controller : MonoBehaviour
 		}
 		Attack();
 		CameraFollow();
+		AnimateMovement();
 
 
 	}
@@ -282,6 +285,22 @@ public class Player_Controller : MonoBehaviour
 		transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, Mathf.Rad2Deg * Mathf.Atan(_h / _v) + Mathf.Sign(_v) * 90f - 90f, 0f), 0.2f);
 
 
+
+
+	}
+	void AnimateMovement()
+	{
+		Vector3 _localVelocity = transform.InverseTransformVector(rb.velocity);
+		Vector3 _localAcceleration = (_localVelocity - lastVelocity) / Time.deltaTime;
+		lastVelocity = _localVelocity;
+		anim.SetFloat("Run Speed", _localVelocity.z);
+		if (_localAcceleration.z > 10f)
+		{
+			if (dust != null && !dust.isPlaying)
+			{
+				dust.Play();
+			}
+		}
 
 
 	}
