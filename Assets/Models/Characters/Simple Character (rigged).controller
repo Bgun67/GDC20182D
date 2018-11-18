@@ -13,25 +13,25 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Roll Right
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Roll Left
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Run Speed
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -61,7 +61,7 @@ BlendTree:
     m_DirectBlendParameter: Run Speed
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400006, guid: 975aeb2491b4b954db1c61933c0e02e2, type: 3}
+    m_Motion: {fileID: 7400012, guid: 975aeb2491b4b954db1c61933c0e02e2, type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 4
@@ -375,7 +375,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Shoulder_Ram
-  m_Speed: 2
+  m_Speed: 3
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1101291097256035730}
@@ -433,7 +433,7 @@ AnimatorStateMachine:
     m_Position: {x: 216, y: 12, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102156979364222014}
-    m_Position: {x: 252, y: 144, z: 0}
+    m_Position: {x: 360, y: 132, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102338491429001006}
     m_Position: {x: 192, y: 300, z: 0}
