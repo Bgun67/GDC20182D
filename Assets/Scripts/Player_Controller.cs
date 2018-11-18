@@ -44,10 +44,12 @@ public class Player_Controller : MonoBehaviour
 	[Header("Movement")]
 	float vertical;
 	float horizontal;
+	Vector3 lastVelocity;
 	//Amount of force applied to player
 	public float forceFactor = 5f;
 	//Determines which colliders the rays should hit
 	public LayerMask jumpMask;
+	public ParticleSystem dust;
 	Rigidbody rb;
 	public Animator anim;
 	bool rolling;
@@ -136,6 +138,7 @@ public class Player_Controller : MonoBehaviour
 		}
 		Attack();
 		CameraFollow();
+		AnimateMovement();
 
 
 	}
@@ -285,6 +288,22 @@ public class Player_Controller : MonoBehaviour
 
 
 	}
+	void AnimateMovement()
+	{
+		Vector3 _localVelocity = transform.InverseTransformVector(rb.velocity);
+		Vector3 _localAcceleration = (_localVelocity - lastVelocity) / Time.deltaTime;
+		lastVelocity = _localVelocity;
+		anim.SetFloat("Run Speed", _localVelocity.z);
+		if (_localAcceleration.z > 10f)
+		{
+			if (dust != null && !dust.isPlaying)
+			{
+				dust.Play();
+			}
+		}
+
+
+	}
 	void Jump()
 	{
 		//add upwards velocity to current velocity
@@ -298,7 +317,7 @@ public class Player_Controller : MonoBehaviour
 		bool _grounded = false;
 		//draw a laser downwards and see if it hits anything
 		RaycastHit _hit;
-		if (Physics.Raycast(this.transform.position, Vector3.down, out _hit, 0.1f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (Physics.SphereCast(this.transform.position+rb.centerOfMass,0.2f, Vector3.down, out _hit, 1f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			//we've hit something, there is something below the player
 			_grounded = true;
@@ -557,7 +576,7 @@ public class Player_Controller : MonoBehaviour
 		anim.SetInteger("Attack Number", 0);
 		//check for object below
 		RaycastHit _hit;
-		if (!Physics.Raycast(transform.position, Vector3.down, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (!Physics.SphereCast(transform.position+rb.centerOfMass,0.2f, Vector3.down, out _hit, 1f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			yield break;
 		}
@@ -588,7 +607,7 @@ public class Player_Controller : MonoBehaviour
 		//add force forwards
 		rb.velocity = transform.forward * 3f;
 		//check for object
-		if (!Physics.Raycast(transform.position, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (!Physics.SphereCast(transform.position+rb.centerOfMass,0.2f, transform.forward, out _hit, 1f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			return;
 		}
@@ -607,7 +626,7 @@ public class Player_Controller : MonoBehaviour
 	{
 		currentAttack.effect.GetComponent<ParticleSystem>().Play();
 		RaycastHit _hit;
-		if (!Physics.SphereCast(transform.position + rb.centerOfMass, 0.3f, transform.forward, out _hit, 2f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (!Physics.SphereCast(transform.position + rb.centerOfMass, 0.3f, transform.forward, out _hit, 10f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			return;
 		}

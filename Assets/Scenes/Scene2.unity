@@ -1443,22 +1443,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemiesToSpawn:
-  - spawnTime: 0
-    enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
+  - enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
       type: 2}
     position: {fileID: 258476770}
-  - spawnTime: 1
-    enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
+    amount: 1
+    initialDelay: 0
+    subsequentDelay: 0
+  - enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
       type: 2}
     position: {fileID: 1293924136}
-  - spawnTime: 1
-    enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
+    amount: 1
+    initialDelay: 0
+    subsequentDelay: 0
+  - enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
       type: 2}
     position: {fileID: 1893411697}
-  - spawnTime: 4
-    enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
+    amount: 1
+    initialDelay: 0
+    subsequentDelay: 0
+  - enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
       type: 2}
     position: {fileID: 1521416221}
+    amount: 1
+    initialDelay: 0
+    subsequentDelay: 0
   playerSpawnPosition: {fileID: 1407926923}
   scene: Scene2
 --- !u!4 &1922785627

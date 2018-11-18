@@ -82,6 +82,7 @@ ModelImporter:
     7400006: Shoulder_Ram
     7400008: Roll_Right
     7400010: Roll_Left
+    7400012: Idle
     9500000: //RootNode
     13700000: Character
     2186277476908879412: ImportLogs
@@ -181,7 +182,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Flip_Smash
       takeName: Flip_Smash
-      firstFrame: -1
+      firstFrame: 0
       lastFrame: 49
       wrapMode: 0
       orientationOffsetY: 0
@@ -266,6 +267,22 @@ ModelImporter:
         floatParameter: 50
         intParameter: 0
         messageOptions: 0
+      - time: 0.5385408
+        functionName: ForwardStrike
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 8e4b3c64450214245954ec8842e54041,
+          type: 3}
+        floatParameter: 50
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6200608
+        functionName: ForwardStrike
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 8e4b3c64450214245954ec8842e54041,
+          type: 3}
+        floatParameter: 50
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -336,6 +353,34 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Idle
+      takeName: Walk
+      firstFrame: 0
+      lastFrame: 2
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
