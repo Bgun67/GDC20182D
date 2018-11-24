@@ -255,12 +255,9 @@ public class Player_Controller : MonoBehaviour
 		}
 		if (Input.GetButtonDown("Roll Right " + (playerNum + 1)))
 		{
-			RollRight();
+			RollForward();
 		}
-		if (Input.GetButtonDown("Roll Left " + (playerNum + 1)))
-		{
-			RollLeft();
-		}
+		
 	}
 	#endregion
 	#region Movement
@@ -524,26 +521,14 @@ public class Player_Controller : MonoBehaviour
 			newHit.GetComponent<HitIndicator>().SetHealth(amount);
 		}
 	}
-	public void RollRight()
+	public void RollForward()
 	{
 		if (CheckGrounded() && anim.GetInteger("Attack Number") == 0)
 		{
-			anim.SetTrigger("Roll Right");
-
-			rb.velocity = transform.right * 10f;
+			anim.SetTrigger("Roll Forward");
+			rb.velocity = transform.forward * 7f;
 			rolling = true;
 
-		}
-
-	}
-	public void RollLeft()
-	{
-		if (CheckGrounded() && anim.GetInteger("Attack Number") == 0)
-		{
-			anim.SetTrigger("Roll Left");
-
-			rb.velocity = transform.right * -10f;
-			rolling = true;
 		}
 
 	}
