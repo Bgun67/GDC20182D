@@ -43,6 +43,7 @@ public class Player_Controller : MonoBehaviour
 	#region Movement
 	[Header("Movement")]
 	float vertical;
+	float previousVertical;
 	float horizontal;
 	Vector3 lastVelocity;
 	//Amount of force applied to player
@@ -52,6 +53,7 @@ public class Player_Controller : MonoBehaviour
 	public ParticleSystem dust;
 	Rigidbody rb;
 	public Animator anim;
+	int lastTapFrame;
 	bool rolling;
 	#endregion
 	#region Camera
@@ -119,6 +121,18 @@ public class Player_Controller : MonoBehaviour
 		horizontal = Input.GetAxis("Horizontal " + (playerNum + 1));
 		
 
+		if (Input.GetAxisRaw("Vertical " + (playerNum + 1))>0 &&previousVertical==0f)
+		{
+			if (Time.frameCount-lastTapFrame < 20)
+			{
+				RollForward();
+			}
+			else
+			{
+				lastTapFrame = Time.frameCount;
+			}
+		}
+		previousVertical = Input.GetAxisRaw("Vertical " + (playerNum + 1));
 		if (Input.GetButton("Change Weapon " + (playerNum + 1)))
 		{
 			ChooseAttack(horizontal, vertical);
@@ -126,12 +140,10 @@ public class Player_Controller : MonoBehaviour
 		//is input greater than 0
 		else if (Vector2.SqrMagnitude(new Vector2(vertical, horizontal)) > 0f && !rolling)
 		{
-
 			//Moves the player using velocities
 			Move(horizontal, vertical);
 			//Turns the player to face direction of movement
 			Look(horizontal, vertical);
-
 		}
 		if (Input.GetButtonDown("Jump " + (playerNum + 1)) && CheckGrounded())
 		{
@@ -141,6 +153,18 @@ public class Player_Controller : MonoBehaviour
 		CameraFollow();
 		AnimateMovement();
 
+
+	}
+	void GetInput()
+	{
+		string [] inputSettings;
+		try
+		{
+			inputSettings = System.IO.File.ReadAllLines(@"Input Settings.txt");
+		}
+		catch
+		{
+		}
 
 	}
 	public void SetupPlayer()
