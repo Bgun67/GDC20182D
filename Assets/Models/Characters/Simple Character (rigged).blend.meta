@@ -84,6 +84,12 @@ ModelImporter:
     7400010: Roll_Left
     7400012: Idle
     7400014: Roll_Forward
+    7400016: Jump
+    7400018: Idle_1
+    7400020: Idle_2
+    7400022: Idle_3
+    7400024: Fall
+    7400026: Land
     9500000: //RootNode
     13700000: Character
     2186277476908879412: ImportLogs
@@ -109,24 +115,60 @@ ModelImporter:
     animationImportErrors: 
     animationImportWarnings: "\nClip 'Default Take' has import animation warnings
       that might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'Upper_Leg_L' has translation animation that
-      will be discarded.\n\t'Leg_Control_L' is inbetween humanoid transforms and has
-      rotation animation that will be discarded.\n\t'Foot_L' has translation animation
-      that will be discarded.\n\t'Upper_Leg_R' has translation animation that will
-      be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms and has rotation
-      animation that will be discarded.\n\t'Foot_R' has translation animation that
-      will be discarded.\n\nClip 'Roll_Forward' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar to
-      improve retargeting quality.\n\t'Upper_Leg_L' has translation animation that
-      will be discarded.\n\t'Leg_Control_L' is inbetween humanoid transforms and has
-      rotation animation that will be discarded.\n\t'Foot_L' has translation animation
-      that will be discarded.\n\t'Upper_Leg_R' has translation animation that will
-      be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms and has rotation
-      animation that will be discarded.\n\t'Foot_R' has translation animation that
-      will be discarded.\n\nClip 'Roll_Right' has import animation warnings that might
-      lower retargeting quality:\nNote: Activate translation DOF on avatar to improve
-      retargeting quality.\n\t'Upper_Leg_L' has translation animation that will be
-      discarded.\n\t'Upper_Leg_L' has scale animation that will be discarded.\n\t'Leg_Control_L'
+      to improve retargeting quality.\n\t'Leg_Control_L' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_L' has translation
+      animation that will be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_R' has translation
+      animation that will be discarded.\n\nClip 'Fall' has import animation warnings
+      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'Leg_Control_L' has translation animation
+      that will be discarded.\n\t'Leg_Control_L' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_L' has translation
+      animation that will be discarded.\n\t'Leg_Control_R' has translation animation
+      that will be discarded.\n\t'Foot_R' has translation animation that will be discarded.\n\nClip
+      'Idle_1' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Leg_Control_L'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_L'
+      has translation animation that will be discarded.\n\t'Leg_Control_R' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_R'
+      has translation animation that will be discarded.\n\nClip 'Idle_2' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'Leg_Control_L' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_L'
+      has translation animation that will be discarded.\n\t'Leg_Control_R' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_R'
+      has translation animation that will be discarded.\n\nClip 'Idle_3' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'Leg_Control_L' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_L'
+      has translation animation that will be discarded.\n\t'Leg_Control_R' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_R'
+      has translation animation that will be discarded.\n\nClip 'Jump' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'Leg_Control_L' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_L'
+      has translation animation that will be discarded.\n\t'Leg_Control_R' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_R'
+      has translation animation that will be discarded.\n\nClip 'Land' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'Leg_Control_L' has translation
+      animation that will be discarded.\n\t'Leg_Control_L' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_L' has translation
+      animation that will be discarded.\n\t'Leg_Control_R' has translation animation
+      that will be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_R' has translation
+      animation that will be discarded.\n\nClip 'Roll_Forward' has import animation
+      warnings that might lower retargeting quality:\nNote: Activate translation DOF
+      on avatar to improve retargeting quality.\n\t'Upper_Leg_L' has translation animation
+      that will be discarded.\n\t'Leg_Control_L' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_L' has translation
+      animation that will be discarded.\n\t'Upper_Leg_R' has translation animation
+      that will be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_R' has translation
+      animation that will be discarded.\n\nClip 'Roll_Right' has import animation
+      warnings that might lower retargeting quality:\nNote: Activate translation DOF
+      on avatar to improve retargeting quality.\n\t'Upper_Leg_L' has translation animation
+      that will be discarded.\n\t'Upper_Leg_L' has scale animation that will be discarded.\n\t'Leg_Control_L'
       is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_L'
       has translation animation that will be discarded.\n\t'Upper_Leg_R' has translation
       animation that will be discarded.\n\t'Upper_Leg_R' has scale animation that
@@ -229,12 +271,12 @@ ModelImporter:
       loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 0
-      keepOriginalPositionY: 0
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
@@ -366,10 +408,10 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Idle
-      takeName: Walk
+      name: Idle_1
+      takeName: Idle_1
       firstFrame: 0
-      lastFrame: 2
+      lastFrame: 59
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -379,11 +421,11 @@ ModelImporter:
       loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
+      keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -424,6 +466,153 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Jump
+      takeName: Jump
+      firstFrame: 0
+      lastFrame: 24
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 0
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 1
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0.2852761
+        functionName: AddUpVelocity
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Idle_2
+      takeName: Idle_2
+      firstFrame: 0
+      lastFrame: 59
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Idle_3
+      takeName: Idle_3
+      firstFrame: 0
+      lastFrame: 58
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Fall
+      takeName: Fall
+      firstFrame: -1
+      lastFrame: 39
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 0
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 1
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Land
+      takeName: Land
+      firstFrame: 10
+      lastFrame: 20
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 0
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 1
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

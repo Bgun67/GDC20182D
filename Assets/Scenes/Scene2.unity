@@ -665,7 +665,7 @@ BoxCollider:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 909612791}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3fa44e9dec11ecf4da177309adce0704, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -1928,25 +1928,25 @@ MonoBehaviour:
   - enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
       type: 2}
     position: {fileID: 258476770}
-    amount: 1
+    amount: 0
     initialDelay: 0
     subsequentDelay: 0
   - enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
       type: 2}
     position: {fileID: 1293924136}
-    amount: 1
+    amount: 0
     initialDelay: 0
     subsequentDelay: 0
   - enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
       type: 2}
     position: {fileID: 1893411697}
-    amount: 1
+    amount: 0
     initialDelay: 0
     subsequentDelay: 0
   - enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
       type: 2}
     position: {fileID: 1521416221}
-    amount: 1
+    amount: 0
     initialDelay: 0
     subsequentDelay: 0
   playerSpawnPosition: {fileID: 1407926923}

@@ -117,6 +117,7 @@ public class Player_Controller : MonoBehaviour
 		//Get Input
 		vertical = Input.GetAxis("Vertical " + (playerNum + 1));
 		horizontal = Input.GetAxis("Horizontal " + (playerNum + 1));
+		
 
 		if (Input.GetButton("Change Weapon " + (playerNum + 1)))
 		{
@@ -298,16 +299,30 @@ public class Player_Controller : MonoBehaviour
 				dust.Play();
 			}
 		}
+		if (_localVelocity.y < -1f)
+		{
+			anim.SetFloat("Fall", -_localVelocity.y);
+		}
+		else if (anim.GetFloat("Fall")>0)
+		{
+			anim.SetFloat("Fall", 0f);
+		}
 
 
 	}
 	void Jump()
 	{
+		
+		//show animation
+		anim.SetTrigger("Jump");
+		
+
+	}
+	void AddUpVelocity()
+	{
 		//add upwards velocity to current velocity
 		Vector3 _oldVelocity = rb.velocity;
-		rb.velocity = Vector3.up * 5f + _oldVelocity;
-		//FindObjectOfType<Physics_Helper>().MoveTo(this.gameObject,new Vector3(0f,0f,0f),10f);
-
+		rb.velocity = Vector3.up * 5f + _oldVelocity;		
 	}
 	bool CheckGrounded()
 	{

@@ -28,6 +28,7 @@ public class Level_Controller : MonoBehaviour {
 	}
 	public void SpawnPlayer(GameObject _player)
 	{
+		_player.GetComponent<Rigidbody>().velocity = Vector3.zero;
 		_player.transform.position = playerSpawnPosition.position;
 
 	}
