@@ -624,7 +624,7 @@ public class Player_Controller : MonoBehaviour
 		//add force forwards
 		rb.velocity = transform.forward * 3f;
 		//check for object
-		if (!Physics.SphereCast(transform.position+rb.centerOfMass,0.2f, transform.forward, out _hit, 1f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (!Physics.SphereCast(transform.position + rb.centerOfMass, 0.2f, transform.forward, out _hit, 1f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			return;
 		}
@@ -635,7 +635,13 @@ public class Player_Controller : MonoBehaviour
 		}
 		if (_hit.transform.GetComponent<Rigidbody>() != null)
 		{
-			_hit.transform.GetComponent<Rigidbody>().velocity = transform.forward * 5f;
+			Enemy _enemyScript = _hit.transform.GetComponent<Enemy>();
+			if (_enemyScript != null)
+			{
+				_enemyScript.Recoil();
+			}
+			print("Adding Force");
+			_hit.transform.GetComponent<Rigidbody>().velocity = transform.forward * 7f;
 		}
 
 	}

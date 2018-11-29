@@ -112,7 +112,7 @@ NavMeshSettings:
     accuratePlacement: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 2e257906e58203a40986fabd03d027cd, type: 2}
 --- !u!1 &223272007
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,7 +154,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aa9309b00eee6440b88c47b2110d8f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemiesToSpawn: []
+  enemiesToSpawn:
+  - enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
+      type: 2}
+    position: {fileID: 1402728458}
+    amount: 50
+    initialDelay: 1
+    subsequentDelay: 5
   playerSpawnPosition: {fileID: 1402728458}
   scene: SampleScene
 --- !u!1 &514706706
@@ -276,7 +282,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!65 &909612792
 BoxCollider:

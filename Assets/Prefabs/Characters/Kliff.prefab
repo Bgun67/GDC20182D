@@ -1352,7 +1352,7 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-    damage: 10
+    damage: 5
     type: 1
     available: 1
     maxUses: 1
