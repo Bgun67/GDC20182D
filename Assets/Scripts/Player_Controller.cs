@@ -42,9 +42,11 @@ public class Player_Controller : MonoBehaviour
 
 	#region Movement
 	[Header("Movement")]
-	float vertical;
-	float previousVertical;
-	float horizontal;
+	float moveVertical;
+	float previousMoveVertical;
+	float moveHorizontal;
+	float lookVertical;
+	float lookHorizontal;
 	Vector3 lastVelocity;
 	//Amount of force applied to player
 	public float forceFactor = 5f;
@@ -117,11 +119,12 @@ public class Player_Controller : MonoBehaviour
 	void Update()
 	{
 		//Get Input
-		vertical = Input.GetAxis("Vertical " + (playerNum + 1));
-		horizontal = Input.GetAxis("Horizontal " + (playerNum + 1));
-		
+		moveVertical = Input_Manager.GetAxis("Move Vertical " + (playerNum + 1));
+		moveHorizontal = Input_Manager.GetAxis("Move Horizontal " + (playerNum + 1));
+		lookVertical = Input_Manager.GetAxis("Look Vertical " + (playerNum + 1));
+		lookHorizontal = Input_Manager.GetAxis("Look Horizontal " + (playerNum + 1));
 
-		if (Input.GetAxisRaw("Vertical " + (playerNum + 1))>0 &&previousVertical==0f)
+		if (Input_Manager.GetAxisRaw("Move Vertical " + (playerNum + 1))>0 &&previousMoveVertical==0f)
 		{
 			if (Time.frameCount-lastTapFrame < 20)
 			{
@@ -132,18 +135,21 @@ public class Player_Controller : MonoBehaviour
 				lastTapFrame = Time.frameCount;
 			}
 		}
-		previousVertical = Input.GetAxisRaw("Vertical " + (playerNum + 1));
+		previousMoveVertical = Input_Manager.GetAxisRaw("Move Vertical " + (playerNum + 1));
 		if (Input.GetButton("Change Weapon " + (playerNum + 1)))
 		{
-			ChooseAttack(horizontal, vertical);
+			ChooseAttack(moveHorizontal, moveVertical);
 		}
 		//is input greater than 0
-		else if (Vector2.SqrMagnitude(new Vector2(vertical, horizontal)) > 0f && !rolling)
+		else if (!rolling)
 		{
-			//Moves the player using velocities
-			Move(horizontal, vertical);
+			if (Vector2.SqrMagnitude(new Vector2(moveHorizontal, moveVertical)) > 0f)
+			{
+				//Moves the player using velocities
+				Move(moveHorizontal, moveVertical);
+			}
 			//Turns the player to face direction of movement
-			Look(horizontal, vertical);
+			Look(lookHorizontal, lookVertical);
 		}
 		if (Input.GetButtonDown("Jump " + (playerNum + 1)) && CheckGrounded())
 		{
@@ -153,18 +159,6 @@ public class Player_Controller : MonoBehaviour
 		CameraFollow();
 		AnimateMovement();
 
-
-	}
-	void GetInput()
-	{
-		string [] inputSettings;
-		try
-		{
-			inputSettings = System.IO.File.ReadAllLines(@"Input Settings.txt");
-		}
-		catch
-		{
-		}
 
 	}
 	public void SetupPlayer()
@@ -278,7 +272,7 @@ public class Player_Controller : MonoBehaviour
 			}
 
 		}
-		if (Input.GetButtonDown("Roll Right " + (playerNum + 1)))
+		if (Input.GetButtonDown("Roll " + (playerNum + 1)))
 		{
 			RollForward();
 		}
@@ -288,11 +282,10 @@ public class Player_Controller : MonoBehaviour
 	#region Movement
 	void Move(float _h, float _v)
 	{
-
 		//get previous upward velocity
 		float _yVelocity = rb.velocity.y;
 		//Move Player
-		rb.velocity = new Vector3(_h, 0f, _v) * forceFactor;
+		rb.velocity = transform.forward* _v * forceFactor;
 
 
 		//Reset upwards velocity

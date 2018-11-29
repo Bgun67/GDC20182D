@@ -1,0 +1,10 @@
+Look Vertical 1
+Mouse Position Y
+Look Horizontal 1
+Mouse Position X
+Move Horizontal 1
+Axis
+Horizontal 1
+Move Vertical 1
+Axis
+Vertical 1

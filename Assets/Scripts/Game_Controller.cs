@@ -12,6 +12,7 @@ public class Game_Controller : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		Input_Manager.GetInputSettings();
 		CheckForDuplicates();
 	}
 	void CheckForDuplicates()
