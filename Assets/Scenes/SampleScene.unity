@@ -158,7 +158,7 @@ MonoBehaviour:
   - enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
       type: 2}
     position: {fileID: 1402728458}
-    amount: 50
+    amount: 10
     initialDelay: 1
     subsequentDelay: 5
   playerSpawnPosition: {fileID: 1402728458}
@@ -311,7 +311,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e664a937814e0ea44afebf579783f9e1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -346,7 +346,7 @@ Transform:
   m_GameObject: {fileID: 909612791}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 10, y: 0.1, z: 10}
+  m_LocalScale: {x: 100, y: 0.1, z: 100}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -379,7 +379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: 
-  numberOfPlayers: 1
+  numberOfPlayers: 2
   playerPrefab: {fileID: 1087987552615950, guid: c130444bbe4d2154482c128537692129,
     type: 2}
   players: []
