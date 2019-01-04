@@ -30,6 +30,22 @@ ModelImporter:
     100048: Glu
     100050: Left_Leg
     100052: Right_Leg
+    100054: Bicep_L
+    100056: Bicep_R
+    100058: Center_Chest
+    100060: Hand_L
+    100062: Hand_R
+    100064: Head
+    100066: Leg_L
+    100068: Leg_R
+    100070: LowerArm_L
+    100072: LowerArm_R
+    100074: Neck
+    100076: Root
+    100078: Sholder_L
+    100080: Sholder_R
+    100082: SholderClump_L
+    100084: SholderClump_R
     400000: Armature_002
     400002: Bone
     400004: Bone_001
@@ -57,6 +73,22 @@ ModelImporter:
     400048: Glu
     400050: Left_Leg
     400052: Right_Leg
+    400054: Bicep_L
+    400056: Bicep_R
+    400058: Center_Chest
+    400060: Hand_L
+    400062: Hand_R
+    400064: Head
+    400066: Leg_L
+    400068: Leg_R
+    400070: LowerArm_L
+    400072: LowerArm_R
+    400074: Neck
+    400076: Root
+    400078: Sholder_L
+    400080: Sholder_R
+    400082: SholderClump_L
+    400084: SholderClump_R
     2100000: Glu_Texture
     4300000: Cube
     4300002: Glu
