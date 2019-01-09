@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 81958762}
   - component: {fileID: 81958764}
   m_Layer: 0
-  m_Name: House
+  m_Name: Blue_House
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -325,7 +325,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100012, guid: adfa7a3e04eba0f44a8fa83c05fe0812, type: 3}
       propertyPath: m_Name
-      value: Lava
+      value: Pink_Slime
+      objectReference: {fileID: 0}
+    - target: {fileID: 100018, guid: adfa7a3e04eba0f44a8fa83c05fe0812, type: 3}
+      propertyPath: m_Name
+      value: Black Eyes
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: adfa7a3e04eba0f44a8fa83c05fe0812, type: 3}
@@ -426,7 +430,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 514706706}
   m_LocalRotation: {x: 0.044755787, y: -0.92596126, z: -0.010368075, w: 0.37481362}
-  m_LocalPosition: {x: 7, y: -0.72, z: 2.01}
+  m_LocalPosition: {x: 7.11, y: -0.71, z: 1.91}
   m_LocalScale: {x: 1, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 1285370243}
@@ -529,7 +533,7 @@ GameObject:
   - component: {fileID: 909612793}
   - component: {fileID: 909612792}
   m_Layer: 0
-  m_Name: Lava
+  m_Name: Default_Cave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -975,6 +979,10 @@ Prefab:
     - target: {fileID: 13700002, guid: 7791c09d727ca6f41aa1b34a38306642, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100048, guid: 7791c09d727ca6f41aa1b34a38306642, type: 3}
+      propertyPath: m_Name
+      value: Lava_Glu
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7791c09d727ca6f41aa1b34a38306642, type: 3}
