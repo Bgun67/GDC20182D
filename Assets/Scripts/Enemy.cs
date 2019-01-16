@@ -46,10 +46,6 @@ public class Enemy : MonoBehaviour {
 			navAgent.SetDestination(target.transform.position);
 			timeBetweenAttacks += 0.1f;
 		}
-		if (!navAgent.hasPath)
-		{
-			navAgent.SetDestination(target.transform.position);
-		}
 
 	}
 	
@@ -78,18 +74,11 @@ public class Enemy : MonoBehaviour {
 			Invoke("Restart", 1f);
 		}
 		anim.SetBool("Attack", false);
- 	}
-	public void Recoil()
-	{
 
-		navAgent.isStopped = true;
-		GetComponent<Rigidbody>().isKinematic = false;
-		Invoke("Restart", 1f);
-	}
+ 	}
 	public void Restart()
 	{
 		navAgent.isStopped = false;
-		GetComponent<Rigidbody>().isKinematic = true;
 	}
 
 }

@@ -128,7 +128,6 @@ public static class Input_Manager{
 			if (inputSettings[i] == _name)
 			{
 				_index = i;
-				break;
 			}
 		}
 		if (_index == -1)
@@ -151,34 +150,13 @@ public static class Input_Manager{
 			"Move Horizontal 1",
 			//type
 			"Axis",
-			"Move Horizontal 1",
+			"Horizontal 1",
 			//name
 			"Move Vertical 1",
 			//type
 			"Axis",
-			"Move Vertical 1",
+			"Vertical 1",
 
-
-			//player 2
-			//Axis Sort name
-			"Look Vertical 2",
-			//unity axis or mouse
-			"Axis",
-			"Look Vertical 2",
-			//name
-			"Look Horizontal 2",
-			"Axis",
-			"Look Horizontal 2",
-			//name
-			"Move Horizontal 2",
-			//type
-			"Axis",
-			"Move Horizontal 2",
-			//name
-			"Move Vertical 2",
-			//type
-			"Axis",
-			"Move Vertical 2",
 		};
 
 		System.IO.File.WriteAllLines(@"Input Settings.txt", _settings);
