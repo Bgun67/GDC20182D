@@ -47,6 +47,7 @@ public class Player_Controller : MonoBehaviour
 	float moveHorizontal;
 	float lookVertical;
 	float lookHorizontal;
+	float lastRotation;
 	Vector3 lastVelocity;
 	//Amount of force applied to player
 	public float forceFactor = 5f;
@@ -63,7 +64,12 @@ public class Player_Controller : MonoBehaviour
 	[Tooltip("Assigned automatically if left empty")]
 	public Camera mainCamera;
 	//Placement of camera with respect to player
-	public Vector3 cameraOffset;
+	public float cameraOffset;
+	public float originalFOV;
+	public float tmp_FOV;
+	public float tmp_up;
+	public float tmp_reverse;
+	public float tmp_Rotate;
 	//originalCam rotation as a rotation type
 	Quaternion originalCameraRotation;
 	#endregion
@@ -99,8 +105,10 @@ public class Player_Controller : MonoBehaviour
 		anim = GetComponent<Animator>();
 		mainCamera = transform.GetComponentInChildren<Camera>();
 		originalCameraRotation = mainCamera.transform.rotation;
+		originalFOV = mainCamera.fieldOfView;
 		healthScript = this.GetComponent<Health>();
 		healthScript.HealthChanged += UpdateHealth;
+
 
 		SwitchAttacks(0);
 
@@ -123,7 +131,6 @@ public class Player_Controller : MonoBehaviour
 		moveHorizontal = Input_Manager.GetAxis("Move Horizontal " + (playerNum + 1));
 		lookVertical = Input_Manager.GetAxis("Look Vertical " + (playerNum + 1));
 		lookHorizontal = Input_Manager.GetAxis("Look Horizontal " + (playerNum + 1));
-
 		if (Input_Manager.GetAxisRaw("Move Vertical " + (playerNum + 1))>0 &&previousMoveVertical==0f)
 		{
 			if (Time.frameCount-lastTapFrame < 20)
@@ -143,13 +150,16 @@ public class Player_Controller : MonoBehaviour
 		//is input greater than 0
 		else if (!rolling)
 		{
-			if (Vector2.SqrMagnitude(new Vector2(moveHorizontal, moveVertical)) > 0f)
+			if (Vector2.SqrMagnitude(new Vector2(moveHorizontal, moveVertical)) > 0.1f)
 			{
 				//Moves the player using velocities
 				Move(moveHorizontal, moveVertical);
 			}
-			//Turns the player to face direction of movement
-			Look(lookHorizontal, lookVertical);
+			else
+			{
+				//Turns the player to face direction of movement
+				Look(lookHorizontal, lookVertical);
+			}
 		}
 		if (Input.GetButtonDown("Jump " + (playerNum + 1)) && CheckGrounded())
 		{
@@ -282,14 +292,16 @@ public class Player_Controller : MonoBehaviour
 	#region Movement
 	void Move(float _h, float _v)
 	{
+		
 		//get previous upward velocity
 		float _yVelocity = rb.velocity.y;
 		//Move Player
-		rb.velocity = transform.forward* _v * forceFactor;
+		rb.velocity = Vector3.forward* _v* forceFactor+Vector3.right*forceFactor*_h;
 
 
 		//Reset upwards velocity
 		rb.velocity += new Vector3(0f, _yVelocity, 0f);
+		Look(rb.velocity.x, rb.velocity.z);
 
 	}
 	void Look(float _h, float _v)
@@ -299,16 +311,19 @@ public class Player_Controller : MonoBehaviour
 		//Calculate atan to find angle convert from rads Lerps the angle, result is not exactly the angle
 		transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, Mathf.Rad2Deg * Mathf.Atan(_h / _v) + Mathf.Sign(_v) * 90f - 90f, 0f), 0.2f);
 
-
-
-
 	}
 	void AnimateMovement()
 	{
 		Vector3 _localVelocity = transform.InverseTransformVector(rb.velocity);
 		Vector3 _localAcceleration = (_localVelocity - lastVelocity) / Time.deltaTime;
 		lastVelocity = _localVelocity;
-		anim.SetFloat("Run Speed", _localVelocity.z);
+		float _angularRotation = transform.rotation.eulerAngles.y;
+		float _angularVelocity = lastRotation - _angularRotation;
+		lastRotation = _angularRotation;
+
+		anim.SetFloat("Run Speed", _localVelocity.z+_angularVelocity/-4f);
+		anim.SetFloat("Direction", _localVelocity.x);
+
 		if (_localAcceleration.z > 10f)
 		{
 			if (dust != null && !dust.isPlaying)
@@ -362,9 +377,9 @@ public class Player_Controller : MonoBehaviour
 		Vector3 _position = Vector3.zero;
 		int _connectedPlayers = 0;
 
-		this.mainCamera.transform.rotation = originalCameraRotation;
+		this.mainCamera.transform.rotation = Quaternion.Euler(55f,0f,0f);
 
-		GameObject[,] _playerGrid = new GameObject[2, 2];
+		GameObject[] _playerGrid = new GameObject[2];
 
 		//Add all players within range
 		foreach (GameObject _player in gameController.players)
@@ -378,125 +393,75 @@ public class Player_Controller : MonoBehaviour
 				//add position 
 				_position += _player.transform.position;
 				Rect _camRect = _player.GetComponent<Player_Controller>().mainCamera.rect;
-				_playerGrid[(int)(_camRect.x * 2f), (int)(_camRect.y * 2f)] = _player;
+				_playerGrid[(int)(_camRect.y * 2f)] = _player;
 				_connectedPlayers++;
 			}
 
 		}
 		if (_connectedPlayers > 1)
 		{
-			//be careful these change
-			GameObject _player00 = _playerGrid[0, 0];
-			GameObject _player10 = _playerGrid[1, 0];
+			GameObject _bottomPlayer = _playerGrid[0];
+			GameObject _topPlayer = _playerGrid[1];
 
-			if (_player00 != null && _player10 != null)
+			if (_topPlayer != null && _bottomPlayer != null)
 			{
 				//swap player cam at bottom left with bottom right if positioned incorrectly
-				Camera _cam00 = _player00.GetComponent<Player_Controller>().mainCamera;
-				Camera _cam10 = _player10.GetComponent<Player_Controller>().mainCamera;
+				Camera _topCam = _topPlayer.GetComponent<Player_Controller>().mainCamera;
+				Camera _bottomCam = _bottomPlayer.GetComponent<Player_Controller>().mainCamera;
 
-				if (_player00.transform.position.x > _player10.transform.position.x)
+				if (_bottomPlayer.transform.position.z > _topPlayer.transform.position.z)
 				{
-					_playerGrid[0, 0].GetComponent<Player_Controller>().mainCamera = _cam10;
-					_playerGrid[1, 0].GetComponent<Player_Controller>().mainCamera = _cam00;
+					_bottomPlayer.GetComponent<Player_Controller>().mainCamera = _topCam;
+					_topPlayer.GetComponent<Player_Controller>().mainCamera = _bottomCam;
 
-					_playerGrid[0, 0] = _player10;
-					_playerGrid[1, 0] = _player00;
+					_topPlayer.GetComponentInChildren<Canvas>().worldCamera = _bottomCam;
+					_bottomPlayer.GetComponentInChildren<Canvas>().worldCamera = _topCam;
 				}
 			}
-			//be careful these change
-			_player00 = _playerGrid[0, 0];
-			GameObject _player01 = _playerGrid[0, 1];
-
-			if (_player00 != null && _player01 != null)
-			{
-				//swap player cam at bottom left with top left if positioned incorrectly
-
-
-				if (_player00.transform.position.z > _player01.transform.position.z)
-				{
-					Camera _cam00 = _player00.GetComponent<Player_Controller>().mainCamera;
-					Camera _cam01 = _player01.GetComponent<Player_Controller>().mainCamera;
-
-
-					_playerGrid[0, 0].GetComponent<Player_Controller>().mainCamera = _cam01;
-					_playerGrid[0, 1].GetComponent<Player_Controller>().mainCamera = _cam00;
-
-					_playerGrid[0, 0] = _player01;
-					_playerGrid[0, 1] = _player00;
-				}
-			}
-			//be careful these change
-			_player01 = _playerGrid[0, 1];
-			GameObject _player11 = _playerGrid[1, 1];
-
-			if (_player01 != null && _player11 != null)
-			{
-				//swap player cam at top left with top right if positioned incorrectly
-
-				Camera _cam01 = _player01.GetComponent<Player_Controller>().mainCamera;
-				Camera _cam11 = _player11.GetComponent<Player_Controller>().mainCamera;
-				if (_player01.transform.position.x > _player11.transform.position.x)
-				{
-					_playerGrid[0, 1].GetComponent<Player_Controller>().mainCamera = _cam11;
-					_playerGrid[1, 1].GetComponent<Player_Controller>().mainCamera = _cam01;
-
-					_playerGrid[0, 1] = _player11;
-					_playerGrid[1, 1] = _player01;
-				}
-			}
-			//be careful these change
-			_player11 = _playerGrid[1, 1];
-			_player10 = _playerGrid[1, 0];
-
-			if (_player11 != null && _player10 != null)
-			{
-				//swap player cam at top right with bottom right if positioned incorrectly
-				Camera _cam11 = _player11.GetComponent<Player_Controller>().mainCamera;
-				Camera _cam10 = _player10.GetComponent<Player_Controller>().mainCamera;
-				if (_player10.transform.position.z > _player11.transform.position.z)
-				{
-					_playerGrid[1, 0].GetComponent<Player_Controller>().mainCamera = _cam11;
-					_playerGrid[1, 1].GetComponent<Player_Controller>().mainCamera = _cam10;
-
-					_playerGrid[1, 0] = _player11;
-					_playerGrid[1, 1] = _player10;
-				}
-			}
+			
 		}
 
-
-		//average positions only if there are 2 or 4 players connected together
+		//new position for the camera
 		Vector3 camPosition;
 
-		camPosition = (_position / _connectedPlayers) + cameraOffset;
+		if (_connectedPlayers < 2)
+		{
+			camPosition = (_position) + mainCamera.transform.forward*cameraOffset;
+		}
+		else
+		{
+			camPosition = (_position / _connectedPlayers);
+
+		}
 
 
 		//Move camera forward or backward to create a mixed view
 		if (_connectedPlayers > 1)
 		{
-			float _height = mainCamera.orthographicSize * 2;
+			float _height = mainCamera.fieldOfView * 2f;
 			float _width = _height * Screen.width / Screen.height;
-			if (_connectedPlayers > 2)
-			{
-				camPosition += (1 - mainCamera.rect.x * 4f) * 0.5f * _width * Vector3.left;
-			}
+			mainCamera.fieldOfView = tmp_FOV;
+			camPosition += (tmp_reverse) * mainCamera.transform.forward;
+			mainCamera.transform.rotation = Quaternion.Euler(45+Mathf.Sign(mainCamera.rect.y - 0.4f) * -mainCamera.fieldOfView/2f, 0f, 0f);
 
-			camPosition += (mainCamera.rect.y * 4f - 1) * 0.8f * _height * Vector3.forward;
-
-		}
-		//Move the camera slow if entering or exiting merge zone
-
-		if (Vector3.Distance(camPosition, mainCamera.transform.position) < 11f)
-		{
-			mainCamera.transform.position = camPosition;
 		}
 		else
 		{
+			mainCamera.fieldOfView = originalFOV;
+		}
+		//Move the camera slow if entering or exiting merge zone
+
+		if (Vector3.Distance(camPosition, mainCamera.transform.position) < 6f)
+		{
 			mainCamera.transform.position = camPosition;
 
+		}
+		else
+		{
+			mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, camPosition, 1f);
+
+			mainCamera.transform.rotation = originalCameraRotation;
 			//move camera to positon
-			//mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, camPosition, 0.1f);
 		}
 
 
@@ -624,7 +589,7 @@ public class Player_Controller : MonoBehaviour
 		//add force forwards
 		rb.velocity = transform.forward * 3f;
 		//check for object
-		if (!Physics.SphereCast(transform.position+rb.centerOfMass,0.2f, transform.forward, out _hit, 1f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (!Physics.SphereCast(transform.position + rb.centerOfMass, 0.2f, transform.forward, out _hit, 1f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			return;
 		}
@@ -635,7 +600,13 @@ public class Player_Controller : MonoBehaviour
 		}
 		if (_hit.transform.GetComponent<Rigidbody>() != null)
 		{
-			_hit.transform.GetComponent<Rigidbody>().velocity = transform.forward * 5f;
+			Enemy _enemyScript = _hit.transform.GetComponent<Enemy>();
+			if (_enemyScript != null)
+			{
+				_enemyScript.Recoil();
+			}
+			print("Adding Force");
+			_hit.transform.GetComponent<Rigidbody>().velocity = transform.forward * 7f;
 		}
 
 	}
