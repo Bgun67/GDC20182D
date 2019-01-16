@@ -245,7 +245,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aa9309b00eee6440b88c47b2110d8f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemiesToSpawn: []
+  enemiesToSpawn:
+  - enemyPrefab: {fileID: 1030400507663832, guid: 5cdca7b1f4e4b6a46817d578d218c2e6,
+      type: 2}
+    position: {fileID: 1402728458}
+    amount: 10
+    initialDelay: 1
+    subsequentDelay: 5
   playerSpawnPosition: {fileID: 1402728458}
   scene: SampleScene
 --- !u!1001 &417432486
@@ -537,7 +543,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!65 &909612792
 BoxCollider:
@@ -566,11 +572,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 47fd2467391ff6a42b0b489403ccf25b, type: 2}
   m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
@@ -634,7 +636,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: 
-  numberOfPlayers: 1
+  numberOfPlayers: 2
   playerPrefab: {fileID: 1087987552615950, guid: c130444bbe4d2154482c128537692129,
     type: 2}
   players: []

@@ -4,7 +4,19 @@ Look Horizontal 1
 Mouse Position X
 Move Horizontal 1
 Axis
-Horizontal 1
+Move Horizontal 1
 Move Vertical 1
 Axis
-Vertical 1
+Move Vertical 1
+Look Vertical 2
+Axis
+Look Vertical 2
+Look Horizontal 2
+Axis
+Look Horizontal 2
+Move Horizontal 2
+Axis
+Move Horizontal 2
+Move Vertical 2
+Axis
+Move Vertical 2
