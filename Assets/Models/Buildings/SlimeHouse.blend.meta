@@ -17,15 +17,32 @@ ModelImporter:
     2300000: Circle
     2300002: Sphere
     2300004: Sphere_001
+    2300006: //RootNode
     3300000: Circle
     3300002: Sphere
     3300004: Sphere_001
+    3300006: //RootNode
     4300000: Sphere
     4300002: Circle
     4300004: Sphere_001
     7400000: Default Take
     9500000: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: House
+    second: {fileID: 2100000, guid: 350307bf3ce58d84dbfee992737df8d7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Light_Sphere
+    second: {fileID: 2100000, guid: 9081f211395e6f14ab63283fda59f9b8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material_001
+    second: {fileID: 2100000, guid: 8a2426e3e28b418428864d61f27c7f46, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -79,8 +96,8 @@ ModelImporter:
     previousCalculatedGlobalScale: 1
     hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
-    normalSmoothAngle: 60
-    normalImportMode: 0
+    normalSmoothAngle: 30
+    normalImportMode: 1
     tangentImportMode: 3
     normalCalculationMode: 4
   importAnimation: 1
