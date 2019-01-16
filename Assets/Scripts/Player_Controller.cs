@@ -65,11 +65,9 @@ public class Player_Controller : MonoBehaviour
 	public Camera mainCamera;
 	//Placement of camera with respect to player
 	public float cameraOffset;
-	public float originalFOV;
+	float originalFOV;
 	public float tmp_FOV;
-	public float tmp_up;
 	public float tmp_reverse;
-	public float tmp_Rotate;
 	//originalCam rotation as a rotation type
 	Quaternion originalCameraRotation;
 	#endregion
@@ -104,7 +102,7 @@ public class Player_Controller : MonoBehaviour
 		rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
 		mainCamera = transform.GetComponentInChildren<Camera>();
-		originalCameraRotation = mainCamera.transform.rotation;
+		originalCameraRotation = mainCamera.transform.rotation;		
 		originalFOV = mainCamera.fieldOfView;
 		healthScript = this.GetComponent<Health>();
 		healthScript.HealthChanged += UpdateHealth;
@@ -377,10 +375,8 @@ public class Player_Controller : MonoBehaviour
 		Vector3 _position = Vector3.zero;
 		int _connectedPlayers = 0;
 
-		this.mainCamera.transform.rotation = Quaternion.Euler(55f,0f,0f);
-
+		this.mainCamera.transform.rotation = originalCameraRotation;//Quaternion.Lerp(mainCamera.transform.rotation,originalCameraRotation, 0.6f);//Quaternion.Euler(55f,0f,0f);
 		GameObject[] _playerGrid = new GameObject[2];
-
 		//Add all players within range
 		foreach (GameObject _player in gameController.players)
 		{
