@@ -48,8 +48,6 @@ public class Player_Controller : MonoBehaviour
 	float lookVertical;
 	float lookHorizontal;
 	float lastRotation;
-	//multiplier for running lock on speeds
-	float runMultiplier = 1f;
 	Vector3 lastVelocity;
 	//Amount of force applied to player
 	public float forceFactor = 5f;
@@ -66,13 +64,10 @@ public class Player_Controller : MonoBehaviour
 	[Tooltip("Assigned automatically if left empty")]
 	public Camera mainCamera;
 	//Placement of camera with respect to player
-	float cameraOffset;
-	public float originalOffset;
+	public float cameraOffset;
 	float originalFOV;
 	public float tmp_FOV;
 	public float tmp_reverse;
-	bool lockedToEnemy;
-	GameObject lockedEnemy;
 	//originalCam rotation as a rotation type
 	Quaternion originalCameraRotation;
 	#endregion
@@ -106,6 +101,7 @@ public class Player_Controller : MonoBehaviour
 		//Find the rigidbody
 		rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
+		mainCamera = transform.GetComponentInChildren<Camera>();
 		originalCameraRotation = mainCamera.transform.rotation;		
 		originalFOV = mainCamera.fieldOfView;
 		healthScript = this.GetComponent<Health>();
@@ -149,28 +145,6 @@ public class Player_Controller : MonoBehaviour
 		{
 			ChooseAttack(moveHorizontal, moveVertical);
 		}
-		if (Input.GetKey("c")){
-			runMultiplier = 2f;
-		}
-		else
-		{
-			runMultiplier = 1f;
-		}
-		if (Input.GetKeyDown("k"))
-		{
-			if (lockedToEnemy)
-			{
-				lockedToEnemy = false;
-				lockedEnemy = null;
-				ResetCam();
-
-			}
-			else if (FindNearestEnemy(out lockedEnemy))
-			{
-				mainCamera.transform.LookAt(lockedEnemy.transform);
-				lockedToEnemy = true;
-			}
-		}
 		//is input greater than 0
 		else if (!rolling)
 		{
@@ -178,6 +152,11 @@ public class Player_Controller : MonoBehaviour
 			{
 				//Moves the player using velocities
 				Move(moveHorizontal, moveVertical);
+			}
+			else
+			{
+				//Turns the player to face direction of movement
+				Look(lookHorizontal, lookVertical);
 			}
 		}
 		if (Input.GetButtonDown("Jump " + (playerNum + 1)) && CheckGrounded())
@@ -206,21 +185,6 @@ public class Player_Controller : MonoBehaviour
 		this.transform.GetComponentInChildren<Renderer>().material.color = playerColors[playerNum];
 	}
 	#region Attacks
-	bool FindNearestEnemy(out GameObject foundEnemy)
-	{
-		foundEnemy = null;
-		Collider[] _colliders = Physics.OverlapSphere(transform.position, 25f);
-		foreach (Collider _collider in _colliders)
-		{
-			if (_collider.transform.root.GetComponent<Enemy>())
-			{
-				foundEnemy = _collider.transform.root.gameObject;
-				return true;
-			}
-		}
-		return false;
-
-	}
 	void ChooseAttack(float _h, float _v)
 	{
 		//     1
@@ -330,10 +294,7 @@ public class Player_Controller : MonoBehaviour
 		//get previous upward velocity
 		float _yVelocity = rb.velocity.y;
 		//Move Player
-		//Find look forward and get the vector parallel to the ground
-		Vector3 _camForward = Vector3.Cross(mainCamera.transform.right, Vector3.up);
-		_camForward = new Vector3(_camForward.x, 0f, _camForward.z);
-		rb.velocity = _camForward* _v*runMultiplier* forceFactor+mainCamera.transform.right*forceFactor*_h;
+		rb.velocity = Vector3.forward* _v* forceFactor+Vector3.right*forceFactor*_h;
 
 
 		//Reset upwards velocity
@@ -346,24 +307,7 @@ public class Player_Controller : MonoBehaviour
 		//Point player in proper direction
 
 		//Calculate atan to find angle convert from rads Lerps the angle, result is not exactly the angle
-		if (Mathf.Abs(_v) > 0||Mathf.Abs(_h)>0)
-		{
-			transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, Mathf.Rad2Deg * Mathf.Atan(_h / _v) + Mathf.Sign(_v) * 90f - 90f, 0f), 0.2f);			
-		}
-		if (lockedToEnemy)
-		{
-			if (lockedEnemy != null)
-			{
-				transform.LookAt(lockedEnemy.transform, Vector3.up);
-				//mainCamera.transform.LookAt(lockedEnemy.transform);
-			}
-			else
-			{
-				ResetCam();
-				lockedToEnemy = false;
-			}
-		}
-
+		transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, Mathf.Rad2Deg * Mathf.Atan(_h / _v) + Mathf.Sign(_v) * 90f - 90f, 0f), 0.2f);
 
 	}
 	void AnimateMovement()
@@ -431,8 +375,7 @@ public class Player_Controller : MonoBehaviour
 		Vector3 _position = Vector3.zero;
 		int _connectedPlayers = 0;
 
-		//this.mainCamera.transform.rotation = originalCameraRotation;//Quaternion.Lerp(mainCamera.transform.rotation,originalCameraRotation, 0.6f);//Quaternion.Euler(55f,0f,0f);
-		
+		this.mainCamera.transform.rotation = originalCameraRotation;//Quaternion.Lerp(mainCamera.transform.rotation,originalCameraRotation, 0.6f);//Quaternion.Euler(55f,0f,0f);
 		GameObject[] _playerGrid = new GameObject[2];
 		//Add all players within range
 		foreach (GameObject _player in gameController.players)
@@ -473,24 +416,24 @@ public class Player_Controller : MonoBehaviour
 			}
 			
 		}
-		//Find any Intersecting colliders
-		RaycastHit _hit;
-		Debug.DrawRay(rb.worldCenterOfMass, (mainCamera.transform.position - rb.worldCenterOfMass) * (-originalOffset + 0.6f));
-		if (Physics.Raycast(rb.worldCenterOfMass, mainCamera.transform.position-rb.worldCenterOfMass, out _hit, -originalOffset+0.6f)){
-			cameraOffset = Mathf.Lerp(cameraOffset,Mathf.Clamp(-_hit.distance+0.1f,originalOffset,-1f),0.1f);
-		}
-		else
-		{
-			cameraOffset = Mathf.Lerp(cameraOffset,originalOffset,0.1f);
-		}
 
 		//new position for the camera
 		Vector3 camPosition;
-		//Move camera forward or backward to create a mixed view
-		if (_connectedPlayers > 1)
+
+		if (_connectedPlayers < 2)
+		{
+			camPosition = (_position) + mainCamera.transform.forward*cameraOffset;
+		}
+		else
 		{
 			camPosition = (_position / _connectedPlayers);
 
+		}
+
+
+		//Move camera forward or backward to create a mixed view
+		if (_connectedPlayers > 1)
+		{
 			float _height = mainCamera.fieldOfView * 2f;
 			float _width = _height * Screen.width / Screen.height;
 			mainCamera.fieldOfView = tmp_FOV;
@@ -500,22 +443,26 @@ public class Player_Controller : MonoBehaviour
 		}
 		else
 		{
-			camPosition = (_position)+rb.centerOfMass + mainCamera.transform.forward*cameraOffset;
 			mainCamera.fieldOfView = originalFOV;
 		}
-		
-		
-		mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, camPosition, 1f);
-		PivotCam();
+		//Move the camera slow if entering or exiting merge zone
+
+		if (Vector3.Distance(camPosition, mainCamera.transform.position) < 6f)
+		{
+			mainCamera.transform.position = camPosition;
+
+		}
+		else
+		{
+			mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, camPosition, 1f);
+
+			mainCamera.transform.rotation = originalCameraRotation;
+			//move camera to positon
+		}
+
+
 	}
-	void PivotCam()
-	{
-		mainCamera.transform.RotateAround(transform.position, Vector3.up, lookHorizontal/2f);
-	}
-	void ResetCam()
-	{
-		mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, originalCameraRotation, 0.4f);
-	}
+
 
 
 	void CheckFall()

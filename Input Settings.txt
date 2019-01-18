@@ -1,9 +1,7 @@
 Look Vertical 1
-Axis
-Look Vertical 1
+Mouse Position Y
 Look Horizontal 1
-Axis
-Look Horizontal 1
+Mouse Position X
 Move Horizontal 1
 Axis
 Move Horizontal 1

@@ -143,12 +143,10 @@ public static class Input_Manager{
 			//Axis Sort name
 			"Look Vertical 1",
 			//unity axis or mouse
-			"Axis",
-			"Look Vertical 1",
+			"Mouse Position Y",
 			//name
 			"Look Horizontal 1",
-			"Axis",
-			"Look Horizontal 1",
+			"Mouse Position X",
 			//name
 			"Move Horizontal 1",
 			//type
