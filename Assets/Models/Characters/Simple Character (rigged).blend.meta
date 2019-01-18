@@ -91,6 +91,8 @@ ModelImporter:
     7400024: Fall
     7400026: Land
     7400028: Walk_Left
+    7400030: Shield_Bash
+    7400032: Run
     9500000: //RootNode
     13700000: Character
     2186277476908879412: ImportLogs
@@ -120,40 +122,34 @@ ModelImporter:
       and has rotation animation that will be discarded.\n\t'Foot_L' has translation
       animation that will be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms
       and has rotation animation that will be discarded.\n\t'Foot_R' has translation
-      animation that will be discarded.\n\nClip 'Fall' has import animation warnings
+      animation that will be discarded.\n\nClip 'Idle_1' has import animation warnings
+      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'Leg_Control_L' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_L' has translation
+      animation that will be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_R' has translation
+      animation that will be discarded.\n\nClip 'Idle_2' has import animation warnings
+      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'Leg_Control_L' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_L' has translation
+      animation that will be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_R' has translation
+      animation that will be discarded.\n\nClip 'Idle_3' has import animation warnings
+      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'Leg_Control_L' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_L' has translation
+      animation that will be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_R' has translation
+      animation that will be discarded.\n\nClip 'Jump' has import animation warnings
+      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'Leg_Control_L' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_L' has translation
+      animation that will be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_R' has translation
+      animation that will be discarded.\n\nClip 'Land' has import animation warnings
       that might lower retargeting quality:\nNote: Activate translation DOF on avatar
       to improve retargeting quality.\n\t'Leg_Control_L' has translation animation
       that will be discarded.\n\t'Leg_Control_L' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\t'Foot_L' has translation
-      animation that will be discarded.\n\t'Leg_Control_R' has translation animation
-      that will be discarded.\n\t'Foot_R' has translation animation that will be discarded.\n\nClip
-      'Idle_1' has import animation warnings that might lower retargeting quality:\nNote:
-      Activate translation DOF on avatar to improve retargeting quality.\n\t'Leg_Control_L'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_L'
-      has translation animation that will be discarded.\n\t'Leg_Control_R' is inbetween
-      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_R'
-      has translation animation that will be discarded.\n\nClip 'Idle_2' has import
-      animation warnings that might lower retargeting quality:\nNote: Activate translation
-      DOF on avatar to improve retargeting quality.\n\t'Leg_Control_L' is inbetween
-      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_L'
-      has translation animation that will be discarded.\n\t'Leg_Control_R' is inbetween
-      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_R'
-      has translation animation that will be discarded.\n\nClip 'Idle_3' has import
-      animation warnings that might lower retargeting quality:\nNote: Activate translation
-      DOF on avatar to improve retargeting quality.\n\t'Leg_Control_L' is inbetween
-      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_L'
-      has translation animation that will be discarded.\n\t'Leg_Control_R' is inbetween
-      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_R'
-      has translation animation that will be discarded.\n\nClip 'Jump' has import
-      animation warnings that might lower retargeting quality:\nNote: Activate translation
-      DOF on avatar to improve retargeting quality.\n\t'Leg_Control_L' is inbetween
-      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_L'
-      has translation animation that will be discarded.\n\t'Leg_Control_R' is inbetween
-      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_R'
-      has translation animation that will be discarded.\n\nClip 'Land' has import
-      animation warnings that might lower retargeting quality:\nNote: Activate translation
-      DOF on avatar to improve retargeting quality.\n\t'Leg_Control_L' has translation
-      animation that will be discarded.\n\t'Leg_Control_L' is inbetween humanoid transforms
       and has rotation animation that will be discarded.\n\t'Foot_L' has translation
       animation that will be discarded.\n\t'Leg_Control_R' has translation animation
       that will be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms
@@ -175,23 +171,29 @@ ModelImporter:
       animation that will be discarded.\n\t'Upper_Leg_R' has scale animation that
       will be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms and has
       rotation animation that will be discarded.\n\t'Foot_R' has translation animation
-      that will be discarded.\n\nClip 'Shoulder_Ram' has import animation warnings
+      that will be discarded.\n\nClip 'Run' has import animation warnings that might
+      lower retargeting quality:\nNote: Activate translation DOF on avatar to improve
+      retargeting quality.\n\t'Leg_Control_L' is inbetween humanoid transforms and
+      has rotation animation that will be discarded.\n\t'Foot_L' has translation animation
+      that will be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_R' has translation
+      animation that will be discarded.\n\nClip 'Shield_Bash' has import animation
+      warnings that might lower retargeting quality:\nNote: Activate translation DOF
+      on avatar to improve retargeting quality.\n\t'Leg_Control_L' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\t'Foot_L' has
+      translation animation that will be discarded.\n\t'Leg_Control_R' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_R'
+      has translation animation that will be discarded.\n\nClip 'Shoulder_Ram' has
+      import animation warnings that might lower retargeting quality:\nNote: Activate
+      translation DOF on avatar to improve retargeting quality.\n\t'Upper_Leg_L' has
+      translation animation that will be discarded.\n\t'Leg_Control_L' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Foot_L'
+      has translation animation that will be discarded.\n\t'Upper_Leg_R' has translation
+      animation that will be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Foot_R' has translation
+      animation that will be discarded.\n\nClip 'Walk' has import animation warnings
       that might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'Upper_Leg_L' has translation animation that
-      will be discarded.\n\t'Leg_Control_L' is inbetween humanoid transforms and has
-      rotation animation that will be discarded.\n\t'Foot_L' has translation animation
-      that will be discarded.\n\t'Upper_Leg_R' has translation animation that will
-      be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms and has rotation
-      animation that will be discarded.\n\t'Foot_R' has translation animation that
-      will be discarded.\n\nClip 'Walk' has import animation warnings that might lower
-      retargeting quality:\nNote: Activate translation DOF on avatar to improve retargeting
-      quality.\n\t'Leg_Control_L' is inbetween humanoid transforms and has rotation
-      animation that will be discarded.\n\t'Foot_L' has translation animation that
-      will be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms and has
-      rotation animation that will be discarded.\n\t'Foot_R' has translation animation
-      that will be discarded.\n\nClip 'Walk_Left' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar to
-      improve retargeting quality.\n\t'Leg_Control_L' is inbetween humanoid transforms
+      to improve retargeting quality.\n\t'Leg_Control_L' is inbetween humanoid transforms
       and has rotation animation that will be discarded.\n\t'Foot_L' has translation
       animation that will be discarded.\n\t'Leg_Control_R' is inbetween humanoid transforms
       and has rotation animation that will be discarded.\n\t'Foot_R' has translation
@@ -644,6 +646,62 @@ ModelImporter:
       keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
       heightFromFeet: 1
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Shield_Bash
+      takeName: Shield_Bash
+      firstFrame: 0
+      lastFrame: 29
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Run
+      takeName: Run
+      firstFrame: -1
+      lastFrame: 39
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
