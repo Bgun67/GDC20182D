@@ -7,6 +7,7 @@ public class Game_Controller : MonoBehaviour {
 	public string sceneName;
 	public int numberOfPlayers = 1;
 	public GameObject playerPrefab;
+	public GameObject camPrefab;
 	//[HideInInspector]
 	public List<GameObject> players = new List<GameObject>();
 	
@@ -62,9 +63,12 @@ public class Game_Controller : MonoBehaviour {
 		{
 
 			GameObject _newPlayer = (GameObject)Instantiate(playerPrefab);
+			Camera _cam = Instantiate(camPrefab).GetComponent<Camera>();
 			GetLevelController(this.sceneName).SpawnPlayer(_newPlayer);
 			_newPlayer.GetComponent<Player_Controller>().playerNum = i;
+			_newPlayer.GetComponent<Player_Controller>().mainCamera = _cam;
 			DontDestroyOnLoad(_newPlayer);
+			DontDestroyOnLoad(_cam);
 			_newPlayer.GetComponent<Player_Controller>().SetupPlayer();
 			_newPlayer.name = "Player " + i;
 			players.Add( _newPlayer);
