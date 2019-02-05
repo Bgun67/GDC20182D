@@ -129,8 +129,8 @@ BlendTree:
     m_DirectBlendParameter: Run Speed
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400016, guid: 975aeb2491b4b954db1c61933c0e02e2, type: 3}
-    m_Threshold: 8
+    m_Motion: {fileID: 7400034, guid: 975aeb2491b4b954db1c61933c0e02e2, type: 3}
+    m_Threshold: 6
     m_Position: {x: 0, y: 0}
     m_TimeScale: 2
     m_CycleOffset: 0
@@ -139,7 +139,7 @@ BlendTree:
   m_BlendParameter: Fall
   m_BlendParameterY: Run Speed
   m_MinThreshold: 0
-  m_MaxThreshold: 8
+  m_MaxThreshold: 6
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
@@ -385,11 +385,11 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0.27688593
   m_TransitionOffset: 0
-  m_ExitTime: 0.8
+  m_ExitTime: 0.35313022
   m_HasExitTime: 0
-  m_HasFixedDuration: 1
+  m_HasFixedDuration: 0
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
