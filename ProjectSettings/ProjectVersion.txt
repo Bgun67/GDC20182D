@@ -1,6 +1,10 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 m_EditorVersion: 2018.3.3f1
+=======
+m_EditorVersion: 2018.2.10f1
+>>>>>>> parent of ed6817a... Items
 =======
 m_EditorVersion: 2018.2.10f1
 >>>>>>> parent of ed6817a... Items
