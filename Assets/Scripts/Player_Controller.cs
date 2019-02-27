@@ -19,6 +19,7 @@ public enum AttackType
 	Grass,
 	Earth
 	//etc
+
 }
 [System.Serializable]
 public class AttackClass
@@ -35,24 +36,18 @@ public class AttackClass
 	public float rechargeWait = 0;
 	public GameObject effect;
 }
-[SerializeField]
-public enum ItemName
-{
-	Coin,
-	ShieldExample,
-	PotionOfCoolness
-}
+
 public class Player_Controller : MonoBehaviour
 {
+
 	#region Movement
 	[Header("Movement")]
 	float moveVertical;
 	float previousMoveVertical;
 	float moveHorizontal;
+	float lookVertical;
 	float lookHorizontal;
 	float lastRotation;
-	int lastTapFrame;
-
 	//multiplier for running lock on speeds
 	float runMultiplier = 1f;
 	Vector3 lastVelocity;
@@ -63,6 +58,7 @@ public class Player_Controller : MonoBehaviour
 	public ParticleSystem dust;
 	Rigidbody rb;
 	public Animator anim;
+	int lastTapFrame;
 	bool rolling;
 	#endregion
 	#region Camera
@@ -72,6 +68,9 @@ public class Player_Controller : MonoBehaviour
 	//Placement of camera with respect to player
 	float cameraOffset;
 	public float originalOffset;
+	float originalFOV;
+	public float tmp_FOV;
+	public float tmp_reverse;
 	bool lockedToEnemy;
 	GameObject lockedEnemy;
 	//originalCam rotation as a rotation type
@@ -96,7 +95,6 @@ public class Player_Controller : MonoBehaviour
 	public Color[] playerColors;
 	#region Player Data
 	public int playerNum;
-	public int playerScore;
 	#endregion
 
 
@@ -109,6 +107,7 @@ public class Player_Controller : MonoBehaviour
 		rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
 		originalCameraRotation = mainCamera.transform.rotation;		
+		originalFOV = mainCamera.fieldOfView;
 		healthScript = this.GetComponent<Health>();
 		healthScript.HealthChanged += UpdateHealth;
 
@@ -132,6 +131,7 @@ public class Player_Controller : MonoBehaviour
 		//Get Input
 		moveVertical = Input_Manager.GetAxis("Move Vertical " + (playerNum + 1));
 		moveHorizontal = Input_Manager.GetAxis("Move Horizontal " + (playerNum + 1));
+		lookVertical = Input_Manager.GetAxis("Look Vertical " + (playerNum + 1));
 		lookHorizontal = Input_Manager.GetAxis("Look Horizontal " + (playerNum + 1));
 		if (Input_Manager.GetAxisRaw("Move Vertical " + (playerNum + 1))>0 &&previousMoveVertical==0f)
 		{
@@ -149,14 +149,14 @@ public class Player_Controller : MonoBehaviour
 		{
 			ChooseAttack(moveHorizontal, moveVertical);
 		}
-		if (Input.GetButton("Sprint "+(playerNum+1))){
+		if (Input.GetKey("c")){
 			runMultiplier = 2f;
 		}
 		else
 		{
 			runMultiplier = 1f;
 		}
-		if (Input.GetButtonDown("Lock Aim " + (playerNum+1)))
+		if (Input.GetKeyDown("k"))
 		{
 			if (lockedToEnemy)
 			{
@@ -393,11 +393,16 @@ public class Player_Controller : MonoBehaviour
 		{
 			anim.SetFloat("Fall", 0f);
 		}
+
+
 	}
 	void Jump()
-	{	
+	{
+		
 		//show animation
 		anim.SetTrigger("Jump");
+		
+
 	}
 	void AddUpVelocity()
 	{
@@ -415,14 +420,62 @@ public class Player_Controller : MonoBehaviour
 			//we've hit something, there is something below the player
 			_grounded = true;
 		}
+
 		return _grounded;
+
 	}
 
 	#endregion
 	void CameraFollow()
 	{
+		Vector3 _position = Vector3.zero;
+		int _connectedPlayers = 0;
+
+		//this.mainCamera.transform.rotation = originalCameraRotation;//Quaternion.Lerp(mainCamera.transform.rotation,originalCameraRotation, 0.6f);//Quaternion.Euler(55f,0f,0f);
+		
+		GameObject[] _playerGrid = new GameObject[2];
+		//Add all players within range
+		foreach (GameObject _player in gameController.players)
+		{
+
+			//find if other player is merge zone
+			float _distance = Vector3.Distance(_player.transform.position, this.transform.position);
+			if (_distance < 12f)
+			{
+
+				//add position 
+				_position += _player.transform.position;
+				Rect _camRect = _player.GetComponent<Player_Controller>().mainCamera.rect;
+				_playerGrid[(int)(_camRect.y * 2f)] = _player;
+				_connectedPlayers++;
+			}
+
+		}
+		if (_connectedPlayers > 1)
+		{
+			GameObject _bottomPlayer = _playerGrid[0];
+			GameObject _topPlayer = _playerGrid[1];
+
+			if (_topPlayer != null && _bottomPlayer != null)
+			{
+				//swap player cam at bottom left with bottom right if positioned incorrectly
+				Camera _topCam = _topPlayer.GetComponent<Player_Controller>().mainCamera;
+				Camera _bottomCam = _bottomPlayer.GetComponent<Player_Controller>().mainCamera;
+
+				if (_bottomPlayer.transform.position.z > _topPlayer.transform.position.z)
+				{
+					_bottomPlayer.GetComponent<Player_Controller>().mainCamera = _topCam;
+					_topPlayer.GetComponent<Player_Controller>().mainCamera = _bottomCam;
+
+					_topPlayer.GetComponentInChildren<Canvas>().worldCamera = _bottomCam;
+					_bottomPlayer.GetComponentInChildren<Canvas>().worldCamera = _topCam;
+				}
+			}
+			
+		}
 		//Find any Intersecting colliders
 		RaycastHit _hit;
+		Debug.DrawRay(rb.worldCenterOfMass, (mainCamera.transform.position - rb.worldCenterOfMass) * (-originalOffset + 0.6f));
 		if (Physics.Raycast(rb.worldCenterOfMass, mainCamera.transform.position-rb.worldCenterOfMass, out _hit, -originalOffset+0.6f)){
 			cameraOffset = Mathf.Lerp(cameraOffset,Mathf.Clamp(-_hit.distance+0.1f,originalOffset,-1f),0.1f);
 		}
@@ -432,8 +485,26 @@ public class Player_Controller : MonoBehaviour
 		}
 
 		//new position for the camera
-		Vector3 camPosition = rb.worldCenterOfMass + mainCamera.transform.forward*cameraOffset;
+		Vector3 camPosition;
+		//Move camera forward or backward to create a mixed view
+		if (_connectedPlayers > 1)
+		{
+			camPosition = (_position / _connectedPlayers);
 
+			float _height = mainCamera.fieldOfView * 2f;
+			float _width = _height * Screen.width / Screen.height;
+			mainCamera.fieldOfView = tmp_FOV;
+			camPosition += (tmp_reverse) * mainCamera.transform.forward;
+			mainCamera.transform.rotation = Quaternion.Euler(45+Mathf.Sign(mainCamera.rect.y - 0.4f) * -mainCamera.fieldOfView/2f, 0f, 0f);
+
+		}
+		else
+		{
+			camPosition = (_position)+rb.centerOfMass + mainCamera.transform.forward*cameraOffset;
+			mainCamera.fieldOfView = originalFOV;
+		}
+		
+		
 		mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, camPosition, 1f);
 		PivotCam();
 	}
@@ -619,16 +690,6 @@ public class Player_Controller : MonoBehaviour
 		
 
 		currentAttack.currentUses++;
-	}
-	public void PickupItem(ItemName _name)
-	{
-		print("Picked up" + _name);
-		switch (_name)
-		{
-			case ItemName.Coin:
-				playerScore += 10;
-				break;
-		}
 	}
 
 	#endregion
