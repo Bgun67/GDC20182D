@@ -58,10 +58,8 @@ public class Game_Controller : MonoBehaviour {
 	}
 	void AddPlayers()
 	{
-		Level_Controller currentController = FindObjectOfType<Level_Controller>();
 		for (int i = 0; i < numberOfPlayers; i++)
 		{
-
 			GameObject _newPlayer = (GameObject)Instantiate(playerPrefab);
 			Camera _cam = Instantiate(camPrefab).GetComponent<Camera>();
 			GetLevelController(this.sceneName).SpawnPlayer(_newPlayer);
