@@ -1,6 +1,10 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 m_EditorVersion: 2018.2.10f1
+=======
+m_EditorVersion: 2018.2.16f1
+>>>>>>> parent of 6af3a2d... Merge branch 'Kliff-Animation-Test' into Glu-Anims
 =======
 m_EditorVersion: 2018.2.16f1
 >>>>>>> parent of 6af3a2d... Merge branch 'Kliff-Animation-Test' into Glu-Anims
