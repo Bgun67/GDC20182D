@@ -8,12 +8,18 @@ public class Health : MonoBehaviour
 	[Tooltip("The original health of the object")]
 	public float originalHealth;
 	public float currentHealth;
+
 	[Tooltip("If left empty, object is destroyed")]
 	public UnityEvent dieFunction;
 	public bool showHealth;
-	[Tooltip("Do not use default as a critical attack type")]
-	public AttackType criticalAttackType = AttackType.None;
-	public float criticalMultiplier;
+    bool isDead;    //Ensures dieFunction only executes once
+
+    [Tooltip("Do not use default as a critical attack type")]
+	[EnumFlags] public AttackType criticalAttackType;
+    [EnumFlags] public AttackType resistAttackType;
+    [EnumFlags] public AttackType immuneToAttackType;
+
+    public float criticalMultiplier;
 	//public float lastUpdate;
 
 	#region regen
@@ -30,8 +36,6 @@ public class Health : MonoBehaviour
 	public delegate void HealthChangeHandler(float amount);
 	public event HealthChangeHandler HealthChanged;
 
-	//Ensures dieFunction only executes once
-	bool isDead;
 	// Use this for initialization
 	void Start()
 	{
@@ -47,20 +51,46 @@ public class Health : MonoBehaviour
 		Start();
 	}
 
+    //Is there an element in A thats in B
+    bool HasType(AttackType a, AttackType b)
+    {
+        return ((a & b) != AttackType.None);
+    }
+
+    //Is there an element in A that is not in B?
+    bool HasTypeNotInB(AttackType a, AttackType b)
+    {
+        return (((a ^ b) & a) != AttackType.None);
+    }
+
 	// Update is called once per frame
-	public void TakeDamage(float _amount, AttackType _damageType)
+	public void TakeDamage(float _amount, AttackType _damageType = AttackType.Normal)
 	{
-		if (_damageType == criticalAttackType)
+        if(HasTypeNotInB(_damageType,immuneToAttackType))
+        {
+            if (HasType(_damageType,criticalAttackType))
+            {
+                _amount *= criticalMultiplier;
+            }
+            else if (!HasTypeNotInB(_damageType,resistAttackType))
+            {
+                _amount /= criticalMultiplier;
+            }
+            currentHealth -= _amount;
+        }
+
+
+        if (_damageType == criticalAttackType)
 		{
-			_amount *= criticalMultiplier;
 		}
-		currentHealth -= _amount;
+
 		//Checks if the object is alive and health below 0
 		if (!isDead && currentHealth <= 0)
 		{
 			Die();
 			return;
 		}
+
 		//if the object should regenerate set its next regen time to regen properties
 		if (regen)
 		{
@@ -69,9 +99,11 @@ public class Health : MonoBehaviour
 			//invoke a new regen at delay time away
 			InvokeRepeating("Regen", regenDelay, regenTime);
 		}
+
 		//Send message for script to update UI
 		if (HealthChanged != null && showHealth) HealthChanged.Invoke(-_amount);
 	}
+
 	void Die()
 	{
 		//check if there is a diefunction
@@ -88,6 +120,7 @@ public class Health : MonoBehaviour
 		//Sets object to dead
 		isDead = true;
 	}
+
 	void Regen()
 	{
 		float remainingHealth = originalHealth - currentHealth;
@@ -104,14 +137,14 @@ public class Health : MonoBehaviour
 		{
 			float amount;
 			if (remainingHealth < regenAmount){
-        amount = remainingHealth;
-      }
-      else{
-        amount = regenAmount;
-      }
+                amount = remainingHealth;
+            }
+            else{
+                amount = regenAmount;
+            }
 			if (HealthChanged != null){
-        HealthChanged.Invoke(amount);
-      }
+                HealthChanged.Invoke(amount);
+            }
 		}
 	}
 }
