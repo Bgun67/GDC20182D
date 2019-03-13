@@ -6,27 +6,31 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 
 [System.Serializable]
+[System.Flags]
 public enum AttackType
 {
-	//use this for critical Attack in health
-	None,
-	//use this for a basic attack
-	Default,
-	Slime,
-	Fire,
-	Water,
-	Ice,
-	Grass,
-	Earth
-	//etc
+	// Use this for critical and ineffective attacks 
+    // AttackType can be a mix of types
+    // Change To Long If Over 16 Attack Types are required
 
+    None    = 0,
+    Normal  = 1 << 0,
+	Melee   = 1 << 1,
+    Fire    = 1 << 2,
+    Water   = 1 << 3,
+    Ice     = 1 << 4,
+    Grass   = 1 << 5,
+    Earth   = 1 << 6,
+    Slime   = 1 << 7,
+	
 }
+
 [System.Serializable]
 public class AttackClass
 {
 	public UnityEvent function;
 	public float damage;
-	public AttackType type = AttackType.Default;
+	public AttackType type = AttackType.Normal;
 	public bool available = true;
 	public int maxUses = 1;
 	[HideInInspector]
