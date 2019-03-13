@@ -213,8 +213,7 @@ ModelImporter:
       animation that will be discarded.\nEvent ResetRoll has a time (2.456838) outside
       the clip's valid range (0.000000..0.791667). It will never be firedEvent ResetRoll
       has a time (2.455725) outside the clip's valid range (0.000000..0.791667). It
-      will never be firedEvent ResetRoll has a time (3.491684) outside the clip's
-      valid range (0.000000..1.000000). It will never be fired"
+      will never be fired"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -465,7 +464,7 @@ ModelImporter:
       name: Roll_Forward
       takeName: Roll_Forward
       firstFrame: 0
-      lastFrame: 91
+      lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -520,7 +519,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.2852761
+      - time: 0.96244144
         functionName: AddUpVelocity
         data: 
         objectReferenceParameter: {instanceID: 0}
