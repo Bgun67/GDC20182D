@@ -4,7 +4,7 @@
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_NormalTex ("Normal (RGB)", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
-		_Metallic ("Metallic", Range(0,1)) = 0.0
+		_Metallic ("Metallic", Range(0,10)) = 0.0
 		_Threshold ("Threshold", Range(0,1)) = 0.2
 	}
 	SubShader {
@@ -25,22 +25,27 @@
 
 		half4 LightingRamp (SurfaceOutput s, half3 lightDir, half atten){
 			half NdotL = dot (s.Normal, lightDir);
+			//NdotL = abs(NdotL);
 			half diff = NdotL * 0.5 + 0.5;
+			diff = clamp(diff,0,1);
 			if(diff < 0.5 + _Threshold/2 && diff > 0.5 - _Threshold/2){
-				diff = 1 * ((diff-0.5 + _Threshold/2)/(_Threshold));
+				diff = 1.0 * ((diff-0.5 + _Threshold/2)/(_Threshold));
 			}
 			else{
 				diff = round(diff);
 			}
 			
 			half4 c;
-			c.rgb = (s.Albedo * _LightColor0.rgb) * diff * (1+s.Gloss*NdotL) * atten;
+			c.rgb = (s.Albedo * _LightColor0.rgb) * clamp(diff,0,1) * (1+s.Gloss*diff) * clamp(atten,0,1);
+			
+			//c.rgb = s.Albedo;
 			c.a = s.Alpha;
 			return c;
 		}
 
 		struct Input {
 			float2 uv_MainTex;
+			float2 uv_BumpMap;
 		};
 
 		half _Glossiness;
@@ -59,7 +64,7 @@
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
 			fixed4 n = tex2D (_NormalTex, IN.uv_MainTex);
 			o.Albedo = c.rgb;
-			o.Normal += n.rgb;
+			o.Normal = UnpackNormal (tex2D (_NormalTex, IN.uv_MainTex));
 			// Metallic and smoothness come from slider variables
 			//o.Metallic = _Metallic;
 			o.Gloss = _Glossiness;

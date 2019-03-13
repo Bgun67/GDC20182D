@@ -1,0 +1,152 @@
+fileFormatVersion: 2
+guid: a3939954e32bf0a4ea06b1b0ef63ce5e
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Cube
+    100002: Cube_001
+    100004: Cylinder
+    100006: //RootNode
+    100008: Sphere
+    100010: Sphere_001
+    100012: Sphere_002
+    100014: Sphere_003
+    400000: Cube
+    400002: Cube_001
+    400004: Cylinder
+    400006: //RootNode
+    400008: Sphere
+    400010: Sphere_001
+    400012: Sphere_002
+    400014: Sphere_003
+    2100000: Slime-House-2-Eyebrows
+    2100002: unnamed
+    2100004: Slime-House-2-Body
+    2100006: Slime-House-2-Eyes
+    2100008: Slime-House-2-Body__Slime-House-2-Albedo_png
+    2300000: Cube
+    2300002: Cube_001
+    2300004: Cylinder
+    2300006: Sphere
+    2300008: Sphere_001
+    2300010: Sphere_002
+    2300012: Sphere_003
+    3300000: Cube
+    3300002: Cube_001
+    3300004: Cylinder
+    3300006: Sphere
+    3300008: Sphere_001
+    3300010: Sphere_002
+    3300012: Sphere_003
+    4300000: Cube
+    4300002: Sphere_001
+    4300004: Sphere
+    4300006: Cylinder
+    4300008: Sphere_002
+    4300010: Sphere_003
+    4300012: Cube_001
+    7400000: Default Take
+    9500000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Slime-House-2-Body
+    second: {fileID: 2100000, guid: 9c2dbabdae3f4f84bac04c20f6366091, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Slime-House-2-Body__Slime-House-2-Albedo_png
+    second: {fileID: 2100000, guid: b0de139ce15c4fd4b9b57e0edceb6038, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Slime-House-2-Eyebrows
+    second: {fileID: 2100000, guid: 84db8052040fb704ca72ae37bddc1012, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Slime-House-2-Eyes
+    second: {fileID: 2100000, guid: d10e75273061a904681473ec86610a43, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 1
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 0
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 65
+    normalImportMode: 1
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
