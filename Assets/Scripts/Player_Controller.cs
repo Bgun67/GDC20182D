@@ -153,7 +153,7 @@ public class Player_Controller : MonoBehaviour
 		{
 			ChooseAttack(moveHorizontal, moveVertical);
 		}
-		if (Input.GetKey("c")){
+		if (Input.GetKey(KeyCode.LeftShift)){
 			runMultiplier = 2f;
 		}
 		else
