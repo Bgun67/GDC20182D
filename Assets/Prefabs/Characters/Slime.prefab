@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 135879337469467980}
   - component: {fileID: 195835965475528858}
   - component: {fileID: 54212506846885294}
+  - component: {fileID: 95282551745290560}
   m_Layer: 0
   m_Name: Slime
   m_TagString: Untagged
@@ -402,6 +403,24 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!95 &95282551745290560
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1059275152754800}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9efaca078ec36bc4bb2279e7e0647f66, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114142824675852900
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -422,6 +441,8 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   showHealth: 0
   criticalAttackType: 0
+  resistAttackType: 0
+  immuneToAttackType: 0
   criticalMultiplier: 2
   regen: 0
   regenDelay: 5
@@ -486,7 +507,7 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100002, guid: adfa7a3e04eba0f44a8fa83c05fe0812, type: 3}
+  - {fileID: 2100000, guid: 2c55e82da23ea964cb766e5eed61d6b9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -540,7 +561,7 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100004, guid: adfa7a3e04eba0f44a8fa83c05fe0812, type: 3}
+  - {fileID: 2100000, guid: 0ae828818a661a44bac2a53b0fedf26a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

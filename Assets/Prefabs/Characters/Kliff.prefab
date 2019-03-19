@@ -1471,7 +1471,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e4b3c64450214245954ec8842e54041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookHorizontal: 0
   forceFactor: 5
   jumpMask:
     serializedVersion: 2
@@ -1479,9 +1478,8 @@ MonoBehaviour:
   dust: {fileID: 198380200257766334}
   anim: {fileID: 0}
   mainCamera: {fileID: 0}
-  originalOffset: -6
-  tmp_FOV: 30
-  tmp_reverse: -12
+  originalOffset: -8
+  centerOffset: {x: 0, y: 2, z: 0}
   attacks:
   - function:
       m_PersistentCalls:
@@ -1757,6 +1755,8 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   showHealth: 1
   criticalAttackType: 0
+  resistAttackType: 0
+  immuneToAttackType: 0
   criticalMultiplier: 0
   regen: 0
   regenDelay: 5
@@ -1898,8 +1898,8 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 975aeb2491b4b954db1c61933c0e02e2, type: 3}
-  - {fileID: 2100004, guid: 975aeb2491b4b954db1c61933c0e02e2, type: 3}
+  - {fileID: 2100000, guid: 46664870f37a730458d989c494877a19, type: 2}
+  - {fileID: 2100000, guid: 46664870f37a730458d989c494877a19, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

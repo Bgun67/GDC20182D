@@ -72,9 +72,7 @@ public class Player_Controller : MonoBehaviour
 	//Placement of camera with respect to player
 	float cameraOffset;
 	public float originalOffset;
-	float originalFOV;
-	public float tmp_FOV;
-	public float tmp_reverse;
+	public Vector3 centerOffset;
 	bool lockedToEnemy;
 	GameObject lockedEnemy;
 	//originalCam rotation as a rotation type
@@ -111,7 +109,6 @@ public class Player_Controller : MonoBehaviour
 		rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
 		originalCameraRotation = mainCamera.transform.rotation;		
-		originalFOV = mainCamera.fieldOfView;
 		healthScript = this.GetComponent<Health>();
 		healthScript.HealthChanged += UpdateHealth;
 
@@ -178,7 +175,7 @@ public class Player_Controller : MonoBehaviour
 		//is input greater than 0
 		else if (!rolling)
 		{
-			if (Vector2.SqrMagnitude(new Vector2(moveHorizontal, moveVertical)) > 0.1f)
+			if (CheckGrounded()&&Vector2.SqrMagnitude(new Vector2(moveHorizontal, moveVertical)) > 0.1f)
 			{
 				//Moves the player using velocities
 				Move(moveHorizontal, moveVertical);
@@ -419,7 +416,7 @@ public class Player_Controller : MonoBehaviour
 		bool _grounded = false;
 		//draw a laser downwards and see if it hits anything
 		RaycastHit _hit;
-		if (Physics.SphereCast(this.transform.position+rb.centerOfMass,0.2f, Vector3.down, out _hit, 1f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (Physics.SphereCast(this.transform.position+rb.centerOfMass,0.2f, Vector3.down, out _hit, 1.1f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			//we've hit something, there is something below the player
 			_grounded = true;
@@ -432,51 +429,8 @@ public class Player_Controller : MonoBehaviour
 	#endregion
 	void CameraFollow()
 	{
-		Vector3 _position = Vector3.zero;
-		int _connectedPlayers = 0;
-
-		//this.mainCamera.transform.rotation = originalCameraRotation;//Quaternion.Lerp(mainCamera.transform.rotation,originalCameraRotation, 0.6f);//Quaternion.Euler(55f,0f,0f);
+		Vector3 _position = rb.worldCenterOfMass;
 		
-		GameObject[] _playerGrid = new GameObject[2];
-		//Add all players within range
-		foreach (GameObject _player in gameController.players)
-		{
-
-			//find if other player is merge zone
-			float _distance = Vector3.Distance(_player.transform.position, this.transform.position);
-			if (_distance < 12f)
-			{
-
-				//add position 
-				_position += _player.transform.position;
-				Rect _camRect = _player.GetComponent<Player_Controller>().mainCamera.rect;
-				_playerGrid[(int)(_camRect.y * 2f)] = _player;
-				_connectedPlayers++;
-			}
-
-		}
-		if (_connectedPlayers > 1)
-		{
-			GameObject _bottomPlayer = _playerGrid[0];
-			GameObject _topPlayer = _playerGrid[1];
-
-			if (_topPlayer != null && _bottomPlayer != null)
-			{
-				//swap player cam at bottom left with bottom right if positioned incorrectly
-				Camera _topCam = _topPlayer.GetComponent<Player_Controller>().mainCamera;
-				Camera _bottomCam = _bottomPlayer.GetComponent<Player_Controller>().mainCamera;
-
-				if (_bottomPlayer.transform.position.z > _topPlayer.transform.position.z)
-				{
-					_bottomPlayer.GetComponent<Player_Controller>().mainCamera = _topCam;
-					_topPlayer.GetComponent<Player_Controller>().mainCamera = _bottomCam;
-
-					_topPlayer.GetComponentInChildren<Canvas>().worldCamera = _bottomCam;
-					_bottomPlayer.GetComponentInChildren<Canvas>().worldCamera = _topCam;
-				}
-			}
-			
-		}
 		//Find any Intersecting colliders
 		RaycastHit _hit;
 		Debug.DrawRay(rb.worldCenterOfMass, (mainCamera.transform.position - rb.worldCenterOfMass) * (-originalOffset + 0.6f));
@@ -490,25 +444,10 @@ public class Player_Controller : MonoBehaviour
 
 		//new position for the camera
 		Vector3 camPosition;
-		//Move camera forward or backward to create a mixed view
-		if (_connectedPlayers > 1)
-		{
-			camPosition = (_position / _connectedPlayers);
-
-			float _height = mainCamera.fieldOfView * 2f;
-			float _width = _height * Screen.width / Screen.height;
-			mainCamera.fieldOfView = tmp_FOV;
-			camPosition += (tmp_reverse) * mainCamera.transform.forward;
-			mainCamera.transform.rotation = Quaternion.Euler(45+Mathf.Sign(mainCamera.rect.y - 0.4f) * -mainCamera.fieldOfView/2f, 0f, 0f);
-
-		}
-		else
-		{
-			camPosition = (_position)+rb.centerOfMass + mainCamera.transform.forward*cameraOffset;
-			mainCamera.fieldOfView = originalFOV;
-		}
 		
+		camPosition = (_position)+ centerOffset+ mainCamera.transform.forward*cameraOffset;
 		
+
 		mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, camPosition, 1f);
 		PivotCam();
 	}
