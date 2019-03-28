@@ -32,7 +32,6 @@ public class Enemy : MonoBehaviour {
 	public virtual void Follow()
 	{
 		//follow the player
-		print("Trying to Following");
  		target = GameObject.FindGameObjectWithTag("Player");
 		if (!navAgent.isOnNavMesh)
 		{
@@ -42,7 +41,6 @@ public class Enemy : MonoBehaviour {
 		}
 		if (navAgent.remainingDistance > 1f||navAgent.remainingDistance == 0)
 		{
-			print("Following");
 			navAgent.SetDestination(target.transform.position);
 			timeBetweenAttacks += 0.1f;
 		}
