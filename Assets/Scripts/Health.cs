@@ -39,16 +39,17 @@ public class Health : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
+		Reset();
+	}
+	public void Reset()
+	{
 		currentHealth = originalHealth;
+		isDead = false;
 		//Send message for script to update UI
 		if (HealthChanged != null && showHealth)
 		{
 			HealthChanged.Invoke(0);
 		}
-	}
-	public void Reset()
-	{
-		Start();
 	}
 
     //Is there an element in A thats in B

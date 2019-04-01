@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Kick : Attack {
+public class Strike : Attack {
 
 	// Use this for initialization
 	void Reset () {
-		actionBoolName = "Kick";
+		actionTriggerName = "Kick";
 		waitBetweenActions = 2f;
 		attackType = AttackType.Normal;
 		power = 10f;
@@ -15,7 +15,11 @@ public class Kick : Attack {
 	// Update is called once per frame
 	protected override void RunAction()
 	{
-
+		if (used)
+		{
+			return;
+		}
+		used = true;
 		print("Running Action");
 		print(FindNearestEnemy());
 		GiveDamage(FindNearestEnemy());

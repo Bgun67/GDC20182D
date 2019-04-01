@@ -5,7 +5,9 @@ using UnityEngine;
 public class Attack : MonoBehaviour {
 
 	public Animator anim;
-	public string actionBoolName;
+	public string actionTriggerName;
+	public bool available = true;
+	public bool used = false;
 	public float waitBetweenActions;
 	public float lastExecutionTime;
 	//a multipurpose float usually used for damagepower
@@ -26,14 +28,20 @@ public class Attack : MonoBehaviour {
 			}
 			else
 			{
-				anim.SetBool(actionBoolName, true);
+				anim.SetTrigger(actionTriggerName);
 			}
+			used = false;
 			lastExecutionTime = Time.time;
 		}
 	}
 	//Receives a call from the animation 
 	protected virtual void RunAction()
 	{
+		if (used)
+		{
+			return;
+		}
+		used = true;
 	}
 	protected Enemy FindNearestEnemy()
 	{

@@ -25,21 +25,7 @@ public enum AttackType
 	
 }
 
-[System.Serializable]
-public class AttackClass
-{
-	public UnityEvent function;
-	public float damage;
-	public AttackType type = AttackType.Normal;
-	public bool available = true;
-	public int maxUses = 1;
-	[HideInInspector]
-	public int currentUses;
-	public float rechargeTime = 0;
-	[HideInInspector]
-	public float rechargeWait = 0;
-	public GameObject effect;
-}
+
 
 public class Player_Controller : MonoBehaviour
 {
@@ -80,9 +66,8 @@ public class Player_Controller : MonoBehaviour
 	#endregion
 	#region Weapon
 	[Header("Weapon")]
-	public AttackClass[] attacks;
-	public AttackClass currentAttack;
-	public GameObject icePrefab;
+	public Attack[] attacks;
+	public Attack currentAttack;
 	#endregion
 	#region "UI"
 	public Text infoText;
@@ -295,7 +280,7 @@ public class Player_Controller : MonoBehaviour
 	{
 		if (_attackNum >= 0 && _attackNum < attacks.Length)
 		{
-			AttackClass _attack = attacks[_attackNum];
+			Attack _attack = attacks[_attackNum];
 			if (_attack.available)
 			{
 				currentAttack = _attack;
@@ -309,7 +294,7 @@ public class Player_Controller : MonoBehaviour
 		{
 			if (Input.GetButtonDown("Primary Attack " + (playerNum + 1)))
 			{
-				currentAttack.function.Invoke();
+				currentAttack.RunAnimation();
 			}
 			if (Input.GetButtonDown("Secondary Attack " + (playerNum + 1)))
 			{
@@ -472,9 +457,7 @@ public class Player_Controller : MonoBehaviour
 	}
 	public void Die()
 	{
-		//check if player has already died
 
-		infoText.text = "You Died";
 		//Go to level spawn
 		Level_Controller _levelController = gameController.GetLevelController(currentScene.name);
 		if (_levelController != null)
@@ -485,8 +468,6 @@ public class Player_Controller : MonoBehaviour
 		{
 			print("No Level Controller in this scene please add one");
 		}
-		//reset health to full
-		healthScript.Reset();
 	}
 
 	public void UpdateHealth(float amount)
@@ -554,12 +535,6 @@ public class Player_Controller : MonoBehaviour
 		{
 			yield break;
 		}
-		//if object below has a health component, give damage
-		if (_hit.transform.GetComponent<Health>() != null)
-		{
-			_hit.transform.GetComponent<Health>().TakeDamage(currentAttack.damage, currentAttack.type);
-		}
-
 
 	}
 	public void ShoulderRam()
@@ -573,36 +548,8 @@ public class Player_Controller : MonoBehaviour
 		anim.SetInteger("Attack Number", 2);
 		//Damage is called by animation event
 	}
-	public void ForwardStrike()
-	{
-		RaycastHit _hit;
-		//reset player's animation
-		anim.SetInteger("Attack Number", 0);
-		//add force forwards
-		rb.velocity = transform.forward * 3f;
-		//check for object
-		if (!Physics.SphereCast(transform.position + rb.centerOfMass, 0.2f, transform.forward, out _hit, 1f, jumpMask, QueryTriggerInteraction.Ignore))
-		{
-			return;
-		}
-		//if object below has a health component, give damage
-		if (_hit.transform.GetComponent<Health>() != null)
-		{
-			_hit.transform.GetComponent<Health>().TakeDamage(currentAttack.damage, currentAttack.type);
-		}
-		if (_hit.transform.GetComponent<Rigidbody>() != null)
-		{
-			Enemy _enemyScript = _hit.transform.GetComponent<Enemy>();
-			if (_enemyScript != null)
-			{
-				_enemyScript.Recoil();
-			}
-			print("Adding Force");
-			_hit.transform.GetComponent<Rigidbody>().velocity = transform.forward * 7f;
-		}
-
-	}
-	public void Ice()
+	
+	/* public void Ice()
 	{
 		currentAttack.effect.GetComponent<ParticleSystem>().Play();
 		RaycastHit _hit;
@@ -633,7 +580,7 @@ public class Player_Controller : MonoBehaviour
 		
 
 		currentAttack.currentUses++;
-	}
+	}*/
 
 	#endregion
 

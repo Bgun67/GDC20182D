@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 114190564188120968}
   - component: {fileID: 114625151856328628}
   - component: {fileID: 54309954908633868}
+  - component: {fileID: 114250787846742198}
   m_Layer: 0
   m_Name: Kliff
   m_TagString: Player
@@ -1481,69 +1482,8 @@ MonoBehaviour:
   originalOffset: -8
   centerOffset: {x: 0, y: 2, z: 0}
   attacks:
-  - function:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 114190564188120968}
-          m_MethodName: ShoulderRam
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    damage: 5
-    type: 1
-    available: 1
-    maxUses: 1
-    currentUses: 0
-    rechargeTime: 0
-    rechargeWait: 0
-    effect: {fileID: 0}
-  - function:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 114190564188120968}
-          m_MethodName: Ice
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    damage: 0
-    type: 5
-    available: 1
-    maxUses: 1
-    currentUses: 0
-    rechargeTime: 0
-    rechargeWait: 0
-    effect: {fileID: 1663661719017374}
-  currentAttack:
-    function:
-      m_PersistentCalls:
-        m_Calls: []
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    damage: 0
-    type: 1
-    available: 1
-    maxUses: 1
-    currentUses: 0
-    rechargeTime: 0
-    rechargeWait: 0
-    effect: {fileID: 0}
-  icePrefab: {fileID: 1267227237326776, guid: 3d9ac89db4df9464b981e7e366109b1b, type: 2}
+  - {fileID: 114250787846742198}
+  currentAttack: {fileID: 0}
   infoText: {fileID: 114211828902108336}
   healthText: {fileID: 114340090271959588}
   healthScript: {fileID: 114625151856328628}
@@ -1616,6 +1556,24 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: New Text
+--- !u!114 &114250787846742198
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1087987552615950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d53cfe228fbe9dc4498e0db6860b6866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 0}
+  actionTriggerName: Kick
+  available: 1
+  waitBetweenActions: 2
+  lastExecutionTime: 0
+  attackType: 1
+  power: 10
 --- !u!114 &114257164209797520
 MonoBehaviour:
   m_ObjectHideFlags: 1

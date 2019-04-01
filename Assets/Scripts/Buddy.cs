@@ -17,11 +17,13 @@ NavMeshAgent agent;
 	public float attackRadius = 15f;
 	public ActionState currentState;
 	public Attack[] attacks;
+	public Animator anim;
 
 	// Use this for initialization
 	void Start () {
 		agent = GetComponent<NavMeshAgent>();
 		attacks = GetComponents<Attack>();
+		anim = GetComponent<Animator>();
 	}
 	
 
@@ -29,7 +31,8 @@ NavMeshAgent agent;
 	void Update () {
 		objToFollow = FindObjectOfType<Player_Controller>().transform;
 		Vector3 _displacement = objToFollow.position - transform.position;
-		
+		anim.SetFloat("Run Speed", agent.speed);
+
 		currentState = CheckState(_displacement);
 		
 		switch (currentState)
