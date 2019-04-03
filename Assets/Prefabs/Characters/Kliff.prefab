@@ -1381,7 +1381,7 @@ Animator:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1087987552615950}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 975aeb2491b4b954db1c61933c0e02e2, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 7946e6baba9c35349b02cebf7de38f22, type: 3}
   m_Controller: {fileID: 9100000, guid: dec31e5c4211f88498789bcd978a6174, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
@@ -1570,6 +1570,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   actionTriggerName: Kick
   available: 1
+  used: 0
   waitBetweenActions: 2
   lastExecutionTime: 0
   attackType: 1
@@ -1881,7 +1882,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 4300000, guid: 975aeb2491b4b954db1c61933c0e02e2, type: 3}
+  m_Mesh: {fileID: 4300002, guid: 7946e6baba9c35349b02cebf7de38f22, type: 3}
   m_Bones:
   - {fileID: 4871282802917710}
   - {fileID: 4742470495163556}

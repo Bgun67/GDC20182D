@@ -371,7 +371,7 @@ public class Player_Controller : MonoBehaviour
 				dust.Play();
 			}
 		}
-		if (_localVelocity.y < -1f)
+		if (_localVelocity.y < -3f)
 		{
 			anim.SetFloat("Fall", -_localVelocity.y);
 		}

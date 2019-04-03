@@ -956,7 +956,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: dec31e5c4211f88498789bcd978a6174, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -993,6 +993,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   actionTriggerName: Kick
   available: 1
+  used: 0
   waitBetweenActions: 2
   lastExecutionTime: 0
   attackType: 1
@@ -1009,7 +1010,7 @@ CapsuleCollider:
   m_Radius: 0.68
   m_Height: 3.819676
   m_Direction: 1
-  m_Center: {x: 0, y: -0.21067595, z: 0}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!137 &137849264310941252
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -1102,6 +1103,6 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 3.67
-  m_BaseOffset: 1.93
+  m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
