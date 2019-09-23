@@ -5289,7 +5289,7 @@ GameObject:
   - component: {fileID: 114190564188120968}
   - component: {fileID: 114625151856328628}
   - component: {fileID: 54309954908633868}
-  - component: {fileID: 1593524129532434091}
+  - component: {fileID: 1742806586477184644}
   m_Layer: 0
   m_Name: Kliff
   m_TagString: Player
@@ -5324,7 +5324,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1087987552615950}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 7946e6baba9c35349b02cebf7de38f22, type: 3}
+  m_Avatar: {fileID: 9000000, guid: ad7dee2c2d1e9ef46806acd7be4f9bb4, type: 3}
   m_Controller: {fileID: 9100000, guid: dec31e5c4211f88498789bcd978a6174, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
@@ -5365,13 +5365,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   dust: {fileID: 198380200257766334}
-  anim: {fileID: 0}
+  anim: {fileID: 95177477958754546}
   mainCamera: {fileID: 0}
   originalOffset: -5
   centerOffset: {x: 0, y: 2, z: 0}
   attacks:
-  - {fileID: 1593524129532434091}
-  currentAttack: {fileID: 1593524129532434091}
+  - {fileID: 1742806586477184644}
+  currentAttack: {fileID: 1742806586477184644}
   infoText: {fileID: 114211828902108336}
   healthText: {fileID: 114340090271959588}
   healthScript: {fileID: 114625151856328628}
@@ -5443,7 +5443,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &1593524129532434091
+--- !u!114 &1742806586477184644
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5452,14 +5452,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1087987552615950}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7d760fcb6be6d543a314250ca029531, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f4cafc3ff83c6146bc7fa7046bc0d75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 95177477958754546}
   actionTriggerName: Shield Bash
   available: 1
   used: 0
-  waitBetweenActions: 0
+  waitBetweenActions: 0.5
   lastExecutionTime: 0
   attackType: 64
   power: 10
@@ -11411,7 +11411,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 6622264641530768373, guid: 1e628f8ee12cac7418575c9a0dde0715, type: 3}
+  m_Mesh: {fileID: 6622264641530768373, guid: ad7dee2c2d1e9ef46806acd7be4f9bb4, type: 3}
   m_Bones:
   - {fileID: 4871282802917710}
   - {fileID: 4742470495163556}
