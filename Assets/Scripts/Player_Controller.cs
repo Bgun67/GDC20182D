@@ -32,6 +32,7 @@ public class Player_Controller : MonoBehaviour
 
 	#region Movement
 	[Header("Movement")]
+	Player_Movement movement;
 	float moveVertical;
 	float previousMoveVertical;
 	float moveHorizontal;
@@ -39,7 +40,6 @@ public class Player_Controller : MonoBehaviour
 	float lookHorizontal;
 	float lastRotation;
 	//multiplier for running lock on speeds
-	float runMultiplier = 1f;
 	Vector3 lastVelocity;
 	//Amount of force applied to player
 	public float forceFactor = 5f;
@@ -93,6 +93,7 @@ public class Player_Controller : MonoBehaviour
 		//Find the rigidbody
 		rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
+		movement = GetComponent<Player_Movement>();
 		originalCameraRotation = mainCamera.transform.rotation;		
 		healthScript = this.GetComponent<Health>();
 		healthScript.HealthChanged += UpdateHealth;
@@ -136,34 +137,24 @@ public class Player_Controller : MonoBehaviour
 			ChooseAttack(moveHorizontal, moveVertical);
 		}
 		if (Input.GetKey(KeyCode.LeftShift)){
-			runMultiplier = 2f;
+			movement.runMultiplier = 1.75f;
 		}
 		else
 		{
-			runMultiplier = 1f;
+			movement.runMultiplier = 1f;
 		}
 		if (Input.GetKeyDown("k"))
 		{
-			if (lockedToEnemy)
-			{
-				lockedToEnemy = false;
-				lockedEnemy = null;
-				ResetCam();
-
-			}
-			else if (FindNearestEnemy(out lockedEnemy))
-			{
-				mainCamera.transform.LookAt(lockedEnemy.transform);
-				lockedToEnemy = true;
-			}
+			movement.LockOnEnemy();
 		}
+
 		//is input greater than 0
 		else if (!rolling)
 		{
 			if (CheckGrounded()&&Vector2.SqrMagnitude(new Vector2(moveHorizontal, moveVertical)) > 0.1f)
 			{
 				//Moves the player using velocities
-				Move(moveHorizontal, moveVertical);
+				movement.Move(moveHorizontal, moveVertical, mainCamera.transform.right);
 			}
 		}
 		if (Input.GetButtonDown("Jump " + (playerNum + 1)) && CheckGrounded())
@@ -192,21 +183,7 @@ public class Player_Controller : MonoBehaviour
 		this.transform.GetComponentInChildren<Renderer>().material.color = playerColors[playerNum];
 	}
 	#region Attacks
-	bool FindNearestEnemy(out GameObject foundEnemy)
-	{
-		foundEnemy = null;
-		Collider[] _colliders = Physics.OverlapSphere(transform.position, 25f);
-		foreach (Collider _collider in _colliders)
-		{
-			if (_collider.transform.root.GetComponent<Enemy>())
-			{
-				foundEnemy = _collider.transform.root.gameObject;
-				return true;
-			}
-		}
-		return false;
 
-	}
 	void ChooseAttack(float _h, float _v)
 	{
 		//     1
@@ -310,48 +287,7 @@ public class Player_Controller : MonoBehaviour
 	}
 	#endregion
 	#region Movement
-	void Move(float _h, float _v)
-	{
-		
-		//get previous upward velocity
-		float _yVelocity = rb.velocity.y;
-		//Move Player
-		//Find look forward and get the vector parallel to the ground
-		Vector3 _camForward = Vector3.Cross(mainCamera.transform.right, Vector3.up);
-		_camForward = new Vector3(_camForward.x, 0f, _camForward.z);
-		rb.velocity = _camForward* _v*runMultiplier* forceFactor+mainCamera.transform.right*forceFactor*_h;
 
-
-		//Reset upwards velocity
-		rb.velocity += new Vector3(0f, _yVelocity, 0f);
-		Look(rb.velocity.x, rb.velocity.z);
-
-	}
-	void Look(float _h, float _v)
-	{
-		//Point player in proper direction
-
-		//Calculate atan to find angle convert from rads Lerps the angle, result is not exactly the angle
-		if (Mathf.Abs(_v) > 0||Mathf.Abs(_h)>0)
-		{
-			transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, Mathf.Rad2Deg * Mathf.Atan(_h / _v) + Mathf.Sign(_v) * 90f - 90f, 0f), 0.2f);			
-		}
-		if (lockedToEnemy)
-		{
-			if (lockedEnemy != null)
-			{
-				transform.LookAt(lockedEnemy.transform, Vector3.up);
-				//mainCamera.transform.LookAt(lockedEnemy.transform);
-			}
-			else
-			{
-				ResetCam();
-				lockedToEnemy = false;
-			}
-		}
-
-
-	}
 	void AnimateMovement()
 	{
 		Vector3 _localVelocity = transform.InverseTransformVector(rb.velocity);
