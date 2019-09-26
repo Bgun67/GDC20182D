@@ -159,11 +159,11 @@ public class Player_Controller : MonoBehaviour
 		}
 		if (Input.GetButtonDown("Jump " + (playerNum + 1)) && CheckGrounded())
 		{
-			Jump();
+			movement.Jump();
 		}
 		Attack();
 		CameraFollow();
-		AnimateMovement();
+		movement.AnimateMovement();
 
 
 	}
@@ -286,52 +286,7 @@ public class Player_Controller : MonoBehaviour
 		
 	}
 	#endregion
-	#region Movement
 
-	void AnimateMovement()
-	{
-		Vector3 _localVelocity = transform.InverseTransformVector(rb.velocity);
-		Vector3 _localAcceleration = (_localVelocity - lastVelocity) / Time.deltaTime;
-		lastVelocity = _localVelocity;
-		float _angularRotation = transform.rotation.eulerAngles.y;
-		float _angularVelocity = lastRotation - _angularRotation;
-		lastRotation = _angularRotation;
-
-		anim.SetFloat("Run Speed", _localVelocity.z+_angularVelocity/-4f);
-		anim.SetFloat("Direction", _localVelocity.x);
-
-		if (_localAcceleration.z > 10f)
-		{
-			if (dust != null && !dust.isPlaying)
-			{
-				dust.Play();
-			}
-		}
-		if (_localVelocity.y < -3f)
-		{
-			anim.SetFloat("Fall", -_localVelocity.y);
-		}
-		else if (anim.GetFloat("Fall")>0)
-		{
-			anim.SetFloat("Fall", 0f);
-		}
-
-
-	}
-	void Jump()
-	{
-		
-		//show animation
-		anim.SetTrigger("Jump");
-		
-
-	}
-	void AddUpVelocity()
-	{
-		//add upwards velocity to current velocity
-		Vector3 _oldVelocity = rb.velocity;
-		rb.velocity = Vector3.up * 5f + _oldVelocity;		
-	}
 	bool CheckGrounded()
 	{
 		bool _grounded = false;
@@ -347,7 +302,6 @@ public class Player_Controller : MonoBehaviour
 
 	}
 
-	#endregion
 	void CameraFollow()
 	{
 		Vector3 _position = rb.worldCenterOfMass;
