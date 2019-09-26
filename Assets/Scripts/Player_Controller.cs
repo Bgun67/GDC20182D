@@ -39,31 +39,15 @@ public class Player_Controller : MonoBehaviour
 	float lookVertical;
 	float lookHorizontal;
 	float lastRotation;
-	//multiplier for running lock on speeds
-	Vector3 lastVelocity;
-	//Amount of force applied to player
-	public float forceFactor = 5f;
+
 	//Determines which colliders the rays should hit
 	public LayerMask jumpMask;
-	public ParticleSystem dust;
 	Rigidbody rb;
 	public Animator anim;
 	int lastTapFrame;
 	bool rolling;
 	#endregion
-	#region Camera
-	[Header("Camera")]
-	[Tooltip("Assigned automatically if left empty")]
-	public Camera mainCamera;
-	//Placement of camera with respect to player
-	float cameraOffset;
-	public float originalOffset;
-	public Vector3 centerOffset;
-	bool lockedToEnemy;
-	GameObject lockedEnemy;
-	//originalCam rotation as a rotation type
-	Quaternion originalCameraRotation;
-	#endregion
+
 	#region Weapon
 	[Header("Weapon")]
 	public Attack[] attacks;
@@ -94,7 +78,6 @@ public class Player_Controller : MonoBehaviour
 		rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
 		movement = GetComponent<Player_Movement>();
-		originalCameraRotation = mainCamera.transform.rotation;		
 		healthScript = this.GetComponent<Health>();
 		healthScript.HealthChanged += UpdateHealth;
 
@@ -154,7 +137,7 @@ public class Player_Controller : MonoBehaviour
 			if (CheckGrounded()&&Vector2.SqrMagnitude(new Vector2(moveHorizontal, moveVertical)) > 0.1f)
 			{
 				//Moves the player using velocities
-				movement.Move(moveHorizontal, moveVertical, mainCamera.transform.right);
+				movement.Move(moveHorizontal, moveVertical);
 			}
 		}
 		if (Input.GetButtonDown("Jump " + (playerNum + 1)) && CheckGrounded())
@@ -162,7 +145,6 @@ public class Player_Controller : MonoBehaviour
 			movement.Jump();
 		}
 		Attack();
-		CameraFollow();
 		movement.AnimateMovement();
 
 
@@ -170,12 +152,9 @@ public class Player_Controller : MonoBehaviour
 	public void SetupPlayer()
 	{
 		gameController = FindObjectOfType<Game_Controller>();
+		GetComponent<Camera_Follow>().playerNum = this.playerNum;
 		//Adjust Camera to fit players on screen
-		float _x = Mathf.Clamp01(playerNum - 1) * 0.5f;
-		float _y = (playerNum) % 2 * 0.5f;
-		float _width = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 2) * 0.5f;
-		float _height = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 1) * 0.5f;
-		mainCamera.rect = new Rect(_x, _y, _width, _height);
+
 		ColorPlayer();
 	}
 	void ColorPlayer()
@@ -302,38 +281,7 @@ public class Player_Controller : MonoBehaviour
 
 	}
 
-	void CameraFollow()
-	{
-		Vector3 _position = rb.worldCenterOfMass;
-		
-		//Find any Intersecting colliders
-		RaycastHit _hit;
-		Debug.DrawRay(rb.worldCenterOfMass, (mainCamera.transform.position - rb.worldCenterOfMass) * (-originalOffset + 0.6f));
-		if (Physics.Raycast(rb.worldCenterOfMass, mainCamera.transform.position-rb.worldCenterOfMass, out _hit, -originalOffset+0.6f)){
-			cameraOffset = Mathf.Lerp(cameraOffset,Mathf.Clamp(-_hit.distance+0.1f,originalOffset,-1f),0.1f);
-		}
-		else
-		{
-			cameraOffset = Mathf.Lerp(cameraOffset,originalOffset,0.1f);
-		}
 
-		//new position for the camera
-		Vector3 camPosition;
-		
-		camPosition = (_position)+ centerOffset+ mainCamera.transform.forward*cameraOffset;
-		
-
-		mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, camPosition, 1f);
-		PivotCam();
-	}
-	void PivotCam()
-	{
-		mainCamera.transform.RotateAround(transform.position, Vector3.up, lookHorizontal/2f);
-	}
-	void ResetCam()
-	{
-		mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, originalCameraRotation, 0.4f);
-	}
 
 
 	void CheckFall()

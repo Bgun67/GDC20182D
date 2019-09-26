@@ -12,14 +12,16 @@ public class Player_Movement : MonoBehaviour
 	bool lockedToEnemy;
 	GameObject lockedEnemy;
 	public ParticleSystem dust;
+	Camera_Follow camController;
 	Animator anim;
 	void Start(){
 		rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
+		camController = GetComponent<Camera_Follow>();
 	}
-	public void Move(float _h, float _v, Vector3 camRight)
+	public void Move(float _h, float _v)
 	{
-
+		Vector3 camRight = camController.mainCamera.transform.right;
 		//get previous upward velocity
 		float _yVelocity = rb.velocity.y;
 		//Move Player
