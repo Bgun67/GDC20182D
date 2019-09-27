@@ -22,16 +22,17 @@ public class Camera_Follow : MonoBehaviour
 
 		SetupCamera();
 		originalCameraRotation = mainCamera.transform.rotation;
+		originalOffset = cameraOffset;
 	}
 	void SetupCamera(){
 		if(mainCamera == null){
 			mainCamera = Instantiate(camPrefab).GetComponent<Camera>();
 		}
-			float _x = Mathf.Clamp01(playerNum - 1) * 0.5f;
-			float _y = (playerNum) % 2 * 0.5f;
-			float _width = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 2) * 0.5f;
-			float _height = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 1) * 0.5f;
-			mainCamera.rect = new Rect(_x, _y, _width, _height);
+		float _x = Mathf.Clamp01(playerNum - 1) * 0.5f;
+		float _y = (playerNum) % 2 * 0.5f;
+		float _width = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 2) * 0.5f;
+		float _height = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 1) * 0.5f;
+		mainCamera.rect = new Rect(_x, _y, _width, _height);
 
 	}
 	void Update(){
@@ -39,12 +40,12 @@ public class Camera_Follow : MonoBehaviour
 	}
 	void FollowTarget()
 	{
-		Vector3 _position = rb.worldCenterOfMass;
+		Vector3 _position = rb.worldCenterOfMass+centerOffset;
 
 		//Find any Intersecting colliders
 		RaycastHit _hit;
-		Debug.DrawRay(rb.worldCenterOfMass, (mainCamera.transform.position - rb.worldCenterOfMass) * (-originalOffset + 0.6f));
-		if (Physics.Raycast(rb.worldCenterOfMass, mainCamera.transform.position-rb.worldCenterOfMass, out _hit, -originalOffset+0.6f)){
+		Debug.DrawLine(_position, mainCamera.transform.position);
+		if (Physics.Raycast(_position, mainCamera.transform.position-_position, out _hit, -originalOffset+0.6f)){
 			cameraOffset = Mathf.Lerp(cameraOffset,Mathf.Clamp(-_hit.distance+0.1f,originalOffset,-1f),0.1f);
 		}
 		else
@@ -55,11 +56,11 @@ public class Camera_Follow : MonoBehaviour
 		//new position for the camera
 		Vector3 camPosition;
 
-		camPosition = (_position)+ centerOffset+ mainCamera.transform.forward*cameraOffset;
+		camPosition = (_position)+ mainCamera.transform.forward*cameraOffset;
 
 
-		mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, camPosition, 1f);
-		mainCamera.transform.LookAt(_position+centerOffset);
+		mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, camPosition, 0.3f);
+		mainCamera.transform.LookAt(_position);
 		//PivotCam();
 	}
 	void PivotCam()
