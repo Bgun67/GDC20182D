@@ -40,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1005881601108842}
-  m_Mesh: {fileID: 4300002, guid: 975aeb2491b4b954db1c61933c0e02e2, type: 3}
+  m_Mesh: {fileID: -5495902117074765545, guid: ad7dee2c2d1e9ef46806acd7be4f9bb4, type: 3}
 --- !u!183 &183557726002329190
 Cloth:
   m_ObjectHideFlags: 0
@@ -334,7 +334,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100002, guid: 975aeb2491b4b954db1c61933c0e02e2, type: 3}
+  - {fileID: 8598954236217306308, guid: ad7dee2c2d1e9ef46806acd7be4f9bb4, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -359,13 +359,13 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 4300002, guid: 975aeb2491b4b954db1c61933c0e02e2, type: 3}
+  m_Mesh: {fileID: -5495902117074765545, guid: ad7dee2c2d1e9ef46806acd7be4f9bb4, type: 3}
   m_Bones: []
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 4445577055281324}
   m_AABB:
-    m_Center: {x: -0.079695046, y: -0.0038653612, z: -0.117443204}
-    m_Extent: {x: 0.3664334, y: 0.16177385, z: 0.24103093}
+    m_Center: {x: -0.079695016, y: -0.0038655102, z: -0.117443606}
+    m_Extent: {x: 0.3664332, y: 0.16177371, z: 0.24103074}
   m_DirtyAABB: 0
 --- !u!1 &1012517047306744
 GameObject:
