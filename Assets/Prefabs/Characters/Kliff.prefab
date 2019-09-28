@@ -5487,8 +5487,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camPrefab: {fileID: 1946412248082646, guid: e2b0b50cceeaa614cb7d60d9405d6661, type: 3}
   mainCamera: {fileID: 0}
-  cameraOffset: -5
-  centerOffset: {x: 0, y: 0, z: 0}
+  camAngle: 30
+  originalOffset: -3
+  centerOffset: {x: 0, y: 1, z: 0}
   playerNum: 0
 --- !u!1 &1107126937754948
 GameObject:

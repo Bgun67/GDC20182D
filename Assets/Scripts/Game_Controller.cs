@@ -65,6 +65,7 @@ public class Game_Controller : MonoBehaviour {
 			GameObject _newPlayer = (GameObject)Instantiate(playerPrefab);
 			GetLevelController(this.sceneName).SpawnPlayer(_newPlayer);
 			_newPlayer.GetComponent<Player_Controller>().playerNum = i;
+			_newPlayer.GetComponent<Camera_Follow>().playerNum = i;
 			DontDestroyOnLoad(_newPlayer);
 			_newPlayer.GetComponent<Player_Controller>().SetupPlayer();
 			_newPlayer.name = "Player " + i;

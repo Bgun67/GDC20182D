@@ -7,8 +7,9 @@ public class Camera_Follow : MonoBehaviour
 	public GameObject camPrefab;
 	[HideInInspector]
 	public Camera mainCamera;
-	public float cameraOffset = 5f;
-	float originalOffset = 5f;
+	float cameraOffset = 5f;
+	public float camAngle = 45f;
+	public float originalOffset = 5f;
 	Quaternion originalCameraRotation;
 	public Vector3 centerOffset;
 	[HideInInspector]
@@ -22,7 +23,6 @@ public class Camera_Follow : MonoBehaviour
 
 		SetupCamera();
 		originalCameraRotation = mainCamera.transform.rotation;
-		originalOffset = cameraOffset;
 	}
 	void SetupCamera(){
 		if(mainCamera == null){
@@ -59,13 +59,16 @@ public class Camera_Follow : MonoBehaviour
 		camPosition = (_position)+ mainCamera.transform.forward*cameraOffset;
 
 
-		mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, camPosition, 0.3f);
-		mainCamera.transform.LookAt(_position);
-		//PivotCam();
+		mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, camPosition, 0.1f);
+
+		Vector3 camRotation = Quaternion.LookRotation(transform.position-mainCamera.transform.position).eulerAngles;
+		Quaternion newCamRotation = Quaternion.Euler(new Vector3(camAngle, camRotation.y, camRotation.z));
+		mainCamera.transform.localRotation = Quaternion.Lerp(mainCamera.transform.localRotation, newCamRotation,0.1f);
+		PivotCam();
 	}
 	void PivotCam()
 	{
-		//mainCamera.transform.RotateAround(transform.position, Vector3.up, lookHorizontal/2f);
+		mainCamera.transform.RotateAround(transform.position, Vector3.up, Input.GetAxis("Look Horizontal "+ (playerNum+1))/2f);
 	}
 	void ResetCam()
 	{
