@@ -35,7 +35,7 @@ public class Camera_Follow : MonoBehaviour
 		mainCamera.rect = new Rect(_x, _y, _width, _height);
 
 	}
-	void Update(){
+	void FixedUpdate(){
 		FollowTarget();
 	}
 	void FollowTarget()
@@ -68,7 +68,11 @@ public class Camera_Follow : MonoBehaviour
 	}
 	void PivotCam()
 	{
-		mainCamera.transform.RotateAround(transform.position, Vector3.up, Input.GetAxis("Look Horizontal "+ (playerNum+1))/2f);
+		float turnAmount = Input.GetAxis("Look Horizontal " + (playerNum + 1)) / 2f;
+		if (Mathf.Abs(turnAmount) > 0f)
+		{
+			mainCamera.transform.RotateAround(transform.position, Vector3.up,turnAmount);
+		}
 	}
 	void ResetCam()
 	{
