@@ -45,7 +45,7 @@ public class Player_Controller : MonoBehaviour
 	Rigidbody rb;
 	public Animator anim;
 	int lastTapFrame;
-	bool rolling;
+	bool rolling = false;
 	#endregion
 
 	#region Weapon
@@ -65,7 +65,7 @@ public class Player_Controller : MonoBehaviour
 	Game_Controller gameController;
 	public Color[] playerColors;
 	#region Player Data
-	public int playerNum;
+	public int playerNum; //ATTENTION: PLAYER NUMBERS START AT 0!
 	#endregion
 
 
@@ -107,7 +107,7 @@ public class Player_Controller : MonoBehaviour
 		{
 			if (Time.frameCount-lastTapFrame < 20)
 			{
-				RollForward();
+				//RollForward();
 			}
 			else
 			{
@@ -126,12 +126,15 @@ public class Player_Controller : MonoBehaviour
 		{
 			movement.runMultiplier = 1f;
 		}
+		Debug.Log(moveHorizontal+" "+ moveVertical);
+
 		if (Input.GetKeyDown("k"))
 		{
 			movement.LockOnEnemy();
 		}
 
 		//is input greater than 0
+
 		else if (!rolling)
 		{
 			if (CheckGrounded()&&Vector2.SqrMagnitude(new Vector2(moveHorizontal, moveVertical)) > 0.1f)
@@ -271,7 +274,7 @@ public class Player_Controller : MonoBehaviour
 		bool _grounded = false;
 		//draw a laser downwards and see if it hits anything
 		RaycastHit _hit;
-		if (Physics.SphereCast(this.transform.position+rb.centerOfMass,0.2f, Vector3.down, out _hit, 1.1f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (Physics.SphereCast(this.transform.position+rb.centerOfMass,0.2f, Vector3.down, out _hit, 1.15f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			//we've hit something, there is something below the player
 			_grounded = true;
@@ -297,14 +300,14 @@ public class Player_Controller : MonoBehaviour
 	{
 
 		//Go to level spawn
-		Level_Controller _levelController = gameController.GetLevelController(currentScene.name);
+		Level_Controller _levelController = gameController.GetLevelController(gameController.sceneName);
 		if (_levelController != null)
 		{
 			_levelController.SpawnPlayer(this.gameObject);
 		}
 		else
 		{
-			print("No Level Controller in this scene please add one");
+			Debug.Log("No Level Controller in this scene please add one");
 		}
 	}
 

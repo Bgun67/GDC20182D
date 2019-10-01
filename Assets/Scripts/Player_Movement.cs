@@ -21,6 +21,7 @@ public class Player_Movement : MonoBehaviour
 	}
 	public void Move(float _h, float _v)
 	{
+		Debug.Log(_h+" "+ _v);
 		Vector3 camRight = camController.mainCamera.transform.right;
 		//get previous upward velocity
 		float _yVelocity = rb.velocity.y;

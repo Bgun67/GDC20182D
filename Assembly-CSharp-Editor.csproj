@@ -44,9 +44,8 @@
     <ImplicitlyExpandNETStandardFacades>false</ImplicitlyExpandNETStandardFacades>
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
-  <ItemGroup>     <Compile Include="Assets\Editor\EnumFlagsDrawer.cs" />
-     <Compile Include="Assets\Editor\InspectorChaseCamera.cs" />
-     <Compile Include="Assets\Editor\PlacerEditor.cs" />
+  <ItemGroup>     <Compile Include="Assets\Scripts\Editor\EnumFlagsDrawer.cs" />
+     <Compile Include="Assets\Scripts\Editor\PlacerEditor.cs" />
  <Reference Include="UnityEditor.TestRunner">
  <HintPath>C:/Users/frisk/Documents/GitHub/GDC20182D/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
  </Reference>
