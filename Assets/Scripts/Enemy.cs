@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour {
 	void Start () {
 		Setup();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 	}
@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour {
 	public virtual void Follow()
 	{
 		//follow the player
- 		target = GameObject.FindGameObjectWithTag("Player");
+		target = TargetNearestPlayer();
 		if (!navAgent.isOnNavMesh)
 		{
 			NavMeshHit _hit;
@@ -50,7 +50,34 @@ public class Enemy : MonoBehaviour {
 		}
 
 	}
-	
+
+	public virtual GameObject TargetNearestPlayer()
+	{
+		GameObject _closestPlayer = null;
+		List<GameObject> _players =FindObjectOfType<Game_Controller>().players;
+		if (_players.Count == 0)
+		{
+			return null;
+		}
+		else {
+			foreach (GameObject _player in _players)
+			{
+				Vector3 _displacement = _player.transform.position - transform.position;
+				if (_closestPlayer == null)
+				{
+					_closestPlayer = _player;
+					continue;
+				}
+				if (_displacement.magnitude < (_closestPlayer.transform.position - transform.position).magnitude)
+				{
+					_closestPlayer = _player;
+				}
+
+			}
+			return _closestPlayer;
+		}
+	}
+
 	void OnTriggerEnter(Collider other)
 	{
 		//run attack anim and run damage function
@@ -76,7 +103,7 @@ public class Enemy : MonoBehaviour {
 			Invoke("Restart", 1f);
 		}
 		anim.SetBool("Attack", false);
- 	}
+	}
 	public void Recoil()
 	{
 

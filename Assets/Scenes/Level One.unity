@@ -1487,10 +1487,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: Level One
-  numberOfPlayers: 1
+  maxNumberOfPlayers: 2
+  startNumberOfPlayers: 1
+  numberOfPlayers: 0
   playerPrefab: {fileID: 1087987552615950, guid: c130444bbe4d2154482c128537692129,
     type: 3}
   camPrefab: {fileID: 1946412248082646, guid: e2b0b50cceeaa614cb7d60d9405d6661, type: 3}
+  levelController: {fileID: 0}
   players: []
 --- !u!4 &1751515378
 Transform:
