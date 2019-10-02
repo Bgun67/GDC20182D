@@ -5293,6 +5293,7 @@ GameObject:
   - component: {fileID: 1742806586477184644}
   - component: {fileID: 7531540866880748145}
   - component: {fileID: 5732144733952555669}
+  - component: {fileID: 3057455083307661588}
   m_Layer: 0
   m_Name: Kliff
   m_TagString: Player
@@ -5363,6 +5364,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e4b3c64450214245954ec8842e54041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveVertical: 0
+  previousMoveVertical: 0
+  moveHorizontal: 0
+  lookVertical: 0
   jumpMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -5415,6 +5420,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   showHealth: 1
+  isDead: 0
   criticalAttackType: 0
   resistAttackType: 0
   immuneToAttackType: 0
@@ -5491,6 +5497,14 @@ MonoBehaviour:
   originalOffset: -3
   centerOffset: {x: 0, y: 1, z: 0}
   playerNum: 0
+--- !u!81 &3057455083307661588
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1087987552615950}
+  m_Enabled: 1
 --- !u!1 &1107126937754948
 GameObject:
   m_ObjectHideFlags: 0

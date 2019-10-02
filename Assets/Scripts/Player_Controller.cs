@@ -107,7 +107,7 @@ public class Player_Controller : MonoBehaviour
 		{
 			if (Time.frameCount-lastTapFrame < 20)
 			{
-				//RollForward();
+				RollForward();
 			}
 			else
 			{
@@ -119,14 +119,13 @@ public class Player_Controller : MonoBehaviour
 		{
 			ChooseAttack(moveHorizontal, moveVertical);
 		}
-		if (Input.GetKey(KeyCode.LeftShift)){
+		if (Input.GetButton("Run " + (playerNum + 1))){
 			movement.runMultiplier = 1.75f;
 		}
 		else
 		{
 			movement.runMultiplier = 1f;
 		}
-		Debug.Log(moveHorizontal+" "+ moveVertical);
 
 		if (Input.GetKeyDown("k"))
 		{
@@ -158,6 +157,7 @@ public class Player_Controller : MonoBehaviour
 		GetComponent<Camera_Follow>().playerNum = this.playerNum;
         //Adjust Camera to fit players on screen
         GetComponent<Camera_Follow>().SetupCamera();
+        
 		ColorPlayer();
 	}
 	void ColorPlayer()

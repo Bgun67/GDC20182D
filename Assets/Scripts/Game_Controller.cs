@@ -11,8 +11,8 @@ public class Game_Controller : MonoBehaviour {
 	public GameObject playerPrefab;
 	public GameObject camPrefab;
     public GameObject levelController;
-	//[HideInInspector]
-	public List<GameObject> players = new List<GameObject>();
+    //[HideInInspector]
+    public List<GameObject> players = new List<GameObject>();
 	
 	// Use this for initialization
 	void Start () {
@@ -103,6 +103,10 @@ public class Game_Controller : MonoBehaviour {
 		DontDestroyOnLoad(_newPlayer);
 		_newPlayer.GetComponent<Player_Controller>().SetupPlayer();
 		_newPlayer.name = "Player " + numberOfPlayers;
+        if (numberOfPlayers > 0)
+        {
+            Destroy(_newPlayer.GetComponent<AudioListener>());
+        }
         numberOfPlayers += 1;
 		players.Add( _newPlayer);
 
