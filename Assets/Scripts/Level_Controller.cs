@@ -31,8 +31,12 @@ public class Level_Controller : MonoBehaviour {
 		_player.GetComponent<Health>().Reset();
 		_player.GetComponent<Rigidbody>().velocity = Vector3.zero;
 		_player.transform.position = playerSpawnPosition.position;
+        _player.GetComponent<Player_Controller>().moveVertical = 0f;
+        _player.GetComponent<Player_Controller>().previousMoveVertical = 0f;
+        _player.GetComponent<Player_Controller>().moveHorizontal = 0f;
+        _player.GetComponent<Animator>();
 
-	}
+    }
 	public void SpawnEnemies()
 	{
 		foreach (SpawnedEnemy _enemy in enemiesToSpawn)

@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour {
 		//get navagent
 		navAgent = GetComponent<NavMeshAgent>();
 		anim = GetComponent<Animator>();
-		InvokeRepeating("Follow", 1f, 0.1f);
+		InvokeRepeating("Follow", 1f, 0.1f); //retarget player every second
 	}
 	public virtual void Follow()
 	{
@@ -62,6 +62,10 @@ public class Enemy : MonoBehaviour {
 		else {
 			foreach (GameObject _player in _players)
 			{
+                if (_player.GetComponent<Health>().isDead)
+                {
+                    continue; //don't target dead players
+                }
 				Vector3 _displacement = _player.transform.position - transform.position;
 				if (_closestPlayer == null)
 				{
@@ -96,8 +100,8 @@ public class Enemy : MonoBehaviour {
 		print("trying to attack");
 		if (timeBetweenAttacks > attackWait)
 		{
-			_player.transform.GetComponent<Health>().TakeDamage(attackDamage, AttackType.Slime);
-			_player.transform.GetComponent<Rigidbody>().velocity = (_player.transform.position - transform.position) * 10f;
+            _player.transform.GetComponent<Rigidbody>().velocity = (_player.transform.position - transform.position) * 10f;
+            _player.transform.GetComponent<Health>().TakeDamage(attackDamage, AttackType.Slime);
 			navAgent.isStopped = true;
 			timeBetweenAttacks = 0;
 			Invoke("Restart", 1f);

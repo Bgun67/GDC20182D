@@ -33,10 +33,10 @@ public class Player_Controller : MonoBehaviour
 	#region Movement
 	[Header("Movement")]
 	Player_Movement movement;
-	float moveVertical;
-	float previousMoveVertical;
-	float moveHorizontal;
-	float lookVertical;
+	public float moveVertical;
+	public float previousMoveVertical;
+	public float moveHorizontal;
+	public float lookVertical;
 	float lookHorizontal;
 	float lastRotation;
 
@@ -156,8 +156,8 @@ public class Player_Controller : MonoBehaviour
 	{
 		gameController = FindObjectOfType<Game_Controller>();
 		GetComponent<Camera_Follow>().playerNum = this.playerNum;
-		//Adjust Camera to fit players on screen
-
+        //Adjust Camera to fit players on screen
+        GetComponent<Camera_Follow>().SetupCamera();
 		ColorPlayer();
 	}
 	void ColorPlayer()

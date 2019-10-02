@@ -24,15 +24,15 @@ public class Camera_Follow : MonoBehaviour
 		SetupCamera();
 		originalCameraRotation = mainCamera.transform.rotation;
 	}
-	void SetupCamera(){
+	public void SetupCamera(){
 		if(mainCamera == null){
 			mainCamera = Instantiate(camPrefab).GetComponent<Camera>();
 		}
-		float _x = Mathf.Clamp01(playerNum - 1) * 0.5f;
-		float _y = (playerNum) % 2 * 0.5f;
-		float _width = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 2) * 0.5f;
-		float _height = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 1) * 0.5f;
-		mainCamera.rect = new Rect(_x, _y, _width, _height);
+		float _x = (playerNum) % 2 * 0.5f;
+        float _y = Mathf.Clamp01(playerNum - 1) * 0.5f;
+        float _width = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 1) * 0.5f;
+        float _height = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 2) * 0.5f;
+        mainCamera.rect = new Rect(_x, _y, _width, _height);
 
 	}
 	void FixedUpdate(){

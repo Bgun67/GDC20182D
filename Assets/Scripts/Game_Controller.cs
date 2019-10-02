@@ -139,8 +139,6 @@ public class Game_Controller : MonoBehaviour {
 	{
 		foreach (Level_Controller _controller in FindObjectsOfType<Level_Controller>())
 		{
-            Debug.Log(_controller.scene);
-            Debug.Log("Scene:" + _scene);
 			if (_controller.scene == _scene)
 			{
 				return _controller;
