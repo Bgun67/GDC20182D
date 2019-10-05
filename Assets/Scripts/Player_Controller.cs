@@ -93,7 +93,6 @@ public class Player_Controller : MonoBehaviour
 		//check if the player has fallen every 1 second
 		InvokeRepeating("CheckFall", 1f, 1f);
 
-
 	}
 	// Update is called once per frame
 	void Update()
@@ -119,7 +118,7 @@ public class Player_Controller : MonoBehaviour
 		{
 			ChooseAttack(moveHorizontal, moveVertical);
 		}
-		if (Input.GetButton("Run " + (playerNum + 1))){
+		if (Input.GetButton("Run " + (playerNum + 1)) && CheckGrounded()){
 			movement.runMultiplier = 1.75f;
 		}
 		else
@@ -269,7 +268,7 @@ public class Player_Controller : MonoBehaviour
 	}
 	#endregion
 
-	bool CheckGrounded()
+	public bool CheckGrounded()
 	{
 		bool _grounded = false;
 		//draw a laser downwards and see if it hits anything
@@ -280,6 +279,7 @@ public class Player_Controller : MonoBehaviour
 			_grounded = true;
 		}
 
+        anim.SetBool("Grounded", _grounded);
 		return _grounded;
 
 	}

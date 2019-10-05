@@ -40,17 +40,25 @@ public class Player_Movement : MonoBehaviour
 	}
 	public void Jump()
 	{
-
-		//show animation
-		anim.SetTrigger("Jump");
-
-
+        if (!anim.GetBool("Grounded"))
+        {
+            return;
+        }
+        //show animation
+        anim.SetBool("Jump", true);
+        anim.SetBool("Grounded", false);
 	}
+
 	void AddUpVelocity()
 	{
+        if (!anim.GetBool("Grounded"))
+        {
+            return;
+        }
 		//add upwards velocity to current velocity
 		Vector3 _oldVelocity = rb.velocity;
-		rb.velocity = Vector3.up * 5f + _oldVelocity;		
+        rb.velocity = new Vector3(_oldVelocity.x, 5f, _oldVelocity.z);
+        anim.SetBool("Jump", false);
 	}
 	void Look(float _h, float _v)
 	{
