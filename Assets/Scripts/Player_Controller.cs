@@ -98,6 +98,10 @@ public class Player_Controller : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+        if (isDead)
+        {
+            return;
+        }
 		//Get Input
 		moveVertical = Input_Manager.GetAxis("Move Vertical " + (playerNum + 1));
 		moveHorizontal = Input_Manager.GetAxis("Move Horizontal " + (playerNum + 1));
@@ -296,16 +300,18 @@ public class Player_Controller : MonoBehaviour
 	public void Die()
 	{
 
-		//Go to level spawn
-		Level_Controller _levelController = gameController.GetLevelController(currentScene.name);
-		if (_levelController != null)
-		{
-			_levelController.SpawnPlayer(this.gameObject);
-		}
-		else
-		{
-			print("No Level Controller in this scene please add one");
-		}
+            {
+                //Go to level spawn
+                Level_Controller _levelController = gameController.GetLevelController(currentScene.name);
+                if (_levelController != null)
+                {
+                    _levelController.SpawnPlayer(this.gameObject);
+                }
+                else
+                {
+                    print("No Level Controller in this scene please add one");
+                }
+            }
 	}
 
 	public void UpdateHealth(float amount)

@@ -35,6 +35,7 @@ public class Health : MonoBehaviour
 
 	public delegate void HealthChangeHandler(float amount);
 	public event HealthChangeHandler HealthChanged;
+    public float deathTime;
 
 	// Use this for initialization
 	void Start()
@@ -85,10 +86,13 @@ public class Health : MonoBehaviour
 		{
 		}
 
-		//Checks if the object is alive and health below 0
-		if (!isDead && currentHealth <= 0)
-		{
-			Die();
+        //Checks if the object is alive and health below 0
+        if (!isDead && currentHealth <= 0)
+        {
+            GetComponent<Animator>().enabled = false;
+
+            Invoke("Die", 5) ;
+        
 			return;
 		}
 
@@ -116,7 +120,8 @@ public class Health : MonoBehaviour
 		//otherwise destroy object
 		else
 		{
-			Destroy(this.gameObject);
+			GetComponent<Animator>().enabled = false;
+            
 		}
 		//Sets object to dead
 		isDead = true;
