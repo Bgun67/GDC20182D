@@ -33,7 +33,7 @@ public class Level_Controller : MonoBehaviour {
 		_player.transform.position = playerSpawnPosition.position;
         _player.GetComponent<Animator>().enabled = true;
 
-	}
+    }
 	public void SpawnEnemies()
 	{
 		foreach (SpawnedEnemy _enemy in enemiesToSpawn)

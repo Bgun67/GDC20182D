@@ -297,22 +297,31 @@ public class Player_Controller : MonoBehaviour
 			Die();
 		}
 	}
-	public void Die()
-	{
 
-            {
-                //Go to level spawn
-                Level_Controller _levelController = gameController.GetLevelController(currentScene.name);
-                if (_levelController != null)
-                {
-                    _levelController.SpawnPlayer(this.gameObject);
-                }
-                else
-                {
-                    print("No Level Controller in this scene please add one");
-                }
-            }
-	}
+
+
+
+    public void Die()
+    {
+
+        GetComponent<Animator>().enabled = false;
+        Invoke("ResetPlayer", 5f);
+
+    }
+    public void ResetPlayer() { 
+
+        //Go to level spawn
+        Level_Controller _levelController = gameController.GetLevelController(currentScene.name);
+        if (_levelController != null)
+        {
+            _levelController.SpawnPlayer(this.gameObject);
+        }
+        else
+        {
+            print("No Level Controller in this scene please add one");
+        }
+
+    }
 
 	public void UpdateHealth(float amount)
 	{

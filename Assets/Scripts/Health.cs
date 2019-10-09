@@ -89,9 +89,8 @@ public class Health : MonoBehaviour
         //Checks if the object is alive and health below 0
         if (!isDead && currentHealth <= 0)
         {
-            GetComponent<Animator>().enabled = false;
 
-            Invoke("Die", 5) ;
+            Die();
         
 			return;
 		}
@@ -120,7 +119,7 @@ public class Health : MonoBehaviour
 		//otherwise destroy object
 		else
 		{
-			GetComponent<Animator>().enabled = false;
+			//GetComponent<Animator>().enabled = false;
             
 		}
 		//Sets object to dead
