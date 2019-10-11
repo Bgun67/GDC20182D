@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: dbeeda4ecf531984eab7599d0c46901e, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -149,6 +149,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1059275152754800, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
+      propertyPath: m_Name
+      value: Slime
+      objectReference: {fileID: 0}
     - target: {fileID: 4924401774561994, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
       propertyPath: m_LocalPosition.x
       value: 298.10803
@@ -181,11 +185,18 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 14
       objectReference: {fileID: 0}
-    - target: {fileID: 114413352063250070, guid: 1e17d19b9c7139d44bfecea9a4794675,
-        type: 3}
-      propertyPath: anim
-      value: 
-      objectReference: {fileID: 261405395}
+    - target: {fileID: 4924401774561994, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4924401774561994, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4924401774561994, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
 --- !u!4 &184845704 stripped
@@ -224,12 +235,6 @@ Transform:
   m_Father: {fileID: 606633305}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &261405395 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 95282551745290560, guid: 1e17d19b9c7139d44bfecea9a4794675,
-    type: 3}
-  m_PrefabInstance: {fileID: 147773154}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &400596296
 PrefabInstance:
   m_ObjectHideFlags: 0

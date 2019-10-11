@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		anim.SetFloat("Speed", 1.0f + navAgent.velocity.magnitude);
 	}
 	public virtual void Setup()
 	{
