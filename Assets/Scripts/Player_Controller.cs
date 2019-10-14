@@ -25,64 +25,33 @@ public enum AttackType
 	
 }
 
-[System.Serializable]
-public class AttackClass
-{
-	public UnityEvent function;
-	public float damage;
-	public AttackType type = AttackType.Normal;
-	public bool available = true;
-	public int maxUses = 1;
-	[HideInInspector]
-	public int currentUses;
-	public float rechargeTime = 0;
-	[HideInInspector]
-	public float rechargeWait = 0;
-	public GameObject effect;
-}
+
 
 public class Player_Controller : MonoBehaviour
 {
 
 	#region Movement
 	[Header("Movement")]
-	float moveVertical;
-	float previousMoveVertical;
-	float moveHorizontal;
-	float lookVertical;
+	Player_Movement movement;
+	public float moveVertical;
+	public float previousMoveVertical;
+	public float moveHorizontal;
+	public float lookVertical;
 	float lookHorizontal;
 	float lastRotation;
-	//multiplier for running lock on speeds
-	float runMultiplier = 1f;
-	Vector3 lastVelocity;
-	//Amount of force applied to player
-	public float forceFactor = 5f;
+
 	//Determines which colliders the rays should hit
 	public LayerMask jumpMask;
-	public ParticleSystem dust;
 	Rigidbody rb;
 	public Animator anim;
 	int lastTapFrame;
-	bool rolling;
+	bool rolling = false;
 	#endregion
-	#region Camera
-	[Header("Camera")]
-	[Tooltip("Assigned automatically if left empty")]
-	public Camera mainCamera;
-	//Placement of camera with respect to player
-	float cameraOffset;
-	public float originalOffset;
-	public Vector3 centerOffset;
-	bool lockedToEnemy;
-	GameObject lockedEnemy;
-	//originalCam rotation as a rotation type
-	Quaternion originalCameraRotation;
-	#endregion
+
 	#region Weapon
 	[Header("Weapon")]
-	public AttackClass[] attacks;
-	public AttackClass currentAttack;
-	public GameObject icePrefab;
+	public Attack[] attacks;
+	public Attack currentAttack;
 	#endregion
 	#region "UI"
 	public Text infoText;
@@ -96,7 +65,7 @@ public class Player_Controller : MonoBehaviour
 	Game_Controller gameController;
 	public Color[] playerColors;
 	#region Player Data
-	public int playerNum;
+	public int playerNum; //ATTENTION: PLAYER NUMBERS START AT 0!
 	#endregion
 
 
@@ -108,7 +77,7 @@ public class Player_Controller : MonoBehaviour
 		//Find the rigidbody
 		rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
-		originalCameraRotation = mainCamera.transform.rotation;		
+		movement = GetComponent<Player_Movement>();
 		healthScript = this.GetComponent<Health>();
 		healthScript.HealthChanged += UpdateHealth;
 
@@ -123,7 +92,6 @@ public class Player_Controller : MonoBehaviour
 		}
 		//check if the player has fallen every 1 second
 		InvokeRepeating("CheckFall", 1f, 1f);
-
 
 	}
 	// Update is called once per frame
@@ -150,56 +118,45 @@ public class Player_Controller : MonoBehaviour
 		{
 			ChooseAttack(moveHorizontal, moveVertical);
 		}
-		if (Input.GetKey(KeyCode.LeftShift)){
-			runMultiplier = 2f;
+		if (Input.GetButton("Run " + (playerNum + 1)) && CheckGrounded()){
+			movement.runMultiplier = 1.75f;
 		}
 		else
 		{
-			runMultiplier = 1f;
+			movement.runMultiplier = 1f;
 		}
+
 		if (Input.GetKeyDown("k"))
 		{
-			if (lockedToEnemy)
-			{
-				lockedToEnemy = false;
-				lockedEnemy = null;
-				ResetCam();
-
-			}
-			else if (FindNearestEnemy(out lockedEnemy))
-			{
-				mainCamera.transform.LookAt(lockedEnemy.transform);
-				lockedToEnemy = true;
-			}
+			movement.LockOnEnemy();
 		}
+
 		//is input greater than 0
+
 		else if (!rolling)
 		{
 			if (CheckGrounded()&&Vector2.SqrMagnitude(new Vector2(moveHorizontal, moveVertical)) > 0.1f)
 			{
 				//Moves the player using velocities
-				Move(moveHorizontal, moveVertical);
+				movement.Move(moveHorizontal, moveVertical);
 			}
 		}
 		if (Input.GetButtonDown("Jump " + (playerNum + 1)) && CheckGrounded())
 		{
-			Jump();
+			movement.Jump();
 		}
 		Attack();
-		CameraFollow();
-		AnimateMovement();
+		movement.AnimateMovement();
 
 
 	}
 	public void SetupPlayer()
 	{
 		gameController = FindObjectOfType<Game_Controller>();
-		//Adjust Camera to fit players on screen
-		float _x = Mathf.Clamp01(playerNum - 1) * 0.5f;
-		float _y = (playerNum) % 2 * 0.5f;
-		float _width = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 2) * 0.5f;
-		float _height = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 1) * 0.5f;
-		mainCamera.rect = new Rect(_x, _y, _width, _height);
+		GetComponent<Camera_Follow>().playerNum = this.playerNum;
+        //Adjust Camera to fit players on screen
+        GetComponent<Camera_Follow>().SetupCamera();
+        
 		ColorPlayer();
 	}
 	void ColorPlayer()
@@ -207,21 +164,7 @@ public class Player_Controller : MonoBehaviour
 		this.transform.GetComponentInChildren<Renderer>().material.color = playerColors[playerNum];
 	}
 	#region Attacks
-	bool FindNearestEnemy(out GameObject foundEnemy)
-	{
-		foundEnemy = null;
-		Collider[] _colliders = Physics.OverlapSphere(transform.position, 25f);
-		foreach (Collider _collider in _colliders)
-		{
-			if (_collider.transform.root.GetComponent<Enemy>())
-			{
-				foundEnemy = _collider.transform.root.gameObject;
-				return true;
-			}
-		}
-		return false;
 
-	}
 	void ChooseAttack(float _h, float _v)
 	{
 		//     1
@@ -295,7 +238,7 @@ public class Player_Controller : MonoBehaviour
 	{
 		if (_attackNum >= 0 && _attackNum < attacks.Length)
 		{
-			AttackClass _attack = attacks[_attackNum];
+			Attack _attack = attacks[_attackNum];
 			if (_attack.available)
 			{
 				currentAttack = _attack;
@@ -309,7 +252,7 @@ public class Player_Controller : MonoBehaviour
 		{
 			if (Input.GetButtonDown("Primary Attack " + (playerNum + 1)))
 			{
-				currentAttack.function.Invoke();
+				currentAttack.RunAnimation();
 			}
 			if (Input.GetButtonDown("Secondary Attack " + (playerNum + 1)))
 			{
@@ -324,141 +267,24 @@ public class Player_Controller : MonoBehaviour
 		
 	}
 	#endregion
-	#region Movement
-	void Move(float _h, float _v)
-	{
-		
-		//get previous upward velocity
-		float _yVelocity = rb.velocity.y;
-		//Move Player
-		//Find look forward and get the vector parallel to the ground
-		Vector3 _camForward = Vector3.Cross(mainCamera.transform.right, Vector3.up);
-		_camForward = new Vector3(_camForward.x, 0f, _camForward.z);
-		rb.velocity = _camForward* _v*runMultiplier* forceFactor+mainCamera.transform.right*forceFactor*_h;
 
-
-		//Reset upwards velocity
-		rb.velocity += new Vector3(0f, _yVelocity, 0f);
-		Look(rb.velocity.x, rb.velocity.z);
-
-	}
-	void Look(float _h, float _v)
-	{
-		//Point player in proper direction
-
-		//Calculate atan to find angle convert from rads Lerps the angle, result is not exactly the angle
-		if (Mathf.Abs(_v) > 0||Mathf.Abs(_h)>0)
-		{
-			transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, Mathf.Rad2Deg * Mathf.Atan(_h / _v) + Mathf.Sign(_v) * 90f - 90f, 0f), 0.2f);			
-		}
-		if (lockedToEnemy)
-		{
-			if (lockedEnemy != null)
-			{
-				transform.LookAt(lockedEnemy.transform, Vector3.up);
-				//mainCamera.transform.LookAt(lockedEnemy.transform);
-			}
-			else
-			{
-				ResetCam();
-				lockedToEnemy = false;
-			}
-		}
-
-
-	}
-	void AnimateMovement()
-	{
-		Vector3 _localVelocity = transform.InverseTransformVector(rb.velocity);
-		Vector3 _localAcceleration = (_localVelocity - lastVelocity) / Time.deltaTime;
-		lastVelocity = _localVelocity;
-		float _angularRotation = transform.rotation.eulerAngles.y;
-		float _angularVelocity = lastRotation - _angularRotation;
-		lastRotation = _angularRotation;
-
-		anim.SetFloat("Run Speed", _localVelocity.z+_angularVelocity/-4f);
-		anim.SetFloat("Direction", _localVelocity.x);
-
-		if (_localAcceleration.z > 10f)
-		{
-			if (dust != null && !dust.isPlaying)
-			{
-				dust.Play();
-			}
-		}
-		if (_localVelocity.y < -1f)
-		{
-			anim.SetFloat("Fall", -_localVelocity.y);
-		}
-		else if (anim.GetFloat("Fall")>0)
-		{
-			anim.SetFloat("Fall", 0f);
-		}
-
-
-	}
-	void Jump()
-	{
-		
-		//show animation
-		anim.SetTrigger("Jump");
-		
-
-	}
-	void AddUpVelocity()
-	{
-		//add upwards velocity to current velocity
-		Vector3 _oldVelocity = rb.velocity;
-		rb.velocity = Vector3.up * 5f + _oldVelocity;		
-	}
-	bool CheckGrounded()
+	public bool CheckGrounded()
 	{
 		bool _grounded = false;
 		//draw a laser downwards and see if it hits anything
 		RaycastHit _hit;
-		if (Physics.SphereCast(this.transform.position+rb.centerOfMass,0.2f, Vector3.down, out _hit, 1.1f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (Physics.SphereCast(this.transform.position+rb.centerOfMass,0.2f, Vector3.down, out _hit, 1.15f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			//we've hit something, there is something below the player
 			_grounded = true;
 		}
 
+        anim.SetBool("Grounded", _grounded);
 		return _grounded;
 
 	}
 
-	#endregion
-	void CameraFollow()
-	{
-		Vector3 _position = rb.worldCenterOfMass;
-		
-		//Find any Intersecting colliders
-		RaycastHit _hit;
-		Debug.DrawRay(rb.worldCenterOfMass, (mainCamera.transform.position - rb.worldCenterOfMass) * (-originalOffset + 0.6f));
-		if (Physics.Raycast(rb.worldCenterOfMass, mainCamera.transform.position-rb.worldCenterOfMass, out _hit, -originalOffset+0.6f)){
-			cameraOffset = Mathf.Lerp(cameraOffset,Mathf.Clamp(-_hit.distance+0.1f,originalOffset,-1f),0.1f);
-		}
-		else
-		{
-			cameraOffset = Mathf.Lerp(cameraOffset,originalOffset,0.1f);
-		}
 
-		//new position for the camera
-		Vector3 camPosition;
-		
-		camPosition = (_position)+ centerOffset+ mainCamera.transform.forward*cameraOffset;
-		
-
-		mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, camPosition, 1f);
-		PivotCam();
-	}
-	void PivotCam()
-	{
-		mainCamera.transform.RotateAround(transform.position, Vector3.up, lookHorizontal/2f);
-	}
-	void ResetCam()
-	{
-		mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, originalCameraRotation, 0.4f);
-	}
 
 
 	void CheckFall()
@@ -472,21 +298,17 @@ public class Player_Controller : MonoBehaviour
 	}
 	public void Die()
 	{
-		//check if player has already died
 
-		infoText.text = "You Died";
 		//Go to level spawn
-		Level_Controller _levelController = gameController.GetLevelController(currentScene.name);
+		Level_Controller _levelController = gameController.GetLevelController(gameController.sceneName);
 		if (_levelController != null)
 		{
 			_levelController.SpawnPlayer(this.gameObject);
 		}
 		else
 		{
-			print("No Level Controller in this scene please add one");
+			Debug.Log("No Level Controller in this scene please add one");
 		}
-		//reset health to full
-		healthScript.Reset();
 	}
 
 	public void UpdateHealth(float amount)
@@ -554,12 +376,6 @@ public class Player_Controller : MonoBehaviour
 		{
 			yield break;
 		}
-		//if object below has a health component, give damage
-		if (_hit.transform.GetComponent<Health>() != null)
-		{
-			_hit.transform.GetComponent<Health>().TakeDamage(currentAttack.damage, currentAttack.type);
-		}
-
 
 	}
 	public void ShoulderRam()
@@ -573,36 +389,8 @@ public class Player_Controller : MonoBehaviour
 		anim.SetInteger("Attack Number", 2);
 		//Damage is called by animation event
 	}
-	public void ForwardStrike()
-	{
-		RaycastHit _hit;
-		//reset player's animation
-		anim.SetInteger("Attack Number", 0);
-		//add force forwards
-		rb.velocity = transform.forward * 3f;
-		//check for object
-		if (!Physics.SphereCast(transform.position + rb.centerOfMass, 0.2f, transform.forward, out _hit, 1f, jumpMask, QueryTriggerInteraction.Ignore))
-		{
-			return;
-		}
-		//if object below has a health component, give damage
-		if (_hit.transform.GetComponent<Health>() != null)
-		{
-			_hit.transform.GetComponent<Health>().TakeDamage(currentAttack.damage, currentAttack.type);
-		}
-		if (_hit.transform.GetComponent<Rigidbody>() != null)
-		{
-			Enemy _enemyScript = _hit.transform.GetComponent<Enemy>();
-			if (_enemyScript != null)
-			{
-				_enemyScript.Recoil();
-			}
-			print("Adding Force");
-			_hit.transform.GetComponent<Rigidbody>().velocity = transform.forward * 7f;
-		}
-
-	}
-	public void Ice()
+	
+	/* public void Ice()
 	{
 		currentAttack.effect.GetComponent<ParticleSystem>().Play();
 		RaycastHit _hit;
@@ -633,7 +421,7 @@ public class Player_Controller : MonoBehaviour
 		
 
 		currentAttack.currentUses++;
-	}
+	}*/
 
 	#endregion
 
