@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4866961119598114}
   - component: {fileID: 20760684479757102}
   - component: {fileID: 81840925102521362}
+  - component: {fileID: 114813575699712830}
   m_Layer: 0
   m_Name: Kliff Camera
   m_TagString: MainCamera
@@ -70,7 +71,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: -1
+  m_RenderingPath: 3
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
@@ -88,3 +89,15 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1946412248082646}
   m_Enabled: 1
+--- !u!114 &114813575699712830
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1946412248082646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec56912c1868b3429e5b19115a3e522, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: 1c686368de0bb7c43b767e9c4e09212a, type: 2}
