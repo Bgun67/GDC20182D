@@ -55,8 +55,8 @@ public class Player_Controller : MonoBehaviour
 	#endregion
 	#region "UI"
 	public Text infoText;
-	public Text healthText;
-	public Health healthScript;
+    public Transform hearts;
+    public Health healthScript;
 	#endregion
 	public Scene currentScene;
 	public Scene lastScene;
@@ -153,9 +153,9 @@ public class Player_Controller : MonoBehaviour
 	public void SetupPlayer()
 	{
 		gameController = FindObjectOfType<Game_Controller>();
-		GetComponent<Camera_Follow>().playerNum = this.playerNum;
-        //Adjust Camera to fit players on screen
-        GetComponent<Camera_Follow>().SetupCamera();
+        Camera_Follow _cam = GetComponent<Camera_Follow>();
+        _cam.playerNum = this.playerNum;
+        _cam.SetupCamera();
         
 		ColorPlayer();
 	}
@@ -289,7 +289,6 @@ public class Player_Controller : MonoBehaviour
 
 	void CheckFall()
 	{
-
 		if (transform.position.y < -10f)
 		{
 
@@ -319,12 +318,19 @@ public class Player_Controller : MonoBehaviour
 			healthScript = this.GetComponent<Health>();
 		}
 		//Clear shields and get number of shields needed
-		int _shieldNumber = (int)healthScript.currentHealth / 10;
-		healthText.text = "";
-		//type shields
-		for (int i = 0; i < _shieldNumber; i++)
+		int _shieldNumber = Mathf.CeilToInt(healthScript.currentHealth / 33);
+        //
+		//show shields
+		for (int i = 0; i < hearts.childCount; i++)
 		{
-			healthText.text += " 0";
+            if (i < _shieldNumber)
+            {
+                hearts.GetChild(i).gameObject.SetActive(true);
+            }
+            else
+            {
+                hearts.GetChild(i).gameObject.SetActive(false);
+            }
 		}
 		if (hitIndicator != null)
 		{

@@ -30,6 +30,10 @@ public class Game_Controller : MonoBehaviour {
         {
             RemovePlayer();
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Pause_Menu.Pause();
+        }
     }
 
     

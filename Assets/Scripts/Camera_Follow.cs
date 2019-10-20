@@ -33,6 +33,7 @@ public class Camera_Follow : MonoBehaviour
         float _width = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 1) * 0.5f;
         float _height = 1 - Mathf.Clamp01(gameController.numberOfPlayers - 2) * 0.5f;
         mainCamera.rect = new Rect(_x, _y, _width, _height);
+        GetComponentInChildren<Canvas>().worldCamera = mainCamera;
 
 	}
 	void FixedUpdate(){

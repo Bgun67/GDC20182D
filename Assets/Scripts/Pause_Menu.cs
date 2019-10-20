@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class Pause_Menu : MonoBehaviour
 {   
@@ -9,29 +11,39 @@ public class Pause_Menu : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-        Pause_Menu.Resume();
+        _instance.Resume();
     }
-    static void Pause()
+    public static void Pause()
     {
         _instance.gameObject.SetActive(true);
-        Time.timeScale = 0;
     }
-    public static void Resume()
+    public void Resume()
     {
-        Time.timeScale = 1f;
+        print("Resume");
         _instance.gameObject.SetActive(false);
     }
     public void QuitToMainMenu()
     {
-
-
+        new Confirm_Panel("Are you sure you want to quit to the main menu? <color=red>All unsaved progress will be lost</color>", ConfirmQuit);
     }
- 
+    public void ConfirmQuit()
+    {
+        SceneManager.LoadScene("Main Menu");
+    }
+    public void QuitGame()
+    {
+        new Confirm_Panel("Are you sure you want to exit the application? <color=red>All unsaved progress will be lost</color>", Application.Quit);
+    }
+
+
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Resume();
+        }
     }
 
 }
