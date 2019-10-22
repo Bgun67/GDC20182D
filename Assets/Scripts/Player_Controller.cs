@@ -52,6 +52,8 @@ public class Player_Controller : MonoBehaviour
 	[Header("Weapon")]
 	public Attack[] attacks;
 	public Attack currentAttack;
+    public Transform attackRoot;
+    public Transform attackHighlight;
 	#endregion
 	#region "UI"
 	public Text infoText;
@@ -116,8 +118,13 @@ public class Player_Controller : MonoBehaviour
 		previousMoveVertical = Input_Manager.GetAxisRaw("Move Vertical " + (playerNum + 1));
 		if (Input.GetButton("Change Weapon " + (playerNum + 1)))
 		{
-			ChooseAttack(moveHorizontal, moveVertical);
+            attackRoot.gameObject.SetActive(true);
+            ChooseAttack(moveHorizontal, moveVertical);
 		}
+        else
+        {
+            attackRoot.gameObject.SetActive(false);
+        }
 		if (Input.GetButton("Run " + (playerNum + 1)) && CheckGrounded()){
 			movement.runMultiplier = 1.75f;
 		}
@@ -163,89 +170,74 @@ public class Player_Controller : MonoBehaviour
 	{
 		this.transform.GetComponentInChildren<Renderer>().material.color = playerColors[playerNum];
 	}
-	#region Attacks
+    #region Attacks
 
-	void ChooseAttack(float _h, float _v)
-	{
-		//     1
-		//  8     2
-		// 7   0   3
-		//  6     4
-		//     5
-		//on the right side of the clock
-		if (_h > 0.5f)
-		{
-			//upper right
-			if (_v > 0.5f)
-			{
-				// attempt to switch to attack 2 if available
-				SwitchAttacks(2);
-			}
-			//bottom right
-			else if (_v < -0.5f)
-			{
-				// attempt to switch to attack 2 if available
-				SwitchAttacks(4);
-			}
-			//middle right
-			else
-			{
-				SwitchAttacks(3);
-			}
-		}
-		else    //on the left side of the clock
-		if (_h < -0.5f)
-		{
-			//upper left
-			if (_v > 0.5f)
-			{
-				// attempt to switch if available
-				SwitchAttacks(8);
-			}
-			//bottom right
-			else if (_v < -0.5f)
-			{
-				// attempt to switch to attack 2 if available
-				SwitchAttacks(6);
-			}
-			//middle right
-			else
-			{
-				SwitchAttacks(7);
-			}
-		}
-		//center
-		else
-		{
-			//upper center
-			if (_v > 0.5f)
-			{
-				SwitchAttacks(1);
-			}
-			//bottom 
-			else if (_v < -0.5f)
-			{
-				SwitchAttacks(5);
-			}
-			//middle center
-			else
-			{
-				SwitchAttacks(0);
-			}
-		}
-	}
+    void ChooseAttack(float _h, float _v)
+    {
+        //     1
+        //  5     2
+        //     0   
+        //  4     3
+        //     
+        //on the right side of the clock
+        if (_h > 0.5f)
+        {
+            //upper right
+            if (_v > 0.5f)
+            {
+                // attempt to switch to attack 2 if available
+                SwitchAttacks(2);
+            }
+            //bottom right
+            else if (_v < -0.5f)
+            {
+                // attempt to switch to attack 2 if available
+                SwitchAttacks(3);
+            }
+        }
+        else    //on the left side of the clock
+        if (_h < -0.5f)
+        {
+            //upper left
+            if (_v > 0.5f)
+            {
+                // attempt to switch if available
+                SwitchAttacks(5);
+            }
+            //bottom right
+            else if (_v < -0.5f)
+            {
+                // attempt to switch to attack 2 if available
+                SwitchAttacks(4);
+            }
+        }
+        //center
+        else
+        {
+            if (_v > 0.5f)
+            {
+                SwitchAttacks(1);
+            }
+            else
+            {
+                SwitchAttacks(0);
+            }
+        }
+    }
 	void SwitchAttacks(int _attackNum)
 	{
-		if (_attackNum >= 0 && _attackNum < attacks.Length)
+      
+		if (_attackNum < attacks.Length)
 		{
 			Attack _attack = attacks[_attackNum];
 			if (_attack.available)
 			{
 				currentAttack = _attack;
 			}
-		}
+            attackHighlight.position = attackRoot.GetChild(_attackNum).position;
+        }
 
-	}
+    }
 	void Attack()
 	{
 		if (!rolling)
@@ -283,9 +275,6 @@ public class Player_Controller : MonoBehaviour
 		return _grounded;
 
 	}
-
-
-
 
 	void CheckFall()
 	{
