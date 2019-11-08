@@ -5,7 +5,8 @@ Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Sketch_Shader
   m_Shader: {fileID: 4800000, guid: 796e87dd7e9b36143967fb3284b2dcc1, type: 3}
   m_ShaderKeywords: 
@@ -76,6 +77,6 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: -0.09521831, g: -0.41249943, b: 0.90596783, a: 1}
+    - _Color: {r: 0.9580336, g: 0.011622303, b: 0.2864201, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _ForwardVec: {r: 0, g: 0, b: 1, a: 1}
