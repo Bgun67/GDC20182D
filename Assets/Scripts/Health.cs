@@ -12,7 +12,7 @@ public class Health : MonoBehaviour
 	[Tooltip("If left empty, object is destroyed")]
 	public UnityEvent dieFunction;
 	public bool showHealth;
-    bool isDead;    //Ensures dieFunction only executes once
+    public bool isDead;    //Ensures dieFunction only executes once
 
     [Tooltip("Do not use default as a critical attack type")]
 	[EnumFlags] public AttackType criticalAttackType;
@@ -107,8 +107,10 @@ public class Health : MonoBehaviour
 
 	void Die()
 	{
-		//check if there is a diefunction
-		if (dieFunction.GetPersistentEventCount() > 0)
+        //Sets object to dead
+        isDead = true;
+        //check if there is a diefunction
+        if (dieFunction.GetPersistentEventCount() > 0)
 		{
 			//runs diefunction
 			dieFunction.Invoke();
@@ -118,8 +120,7 @@ public class Health : MonoBehaviour
 		{
 			Destroy(this.gameObject);
 		}
-		//Sets object to dead
-		isDead = true;
+		
 	}
 
 	void Regen()

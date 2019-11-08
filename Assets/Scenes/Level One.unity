@@ -151,8 +151,54 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.2845858
-  m_Center: {x: -0.00000047683713, y: -0.0000004768373, z: 3.3881318e-21}
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4924401774561994, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 298.10803
+      objectReference: {fileID: 0}
+    - target: {fileID: 4924401774561994, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.009155273
+      objectReference: {fileID: 0}
+    - target: {fileID: 4924401774561994, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -172.21736
+      objectReference: {fileID: 0}
+    - target: {fileID: 4924401774561994, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4924401774561994, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4924401774561994, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4924401774561994, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4924401774561994, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 114413352063250070, guid: 1e17d19b9c7139d44bfecea9a4794675,
+        type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 261405395}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1e17d19b9c7139d44bfecea9a4794675, type: 3}
+--- !u!4 &184845704 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4686950015530250, guid: 350865352f6a82f4d9fdb1d5e3963608,
+    type: 3}
+  m_PrefabInstance: {fileID: 1689234775}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &205206591
 GameObject:
   m_ObjectHideFlags: 0
@@ -1643,7 +1689,7 @@ GameObject:
   - component: {fileID: 1751515377}
   m_Layer: 0
   m_Name: Game Controller
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1661,10 +1707,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: Level One
-  numberOfPlayers: 1
+  maxNumberOfPlayers: 2
+  startNumberOfPlayers: 1
+  numberOfPlayers: 0
   playerPrefab: {fileID: 1087987552615950, guid: c130444bbe4d2154482c128537692129,
     type: 3}
   camPrefab: {fileID: 1946412248082646, guid: e2b0b50cceeaa614cb7d60d9405d6661, type: 3}
+  levelController: {fileID: 0}
   players: []
 --- !u!4 &1751515378
 Transform:
@@ -1932,5 +1981,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

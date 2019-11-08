@@ -18,18 +18,20 @@ NavMeshAgent agent;
 	public ActionState currentState;
 	public Attack[] attacks;
 	public Animator anim;
+    Game_Controller gameController;
 
 	// Use this for initialization
 	void Start () {
 		agent = GetComponent<NavMeshAgent>();
 		attacks = GetComponents<Attack>();
 		anim = GetComponent<Animator>();
+        gameController = FindObjectOfType<Game_Controller>();
 	}
 	
 
 	// Update is called once per frame
 	void Update () {
-		objToFollow = FindObjectOfType<Player_Controller>().transform;
+		objToFollow = gameController.players[0].transform;
 		Vector3 _displacement = objToFollow.position - transform.position;
 		anim.SetFloat("Run Speed", agent.speed);
 

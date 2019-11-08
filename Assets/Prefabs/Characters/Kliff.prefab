@@ -40,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1005881601108842}
-  m_Mesh: {fileID: 4300002, guid: 975aeb2491b4b954db1c61933c0e02e2, type: 3}
+  m_Mesh: {fileID: -5495902117074765545, guid: ad7dee2c2d1e9ef46806acd7be4f9bb4, type: 3}
 --- !u!183 &183557726002329190
 Cloth:
   m_ObjectHideFlags: 0
@@ -334,7 +334,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100002, guid: 975aeb2491b4b954db1c61933c0e02e2, type: 3}
+  - {fileID: 8598954236217306308, guid: ad7dee2c2d1e9ef46806acd7be4f9bb4, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -359,13 +359,13 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 4300002, guid: 975aeb2491b4b954db1c61933c0e02e2, type: 3}
+  m_Mesh: {fileID: -5495902117074765545, guid: ad7dee2c2d1e9ef46806acd7be4f9bb4, type: 3}
   m_Bones: []
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 4445577055281324}
   m_AABB:
-    m_Center: {x: -0.079695046, y: -0.0038653612, z: -0.117443204}
-    m_Extent: {x: 0.3664334, y: 0.16177385, z: 0.24103093}
+    m_Center: {x: -0.079695016, y: -0.0038655102, z: -0.117443606}
+    m_Extent: {x: 0.3664332, y: 0.16177371, z: 0.24103074}
   m_DirtyAABB: 0
 --- !u!1 &1012517047306744
 GameObject:
@@ -5293,6 +5293,7 @@ GameObject:
   - component: {fileID: 1742806586477184644}
   - component: {fileID: 7531540866880748145}
   - component: {fileID: 5732144733952555669}
+  - component: {fileID: 3057455083307661588}
   m_Layer: 0
   m_Name: Kliff
   m_TagString: Player
@@ -5363,6 +5364,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e4b3c64450214245954ec8842e54041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveVertical: 0
+  previousMoveVertical: 0
+  moveHorizontal: 0
+  lookVertical: 0
   jumpMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -5415,6 +5420,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   showHealth: 1
+  isDead: 0
   criticalAttackType: 0
   resistAttackType: 0
   immuneToAttackType: 0
@@ -5487,9 +5493,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camPrefab: {fileID: 1946412248082646, guid: e2b0b50cceeaa614cb7d60d9405d6661, type: 3}
   mainCamera: {fileID: 0}
-  cameraOffset: -5
-  centerOffset: {x: 0, y: 0, z: 0}
+  camAngle: 30
+  originalOffset: -3
+  centerOffset: {x: 0, y: 1, z: 0}
   playerNum: 0
+--- !u!81 &3057455083307661588
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1087987552615950}
+  m_Enabled: 1
 --- !u!1 &1107126937754948
 GameObject:
   m_ObjectHideFlags: 0

@@ -33,10 +33,10 @@ public class Player_Controller : MonoBehaviour
 	#region Movement
 	[Header("Movement")]
 	Player_Movement movement;
-	float moveVertical;
-	float previousMoveVertical;
-	float moveHorizontal;
-	float lookVertical;
+	public float moveVertical;
+	public float previousMoveVertical;
+	public float moveHorizontal;
+	public float lookVertical;
 	float lookHorizontal;
 	float lastRotation;
 
@@ -45,7 +45,7 @@ public class Player_Controller : MonoBehaviour
 	Rigidbody rb;
 	public Animator anim;
 	int lastTapFrame;
-	bool rolling;
+	bool rolling = false;
 	#endregion
 
 	#region Weapon
@@ -65,7 +65,7 @@ public class Player_Controller : MonoBehaviour
 	Game_Controller gameController;
 	public Color[] playerColors;
 	#region Player Data
-	public int playerNum;
+	public int playerNum; //ATTENTION: PLAYER NUMBERS START AT 0!
 	#endregion
 
 
@@ -93,7 +93,6 @@ public class Player_Controller : MonoBehaviour
 		//check if the player has fallen every 1 second
 		InvokeRepeating("CheckFall", 1f, 1f);
 
-
 	}
 	// Update is called once per frame
 	void Update()
@@ -119,19 +118,21 @@ public class Player_Controller : MonoBehaviour
 		{
 			ChooseAttack(moveHorizontal, moveVertical);
 		}
-		if (Input.GetKey(KeyCode.LeftShift)){
+		if (Input.GetButton("Run " + (playerNum + 1)) && CheckGrounded()){
 			movement.runMultiplier = 1.75f;
 		}
 		else
 		{
 			movement.runMultiplier = 1f;
 		}
+
 		if (Input.GetKeyDown("k"))
 		{
 			movement.LockOnEnemy();
 		}
 
 		//is input greater than 0
+
 		else if (!rolling)
 		{
 			if (CheckGrounded()&&Vector2.SqrMagnitude(new Vector2(moveHorizontal, moveVertical)) > 0.1f)
@@ -153,8 +154,9 @@ public class Player_Controller : MonoBehaviour
 	{
 		gameController = FindObjectOfType<Game_Controller>();
 		GetComponent<Camera_Follow>().playerNum = this.playerNum;
-		//Adjust Camera to fit players on screen
-
+        //Adjust Camera to fit players on screen
+        GetComponent<Camera_Follow>().SetupCamera();
+        
 		ColorPlayer();
 	}
 	void ColorPlayer()
@@ -266,17 +268,18 @@ public class Player_Controller : MonoBehaviour
 	}
 	#endregion
 
-	bool CheckGrounded()
+	public bool CheckGrounded()
 	{
 		bool _grounded = false;
 		//draw a laser downwards and see if it hits anything
 		RaycastHit _hit;
-		if (Physics.SphereCast(this.transform.position+rb.centerOfMass,0.2f, Vector3.down, out _hit, 1.1f, jumpMask, QueryTriggerInteraction.Ignore))
+		if (Physics.SphereCast(this.transform.position+rb.centerOfMass,0.2f, Vector3.down, out _hit, 1.15f, jumpMask, QueryTriggerInteraction.Ignore))
 		{
 			//we've hit something, there is something below the player
 			_grounded = true;
 		}
 
+        anim.SetBool("Grounded", _grounded);
 		return _grounded;
 
 	}
@@ -297,14 +300,14 @@ public class Player_Controller : MonoBehaviour
 	{
 
 		//Go to level spawn
-		Level_Controller _levelController = gameController.GetLevelController(currentScene.name);
+		Level_Controller _levelController = gameController.GetLevelController(gameController.sceneName);
 		if (_levelController != null)
 		{
 			_levelController.SpawnPlayer(this.gameObject);
 		}
 		else
 		{
-			print("No Level Controller in this scene please add one");
+			Debug.Log("No Level Controller in this scene please add one");
 		}
 	}
 
